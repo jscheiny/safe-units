@@ -363,4 +363,3 @@ const SumOfPositive5AndPositive4IsError: SumOfPositive5AndPositive4IsError = tru
 
 type SumOfPositive5AndPositive5IsError = IsArithmeticError<AddExponents<5, 5>>;
 const SumOfPositive5AndPositive5IsError: SumOfPositive5AndPositive5IsError = true;
-

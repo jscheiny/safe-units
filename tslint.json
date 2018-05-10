@@ -1,9 +1,17 @@
 {
     "extends": [
         "tslint-config-standard",
+        "tslint-config-prettier",
         "tslint-plugin-prettier"
     ],
     "rules": {
-        "prettier": true
+        "prettier": [
+            true,
+            {
+                "printWidth": 120,
+                "tabWidth": 4,
+                "trailingComma": "all"
+            }
+        ]
     }
 }

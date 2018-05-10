@@ -1,3 +1,5 @@
+// tslint:disable
+
 import { Exponent, ArithmeticError } from "./common"
 
 export type Negate<N extends Exponent> = MultiplyExponents<N, -1>;

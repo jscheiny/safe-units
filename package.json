@@ -1,10 +1,11 @@
 {
     "name": "uni-ts",
     "version": "0.0.1",
+    "license": "MIT",
     "scripts": {
         "compile": "tsc -p .",
         "lint": "tslint -p tsconfig.json -c tslint.json 'src/**/*.ts*'",
-        "lint:fix": "lint --fix"
+        "lint:fix": "yarn lint --fix"
     },
     "devDependencies": {
         "prettier": "^1.12.1",

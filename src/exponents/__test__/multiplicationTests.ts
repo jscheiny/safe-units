@@ -363,4 +363,3 @@ const ProductOfPositive5AndPositive4IsError: ProductOfPositive5AndPositive4IsErr
 
 type ProductOfPositive5AndPositive5IsError = IsArithmeticError<MultiplyExponents<5, 5>>;
 const ProductOfPositive5AndPositive5IsError: ProductOfPositive5AndPositive5IsError = true;
-

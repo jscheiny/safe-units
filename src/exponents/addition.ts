@@ -1,3 +1,5 @@
+// tslint:disable
+
 import { Exponent, ArithmeticError } from "./common"
 
 export type AddExponents<L extends Exponent, R extends Exponent>
