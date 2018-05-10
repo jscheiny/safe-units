@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "removeComments": false,
+        "sourceMap": true,
+        "strict": true,
+        "stripInternal": true,
+        "target": "es5",
+        "outDir": "./dist"
+    },
+    "lib": [
+        "es2015",
+        "es5"
+    ],   
+}
