@@ -1,6 +1,6 @@
 import { MinimalUnit, Dimensions, Dimension } from "./common";
 import { MultiplyUnits, ExponentiateUnit, DivideUnits } from "./typeArithmetic";
-import { Exponent } from "../exponents/common";
+import { Exponent, MinExponent, MaxExponent, ArithmeticError } from "../exponents/common";
 
 export function base<Dim extends Dimension>(dim: Dim): { [D in Dim]: 1 } {
     return { [dim]: 1 } as any;
@@ -14,9 +14,10 @@ export function multiply<Left extends MinimalUnit, Right extends MinimalUnit>(
     for (const dimension of Dimensions) {
         const leftExp = left[dimension] || 0;
         const rightExp = right[dimension] || 0;
-        const resultExp = leftExp + rightExp;
-        if (resultExp !== 0) {
-            result[dimension] = resultExp;
+        const exp = leftExp + rightExp;
+        checkExponent(exp);
+        if (exp !== 0) {
+            result[dimension] = exp;
         }
     }
     return result;
@@ -35,12 +36,19 @@ export function exponentiate<Unit extends MinimalUnit, Power extends Exponent>(
 ): ExponentiateUnit<Unit, Power> {
     const result: any = {};
     for (const dimension in unit) {
-        const exp = unit[dimension as Dimension];
+        const exp = unit[dimension as Dimension] || 0;
+        checkExponent(exp);
         if (exp) {
             result[dimension] = exp * power;
         }
     }
     return result;
+}
+
+function checkExponent(exp: number) {
+    if (exp < MinExponent || exp > MaxExponent) {
+        throw new Error(ArithmeticError);
+    }
 }
 
 export function square<Unit extends MinimalUnit>(unit: Unit): ExponentiateUnit<Unit, 2> {
