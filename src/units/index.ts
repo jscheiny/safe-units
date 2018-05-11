@@ -1,5 +1,5 @@
 import { Dimension } from "./common";
 import { Unit } from "./unit";
-import { MinimalDimensionVector } from "./vector";
+import { DimensionVector } from "./vector";
 
-export { Dimension, MinimalDimensionVector, Unit };
+export { Dimension, DimensionVector, Unit };

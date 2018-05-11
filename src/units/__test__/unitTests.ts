@@ -1,11 +1,11 @@
 import { Unit } from "../unit";
-import { MinimalDimensionVector } from "../vector";
+import { DimensionVector } from "../vector";
 
 describe("Units", () => {
     const length = Unit.basis("length");
     const time = Unit.basis("time");
 
-    function expectVector(unit: Unit<any>, vector: MinimalDimensionVector) {
+    function expectVector(unit: Unit<any>, vector: DimensionVector) {
         expect(unit.vector).toEqual(vector);
     }
 
@@ -175,7 +175,7 @@ describe("Units", () => {
                 mass: -1,
                 time: 2,
             });
-            const quotient: MinimalDimensionVector = {
+            const quotient: DimensionVector = {
                 mass: 3,
                 time: -2,
             };

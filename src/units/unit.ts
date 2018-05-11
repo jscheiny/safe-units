@@ -1,9 +1,9 @@
 import { Dimension } from "./common";
 import { MultiplyUnits, DivideUnits, ExponentiateUnit } from "./types";
-import { addVectors, subtractVectors, scaleVector, basisVector, MinimalDimensionVector } from "./vector";
+import { addVectors, subtractVectors, scaleVector, basisVector, DimensionVector } from "./vector";
 import { Exponent } from "../exponents";
 
-export class Unit<Vector extends MinimalDimensionVector> {
+export class Unit<Vector extends DimensionVector> {
     constructor(public readonly vector: Vector) {}
 
     public static scalar() {
@@ -14,15 +14,15 @@ export class Unit<Vector extends MinimalDimensionVector> {
         return new Unit(basisVector(dimension));
     }
 
-    public times<Other extends MinimalDimensionVector>(other: Unit<Other>): Unit<MultiplyUnits<Vector, Other>> {
+    public times<Other extends DimensionVector>(other: Unit<Other>): Unit<MultiplyUnits<Vector, Other>> {
         return new Unit(addVectors(this.vector, other.vector));
     }
 
-    public per<Other extends MinimalDimensionVector>(other: Unit<Other>): Unit<DivideUnits<Vector, Other>> {
+    public per<Other extends DimensionVector>(other: Unit<Other>): Unit<DivideUnits<Vector, Other>> {
         return new Unit(subtractVectors(this.vector, other.vector));
     }
 
-    public over<Other extends MinimalDimensionVector>(other: Unit<Other>): Unit<DivideUnits<Vector, Other>> {
+    public over<Other extends DimensionVector>(other: Unit<Other>): Unit<DivideUnits<Vector, Other>> {
         return this.per(other);
     }
 

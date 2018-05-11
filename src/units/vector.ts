@@ -4,13 +4,13 @@ import { Exponent, MinExponent, MaxExponent, ArithmeticError } from "../exponent
 
 export type CompleteDimensionVector = { [Dim in Dimension]: Exponent };
 
-export type MinimalDimensionVector = Partial<CompleteDimensionVector>;
+export type DimensionVector = Partial<CompleteDimensionVector>;
 
 export function basisVector<Dim extends Dimension>(dim: Dim): { [D in Dim]: 1 } {
     return { [dim]: 1 } as any;
 }
 
-export function addVectors<Left extends MinimalDimensionVector, Right extends MinimalDimensionVector>(
+export function addVectors<Left extends DimensionVector, Right extends DimensionVector>(
     left: Left,
     right: Right,
 ): MultiplyUnits<Left, Right> {
@@ -34,13 +34,13 @@ export function addVectors<Left extends MinimalDimensionVector, Right extends Mi
     return result;
 }
 
-export function scaleVector<Unit extends MinimalDimensionVector, Power extends Exponent>(
-    unit: Unit,
+export function scaleVector<Vector extends DimensionVector, Power extends Exponent>(
+    vector: Vector,
     power: Power,
-): ExponentiateUnit<Unit, Power> {
+): ExponentiateUnit<Vector, Power> {
     const result: any = {};
-    for (const dimension in unit) {
-        const exp = (unit[dimension as Dimension] || 0) * power;
+    for (const dimension in vector) {
+        const exp = (vector[dimension as Dimension] || 0) * power;
         checkExponent(exp);
         if (exp) {
             result[dimension] = exp;
@@ -49,7 +49,7 @@ export function scaleVector<Unit extends MinimalDimensionVector, Power extends E
     return result;
 }
 
-export function subtractVectors<Left extends MinimalDimensionVector, Right extends MinimalDimensionVector>(
+export function subtractVectors<Left extends DimensionVector, Right extends DimensionVector>(
     left: Left,
     right: Right,
 ): DivideUnits<Left, Right> {
