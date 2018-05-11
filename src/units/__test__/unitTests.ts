@@ -9,6 +9,15 @@ describe("Units", () => {
         expect(unit.vector).toEqual(vector);
     }
 
+    it("should create scalar units", () => {
+        expectVector(Unit.scalar(), {});
+    });
+
+    it("should create base units", () => {
+        expectVector(length, { length: 1 });
+        expectVector(time, { time: 1 });
+    });
+
     describe("multiplication", () => {
         it("should multiply two different base units correctly", () => {
             expectVector(length.times(time), {
@@ -166,10 +175,12 @@ describe("Units", () => {
                 mass: -1,
                 time: 2,
             });
-            expectVector(left.per(right), {
+            const quotient: MinimalDimensionVector = {
                 mass: 3,
                 time: -2,
-            });
+            };
+            expectVector(left.per(right), quotient);
+            expectVector(left.over(right), quotient);
         });
     });
 });

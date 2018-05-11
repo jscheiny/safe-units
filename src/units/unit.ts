@@ -1,6 +1,6 @@
 import { MinimalDimensionVector, Dimension } from "./common";
 import { MultiplyUnits, DivideUnits, ExponentiateUnit } from "./typeArithmetic";
-import { multiply, divide, exponentiate, base } from "./vectorArithmetic";
+import { addVectors, subtractVectors, scaleVector, basisVector } from "./vectorArithmetic";
 import { Exponent } from "../exponents/common";
 
 export class Unit<Vector extends MinimalDimensionVector> {
@@ -11,19 +11,23 @@ export class Unit<Vector extends MinimalDimensionVector> {
     }
 
     public static basis<Dim extends Dimension>(dimension: Dim) {
-        return new Unit(base(dimension));
+        return new Unit(basisVector(dimension));
     }
 
     public times<Other extends MinimalDimensionVector>(other: Unit<Other>): Unit<MultiplyUnits<Vector, Other>> {
-        return new Unit(multiply(this.vector, other.vector));
+        return new Unit(addVectors(this.vector, other.vector));
     }
 
     public per<Other extends MinimalDimensionVector>(other: Unit<Other>): Unit<DivideUnits<Vector, Other>> {
-        return new Unit(divide(this.vector, other.vector));
+        return new Unit(subtractVectors(this.vector, other.vector));
+    }
+
+    public over<Other extends MinimalDimensionVector>(other: Unit<Other>): Unit<DivideUnits<Vector, Other>> {
+        return this.per(other);
     }
 
     public toThe<Power extends Exponent>(power: Power): Unit<ExponentiateUnit<Vector, Power>> {
-        return new Unit(exponentiate(this.vector, power));
+        return new Unit(scaleVector(this.vector, power));
     }
 
     public inverse() {

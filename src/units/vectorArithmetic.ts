@@ -2,11 +2,11 @@ import { MinimalDimensionVector, Dimension } from "./common";
 import { MultiplyUnits, ExponentiateUnit, DivideUnits } from "./typeArithmetic";
 import { Exponent, MinExponent, MaxExponent, ArithmeticError } from "../exponents/common";
 
-export function base<Dim extends Dimension>(dim: Dim): { [D in Dim]: 1 } {
+export function basisVector<Dim extends Dimension>(dim: Dim): { [D in Dim]: 1 } {
     return { [dim]: 1 } as any;
 }
 
-export function multiply<Left extends MinimalDimensionVector, Right extends MinimalDimensionVector>(
+export function addVectors<Left extends MinimalDimensionVector, Right extends MinimalDimensionVector>(
     left: Left,
     right: Right,
 ): MultiplyUnits<Left, Right> {
@@ -30,7 +30,7 @@ export function multiply<Left extends MinimalDimensionVector, Right extends Mini
     return result;
 }
 
-export function exponentiate<Unit extends MinimalDimensionVector, Power extends Exponent>(
+export function scaleVector<Unit extends MinimalDimensionVector, Power extends Exponent>(
     unit: Unit,
     power: Power,
 ): ExponentiateUnit<Unit, Power> {
@@ -45,11 +45,11 @@ export function exponentiate<Unit extends MinimalDimensionVector, Power extends 
     return result;
 }
 
-export function divide<Left extends MinimalDimensionVector, Right extends MinimalDimensionVector>(
+export function subtractVectors<Left extends MinimalDimensionVector, Right extends MinimalDimensionVector>(
     left: Left,
     right: Right,
 ): DivideUnits<Left, Right> {
-    return multiply(left, exponentiate(right, -1));
+    return addVectors(left, scaleVector(right, -1));
 }
 
 function checkExponent(exp: number) {
