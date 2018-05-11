@@ -10,6 +10,7 @@ module.exports = {
     coveragePathIgnorePatterns: [
         ".*Tests\.ts",
         ".*Spec\.ts",
+        "index.ts",
     ],
     coverageThreshold: {
         global: {

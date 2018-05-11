@@ -16,7 +16,7 @@ export type AddExponents<L extends Exponent, R extends Exponent>
     : L extends 5 ? Add5<R>
     : ArithmeticError;
 
-type Subtract5<N extends Exponent>
+export type Subtract5<N extends Exponent>
     = N extends 0 ? -5
     : N extends 1 ? -4
     : N extends 2 ? -3
@@ -25,7 +25,7 @@ type Subtract5<N extends Exponent>
     : N extends 5 ? 0
     : ArithmeticError;
 
-type Subtract4<N extends Exponent>
+export type Subtract4<N extends Exponent>
     = N extends -1 ? -5
     : N extends 0 ? -4
     : N extends 1 ? -3
@@ -35,7 +35,7 @@ type Subtract4<N extends Exponent>
     : N extends 5 ? 1
     : ArithmeticError;
 
-type Subtract3<N extends Exponent>
+export type Subtract3<N extends Exponent>
     = N extends -2 ? -5
     : N extends -1 ? -4
     : N extends 0 ? -3
@@ -46,7 +46,7 @@ type Subtract3<N extends Exponent>
     : N extends 5 ? 2
     : ArithmeticError;
 
-type Subtract2<N extends Exponent>
+export type Subtract2<N extends Exponent>
     = N extends -3 ? -5
     : N extends -2 ? -4
     : N extends -1 ? -3
@@ -58,7 +58,7 @@ type Subtract2<N extends Exponent>
     : N extends 5 ? 3
     : ArithmeticError;
 
-type Subtract1<N extends Exponent>
+export type Subtract1<N extends Exponent>
     = N extends -4 ? -5
     : N extends -3 ? -4
     : N extends -2 ? -3
@@ -71,7 +71,7 @@ type Subtract1<N extends Exponent>
     : N extends 5 ? 4
     : ArithmeticError;
 
-type Add1<N extends Exponent>
+export type Add1<N extends Exponent>
     = N extends -5 ? -4
     : N extends -4 ? -3
     : N extends -3 ? -2
@@ -84,7 +84,7 @@ type Add1<N extends Exponent>
     : N extends 4 ? 5
     : ArithmeticError;
 
-type Add2<N extends Exponent>
+export type Add2<N extends Exponent>
     = N extends -5 ? -3
     : N extends -4 ? -2
     : N extends -3 ? -1
@@ -96,7 +96,7 @@ type Add2<N extends Exponent>
     : N extends 3 ? 5
     : ArithmeticError;
 
-type Add3<N extends Exponent>
+export type Add3<N extends Exponent>
     = N extends -5 ? -2
     : N extends -4 ? -1
     : N extends -3 ? 0
@@ -107,7 +107,7 @@ type Add3<N extends Exponent>
     : N extends 2 ? 5
     : ArithmeticError;
 
-type Add4<N extends Exponent>
+export type Add4<N extends Exponent>
     = N extends -5 ? -1
     : N extends -4 ? 0
     : N extends -3 ? 1
@@ -117,7 +117,7 @@ type Add4<N extends Exponent>
     : N extends 1 ? 5
     : ArithmeticError;
 
-type Add5<N extends Exponent>
+export type Add5<N extends Exponent>
     = N extends -5 ? 0
     : N extends -4 ? 1
     : N extends -3 ? 2

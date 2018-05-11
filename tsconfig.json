@@ -1,20 +1,21 @@
 {
     "compilerOptions": {
+        "declaration": true,
         "module": "commonjs",
         "moduleResolution": "node",
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
-        "noImplicitThis": true,
         "noImplicitReturns": true,
+        "noImplicitThis": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "outDir": "./dist",
+        "pretty": true,
         "removeComments": false,
         "sourceMap": true,
         "strict": true,
         "stripInternal": true,
-        "target": "es5",
-        "outDir": "./dist",
-        "pretty": true
+        "target": "es5"
     },
     "lib": [
         "es2015",
