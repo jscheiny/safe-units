@@ -22,6 +22,11 @@ export function multiply<Left extends MinimalDimensionVector, Right extends Mini
             result[dimension] = right[dimension];
         }
     }
+    for (const dimension in result) {
+        if (result[dimension] === 0) {
+            delete result[dimension];
+        }
+    }
     return result;
 }
 
