@@ -1,5 +1,5 @@
 import { Unit } from "../unit";
-import { MinimalDimensionVector } from "../common";
+import { MinimalDimensionVector } from "../vector";
 
 describe("Units", () => {
     const length = Unit.basis("length");

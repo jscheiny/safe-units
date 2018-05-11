@@ -1,6 +1,10 @@
-import { MinimalDimensionVector, Dimension } from "./common";
+import { Dimension } from "./common";
 import { MultiplyUnits, ExponentiateUnit, DivideUnits } from "./typeArithmetic";
 import { Exponent, MinExponent, MaxExponent, ArithmeticError } from "../exponents/common";
+
+export type CompleteDimensionVector = { [Dim in Dimension]: Exponent };
+
+export type MinimalDimensionVector = Partial<CompleteDimensionVector>;
 
 export function basisVector<Dim extends Dimension>(dim: Dim): { [D in Dim]: 1 } {
     return { [dim]: 1 } as any;
@@ -52,7 +56,7 @@ export function subtractVectors<Left extends MinimalDimensionVector, Right exten
     return addVectors(left, scaleVector(right, -1));
 }
 
-function checkExponent(exp: number) {
+function checkExponent(exp: number): void {
     if (exp < MinExponent || exp > MaxExponent) {
         throw new Error(ArithmeticError);
     }

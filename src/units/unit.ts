@@ -1,7 +1,7 @@
-import { MinimalDimensionVector, Dimension } from "./common";
+import { Dimension } from "./common";
 import { MultiplyUnits, DivideUnits, ExponentiateUnit } from "./typeArithmetic";
-import { addVectors, subtractVectors, scaleVector, basisVector } from "./vectorArithmetic";
-import { Exponent } from "../exponents/common";
+import { addVectors, subtractVectors, scaleVector, basisVector, MinimalDimensionVector } from "./vector";
+import { Exponent } from "../exponents";
 
 export class Unit<Vector extends MinimalDimensionVector> {
     constructor(public readonly vector: Vector) {}

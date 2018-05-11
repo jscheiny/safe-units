@@ -1,5 +1,8 @@
-import { MinimalDimensionVector, CompleteDimensionVector, FillZeroes, Dimension, StripZeroes } from "./common";
+import { Dimension } from "./common";
 import { AddExponents, Exponent, MultiplyExponents, ArithmeticError } from "../exponents";
+import { MinimalDimensionVector, CompleteDimensionVector } from "./vector";
+
+// Arithmetic
 
 /**
  * Returns the product of two units. The result will be a minimal unit. This can be thought of as the sum of two
@@ -34,9 +37,9 @@ type ExponentiateImpl<Vector extends CompleteDimensionVector, Power extends Expo
     [Dim in Dimension]: MultiplyExponents<Vector[Dim], Power>
 };
 
-/**
- * Handle errors in the result of an arithmetic operation.
- */
+// Error handling
+
+/** Handle errors in the result of an arithmetic operation. */
 type HandleErrors<Result extends ArithmeticResult> = true extends ResultHasError<Result>
     ? ArithmeticError
     : StripZeroes<RemoveErrors<Result>>;
@@ -51,6 +54,25 @@ type RemoveErrors<Result extends ArithmeticResult> = {
 
 type ArithmeticResult = { [Dim in Dimension]: Exponent | ArithmeticError };
 
-// Utils
+// Utility types
 
+/** Ensures that a type will be displayed nicely in editors / compiler output */
 type Clean<T> = { [K in keyof T]: T[K] };
+
+/** Removes all zero exponent dimensions from a dimension vector */
+type StripZeroes<Vector extends CompleteDimensionVector> = Pick<Vector, NonZeroKeys<Vector>>;
+
+type NonZeroKeys<Vector extends MinimalDimensionVector> = {
+    [Dim in keyof Vector]: Vector[Dim] extends 0 ? never : Dim
+}[keyof Vector];
+
+/** Fills in any missing dimensions in a dimension vector with a zero exponent */
+type FillZeroes<Vector extends MinimalDimensionVector> = {
+    [Dim in Dimension]: FillZeroesImpl<Vector>[Dim] extends undefined ? 0 : NonNullable<FillZeroesImpl<Vector>[Dim]>
+};
+
+type FillZeroesImpl<Vector extends MinimalDimensionVector> = Vector & { [Dim in MissingDimensions<Vector>]: 0 };
+
+type MissingDimensions<Vector extends MinimalDimensionVector> = {
+    [Dim in Dimension]: Vector[Dim] extends undefined ? Dim : never
+}[Dimension];
