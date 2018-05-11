@@ -3,6 +3,7 @@
 
 ### Build
 dist/
+coverage/
 *.pyc
 
 ### Yarn

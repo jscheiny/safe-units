@@ -13,7 +13,8 @@
         "strict": true,
         "stripInternal": true,
         "target": "es5",
-        "outDir": "./dist"
+        "outDir": "./dist",
+        "pretty": true
     },
     "lib": [
         "es2015",

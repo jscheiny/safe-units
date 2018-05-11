@@ -12,19 +12,34 @@ export function multiply<Left extends MinimalDimensionVector, Right extends Mini
 ): MultiplyUnits<Left, Right> {
     const result: any = {};
     for (const dimension in left) {
-        result[dimension] = left[dimension];
+        result[dimension] = left[dimension] || 0;
     }
     for (const dimension in right) {
         if (dimension in result) {
-            const exp = (result[dimension] += right[dimension]);
+            const exp = (result[dimension] += right[dimension] || 0);
             checkExponent(exp);
         } else {
-            result[dimension] = right[dimension];
+            result[dimension] = right[dimension] || 0;
         }
     }
     for (const dimension in result) {
         if (result[dimension] === 0) {
             delete result[dimension];
+        }
+    }
+    return result;
+}
+
+export function exponentiate<Unit extends MinimalDimensionVector, Power extends Exponent>(
+    unit: Unit,
+    power: Power,
+): ExponentiateUnit<Unit, Power> {
+    const result: any = {};
+    for (const dimension in unit) {
+        const exp = (unit[dimension as Dimension] || 0) * power;
+        checkExponent(exp);
+        if (exp) {
+            result[dimension] = exp;
         }
     }
     return result;
@@ -37,31 +52,8 @@ export function divide<Left extends MinimalDimensionVector, Right extends Minima
     return multiply(left, exponentiate(right, -1));
 }
 
-export function exponentiate<Unit extends MinimalDimensionVector, Power extends Exponent>(
-    unit: Unit,
-    power: Power,
-): ExponentiateUnit<Unit, Power> {
-    const result: any = {};
-    for (const dimension in unit) {
-        const exp = unit[dimension as Dimension] || 0;
-        checkExponent(exp);
-        if (exp) {
-            result[dimension] = exp * power;
-        }
-    }
-    return result;
-}
-
 function checkExponent(exp: number) {
     if (exp < MinExponent || exp > MaxExponent) {
         throw new Error(ArithmeticError);
     }
-}
-
-export function square<Unit extends MinimalDimensionVector>(unit: Unit): ExponentiateUnit<Unit, 2> {
-    return exponentiate(unit, 2);
-}
-
-export function cubic<Unit extends MinimalDimensionVector>(unit: Unit): ExponentiateUnit<Unit, 3> {
-    return exponentiate(unit, 3);
 }

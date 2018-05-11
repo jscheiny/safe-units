@@ -22,7 +22,7 @@ export class Unit<Vector extends MinimalDimensionVector> {
         return new Unit(divide(this.vector, other.vector));
     }
 
-    public toThe<Power extends Exclude<Exponent, 0 | 1>>(power: Power): Unit<ExponentiateUnit<Vector, Power>> {
+    public toThe<Power extends Exponent>(power: Power): Unit<ExponentiateUnit<Vector, Power>> {
         return new Unit(exponentiate(this.vector, power));
     }
 
