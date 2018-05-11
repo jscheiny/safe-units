@@ -2,14 +2,6 @@ import { Exponent } from "../exponents";
 
 export type Dimension = "length" | "time" | "mass";
 
-const DimensionRecord: Record<Dimension, true> = {
-    length: true,
-    time: true,
-    mass: true,
-};
-
-export const Dimensions = Object.keys(DimensionRecord) as Dimension[];
-
 export type CompleteDimensionVector = { [Dim in Dimension]: Exponent };
 
 export type MinimalDimensionVector = Partial<CompleteDimensionVector>;

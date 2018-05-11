@@ -1,4 +1,4 @@
-import { MinimalDimensionVector, Dimensions, Dimension } from "./common";
+import { MinimalDimensionVector, Dimension } from "./common";
 import { MultiplyUnits, ExponentiateUnit, DivideUnits } from "./typeArithmetic";
 import { Exponent, MinExponent, MaxExponent, ArithmeticError } from "../exponents/common";
 
@@ -11,13 +11,15 @@ export function multiply<Left extends MinimalDimensionVector, Right extends Mini
     right: Right,
 ): MultiplyUnits<Left, Right> {
     const result: any = {};
-    for (const dimension of Dimensions) {
-        const leftExp = left[dimension] || 0;
-        const rightExp = right[dimension] || 0;
-        const exp = leftExp + rightExp;
-        checkExponent(exp);
-        if (exp !== 0) {
-            result[dimension] = exp;
+    for (const dimension in left) {
+        result[dimension] = left[dimension];
+    }
+    for (const dimension in right) {
+        if (dimension in result) {
+            const exp = (result[dimension] += right[dimension]);
+            checkExponent(exp);
+        } else {
+            result[dimension] = right[dimension];
         }
     }
     return result;
