@@ -10,28 +10,28 @@ const DimensionRecord: Record<Dimension, true> = {
 
 export const Dimensions = Object.keys(DimensionRecord) as Dimension[];
 
-export type CompleteUnit = { [Dim in Dimension]: Exponent };
+export type CompleteDimensionVector = { [Dim in Dimension]: Exponent };
 
-export type MinimalUnit = Partial<CompleteUnit>;
+export type MinimalDimensionVector = Partial<CompleteDimensionVector>;
 
 /**
  * Converts a CompleteUnit into a MinimalUnit
  */
-export type StripZeroes<Unit extends CompleteUnit> = Pick<Unit, NonZeroKeys<Unit>>;
+export type StripZeroes<Vector extends CompleteDimensionVector> = Pick<Vector, NonZeroKeys<Vector>>;
 
-type NonZeroKeys<Unit extends MinimalUnit> = { [Dim in keyof Unit]: Unit[Dim] extends 0 ? never : Dim }[keyof Unit];
+type NonZeroKeys<Vector extends MinimalDimensionVector> = {
+    [Dim in keyof Vector]: Vector[Dim] extends 0 ? never : Dim
+}[keyof Vector];
 
 /**
  * Converts a MinimalUnit into a CompleteUnit
  */
-export type FillZeroes<Unit extends MinimalUnit> = {
-    [Dim in Dimension]: FillZeroesImpl<Unit>[Dim] extends undefined ? 0 : NonNullable<FillZeroesImpl<Unit>[Dim]>
+export type FillZeroes<Vector extends MinimalDimensionVector> = {
+    [Dim in Dimension]: FillZeroesImpl<Vector>[Dim] extends undefined ? 0 : NonNullable<FillZeroesImpl<Vector>[Dim]>
 };
 
-type FillZeroesImpl<Unit extends MinimalUnit> = Unit & { [Dim in MissingDimensions<Unit>]: 0 };
+type FillZeroesImpl<Vector extends MinimalDimensionVector> = Vector & { [Dim in MissingDimensions<Vector>]: 0 };
 
-type MissingDimensions<Unit extends MinimalUnit> = {
-    [Dim in Dimension]: Unit[Dim] extends undefined ? Dim : never
+type MissingDimensions<Vector extends MinimalDimensionVector> = {
+    [Dim in Dimension]: Vector[Dim] extends undefined ? Dim : never
 }[Dimension];
-
-export type T = FillZeroes<{ time: -2; length: 5 }>;

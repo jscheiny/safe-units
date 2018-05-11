@@ -1,4 +1,4 @@
-import { MinimalUnit, Dimensions, Dimension } from "./common";
+import { MinimalDimensionVector, Dimensions, Dimension } from "./common";
 import { MultiplyUnits, ExponentiateUnit, DivideUnits } from "./typeArithmetic";
 import { Exponent, MinExponent, MaxExponent, ArithmeticError } from "../exponents/common";
 
@@ -6,7 +6,7 @@ export function base<Dim extends Dimension>(dim: Dim): { [D in Dim]: 1 } {
     return { [dim]: 1 } as any;
 }
 
-export function multiply<Left extends MinimalUnit, Right extends MinimalUnit>(
+export function multiply<Left extends MinimalDimensionVector, Right extends MinimalDimensionVector>(
     left: Left,
     right: Right,
 ): MultiplyUnits<Left, Right> {
@@ -23,14 +23,14 @@ export function multiply<Left extends MinimalUnit, Right extends MinimalUnit>(
     return result;
 }
 
-export function divide<Left extends MinimalUnit, Right extends MinimalUnit>(
+export function divide<Left extends MinimalDimensionVector, Right extends MinimalDimensionVector>(
     left: Left,
     right: Right,
 ): DivideUnits<Left, Right> {
     return multiply(left, exponentiate(right, -1));
 }
 
-export function exponentiate<Unit extends MinimalUnit, Power extends Exponent>(
+export function exponentiate<Unit extends MinimalDimensionVector, Power extends Exponent>(
     unit: Unit,
     power: Power,
 ): ExponentiateUnit<Unit, Power> {
@@ -51,10 +51,10 @@ function checkExponent(exp: number) {
     }
 }
 
-export function square<Unit extends MinimalUnit>(unit: Unit): ExponentiateUnit<Unit, 2> {
+export function square<Unit extends MinimalDimensionVector>(unit: Unit): ExponentiateUnit<Unit, 2> {
     return exponentiate(unit, 2);
 }
 
-export function cubic<Unit extends MinimalUnit>(unit: Unit): ExponentiateUnit<Unit, 3> {
+export function cubic<Unit extends MinimalDimensionVector>(unit: Unit): ExponentiateUnit<Unit, 3> {
     return exponentiate(unit, 3);
 }
