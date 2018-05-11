@@ -5,8 +5,8 @@ import { AddExponents, Exponent, MultiplyExponents, ArithmeticError } from "../e
  * Returns the product of two units. The result will be a minimal unit. This can be thought of as the sum of two
  * dimension vectors.
  */
-export type MultiplyUnits<Left extends MinimalUnit, Right extends MinimalUnit> = HandleErrors<
-    MultiplyImpl<FillZeroes<Left>, FillZeroes<Right>>
+export type MultiplyUnits<Left extends MinimalUnit, Right extends MinimalUnit> = Clean<
+    HandleErrors<MultiplyImpl<FillZeroes<Left>, FillZeroes<Right>>>
 >;
 
 type MultiplyImpl<Left extends CompleteUnit, Right extends CompleteUnit> = {
@@ -26,8 +26,8 @@ export type DivideUnits<Left extends MinimalUnit, Right extends MinimalUnit> = M
  * Returns the exponentation of a unit to a given power. The result will be a minimal unit. This can be through of as
  * a scale of the dimension vector.
  */
-export type ExponentiateUnit<Unit extends MinimalUnit, Power extends Exponent> = HandleErrors<
-    ExponentiateImpl<FillZeroes<Unit>, Power>
+export type ExponentiateUnit<Unit extends MinimalUnit, Power extends Exponent> = Clean<
+    HandleErrors<ExponentiateImpl<FillZeroes<Unit>, Power>>
 >;
 
 type ExponentiateImpl<Unit extends CompleteUnit, Power extends Exponent> = {
@@ -50,3 +50,7 @@ type RemoveErrors<Result extends ArithmeticResult> = {
 };
 
 type ArithmeticResult = { [Dim in Dimension]: Exponent | ArithmeticError };
+
+// Utils
+
+type Clean<T> = { [K in keyof T]: T[K] };
