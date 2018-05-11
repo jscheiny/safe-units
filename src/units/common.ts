@@ -10,7 +10,7 @@ const DimensionRecord: Record<Dimension, true> = {
 
 export const Dimensions = Object.keys(DimensionRecord) as Dimension[];
 
-export type CompleteUnit = { [D in Dimension]: Exponent };
+export type CompleteUnit = { [Dim in Dimension]: Exponent };
 
 export type MinimalUnit = Partial<CompleteUnit>;
 
@@ -19,7 +19,7 @@ export type MinimalUnit = Partial<CompleteUnit>;
  */
 export type StripZeroes<Unit extends CompleteUnit> = Pick<Unit, NonZeroKeys<Unit>>;
 
-type NonZeroKeys<Unit extends MinimalUnit> = { [D in keyof Unit]: Unit[D] extends 0 ? never : D }[keyof Unit];
+type NonZeroKeys<Unit extends MinimalUnit> = { [Dim in keyof Unit]: Unit[Dim] extends 0 ? never : Dim }[keyof Unit];
 
 /**
  * Converts a MinimalUnit into a CompleteUnit

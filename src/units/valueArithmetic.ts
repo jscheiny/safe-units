@@ -2,6 +2,10 @@ import { MinimalUnit, Dimensions, Dimension } from "./common";
 import { MultiplyUnits, ExponentiateUnit, DivideUnits } from "./typeArithmetic";
 import { Exponent } from "../exponents/common";
 
+export function base<Dim extends Dimension>(dim: Dim): { [D in Dim]: 1 } {
+    return { [dim]: 1 } as any;
+}
+
 export function multiply<Left extends MinimalUnit, Right extends MinimalUnit>(
     left: Left,
     right: Right,
@@ -37,4 +41,12 @@ export function exponentiate<Unit extends MinimalUnit, Power extends Exponent>(
         }
     }
     return result;
+}
+
+export function square<Unit extends MinimalUnit>(unit: Unit): ExponentiateUnit<Unit, 2> {
+    return exponentiate(unit, 2);
+}
+
+export function cubic<Unit extends MinimalUnit>(unit: Unit): ExponentiateUnit<Unit, 3> {
+    return exponentiate(unit, 3);
 }

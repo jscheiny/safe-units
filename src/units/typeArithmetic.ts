@@ -10,7 +10,7 @@ export type MultiplyUnits<Left extends MinimalUnit, Right extends MinimalUnit> =
 >;
 
 type MultiplyImpl<Left extends CompleteUnit, Right extends CompleteUnit> = {
-    [D in Dimension]: AddExponents<Left[D], Right[D]>
+    [Dim in Dimension]: AddExponents<Left[Dim], Right[Dim]>
 };
 
 /**
@@ -31,7 +31,7 @@ export type ExponentiateUnit<Unit extends MinimalUnit, Power extends Exponent> =
 >;
 
 type ExponentiateImpl<Unit extends CompleteUnit, Power extends Exponent> = {
-    [D in Dimension]: MultiplyExponents<Unit[D], Power>
+    [Dim in Dimension]: MultiplyExponents<Unit[Dim], Power>
 };
 
 /**
@@ -41,10 +41,12 @@ type HandleErrors<Result extends ArithmeticResult> = true extends ResultHasError
     ? ArithmeticError
     : StripZeroes<RemoveErrors<Result>>;
 
-type ResultHasError<Result> = { [D in keyof Result]: Result[D] extends ArithmeticError ? true : false }[keyof Result];
+type ResultHasError<Result> = {
+    [Dim in keyof Result]: Result[Dim] extends ArithmeticError ? true : false
+}[keyof Result];
 
 type RemoveErrors<Result extends ArithmeticResult> = {
-    [D in Dimension]: Result[D] extends ArithmeticError ? 0 : Result[D]
+    [Dim in Dimension]: Result[Dim] extends ArithmeticError ? 0 : Result[Dim]
 };
 
-type ArithmeticResult = { [D in Dimension]: Exponent | ArithmeticError };
+type ArithmeticResult = { [Dim in Dimension]: Exponent | ArithmeticError };
