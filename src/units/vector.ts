@@ -1,5 +1,5 @@
 import { Dimension } from "./common";
-import { MultiplyUnits, ExponentiateUnit, DivideUnits } from "./typeArithmetic";
+import { MultiplyUnits, ExponentiateUnit, DivideUnits } from "./types";
 import { Exponent, MinExponent, MaxExponent, ArithmeticError } from "../exponents/common";
 
 export type CompleteDimensionVector = { [Dim in Dimension]: Exponent };

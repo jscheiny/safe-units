@@ -1,5 +1,5 @@
 import { Dimension } from "./common";
-import { MultiplyUnits, DivideUnits, ExponentiateUnit } from "./typeArithmetic";
+import { MultiplyUnits, DivideUnits, ExponentiateUnit } from "./types";
 import { addVectors, subtractVectors, scaleVector, basisVector, MinimalDimensionVector } from "./vector";
 import { Exponent } from "../exponents";
 
