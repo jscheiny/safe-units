@@ -4,10 +4,6 @@ def emitImport():
     print 'import { Exponent, ArithmeticError } from "./common"'
     print
 
-def emitNegationType():
-    print "export type Negate<N extends Exponent> = MultiplyExponents<N, -1>;"
-    print
-
 def emitUncurriedMultiplicationType():
     print "export type MultiplyExponents<L extends Exponent, R extends Exponent>"
     first = True
@@ -19,11 +15,11 @@ def emitUncurriedMultiplicationType():
         elif left == 1:
             print "%s%s L extends 1 ? R" % (tab, prefix)
         else:
-            print "%s%s L extends %d ? %s<R>" % (tab, prefix, left, getCurriedAdditionTypeName(left))
+            print "%s%s L extends %d ? %s<R>" % (tab, prefix, left, getCurriedMultiplicationTypeName(left))
     emitErrorCase()
 
 def emitCurriedMultiplicationType(left):
-    print "type %s<N extends Exponent>" % getCurriedAdditionTypeName(left)
+    print "type %s<N extends Exponent>" % getCurriedMultiplicationTypeName(left)
     first = True
     for right in exponents:
         product = left * right
@@ -37,7 +33,7 @@ def emitErrorCase():
     print "%s: ArithmeticError;" % tab
     print
 
-def getCurriedAdditionTypeName(left):
+def getCurriedMultiplicationTypeName(left):
     sign = "Negative" if left < 0 else "Positive"
     return "MultiplyBy%s%d" % (sign, abs(left))
 

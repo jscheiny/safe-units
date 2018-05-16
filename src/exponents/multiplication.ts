@@ -2,8 +2,6 @@
 
 import { Exponent, ArithmeticError } from "./common"
 
-export type Negate<N extends Exponent> = MultiplyExponents<N, -1>;
-
 export type MultiplyExponents<L extends Exponent, R extends Exponent>
     = L extends -5 ? MultiplyByNegative5<R>
     : L extends -4 ? MultiplyByNegative4<R>

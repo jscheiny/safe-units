@@ -5,7 +5,7 @@ def emitImport():
     print 'import { IsArithmeticError } from "./utils";'
     print
 
-def emitAdditionTest(left, right):
+def emitMultiplicationTest(left, right):
     product = left * right
     if product in exponents:
         emitNonErrorMultiplicationTest(left, right)
@@ -37,7 +37,7 @@ def main():
     emitImport()
     for left in exponents:
         for right in exponents:
-            emitAdditionTest(left, right)
+            emitMultiplicationTest(left, right)
 
 if __name__ == '__main__':
     main()

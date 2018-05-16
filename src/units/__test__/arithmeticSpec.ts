@@ -1,5 +1,5 @@
 import { StripZeroes, FillZeroes, MultiplyUnits, DivideUnits, ExponentiateUnit } from "../types";
-import { IsArithmeticError } from "../../exponents/__test__/utils";
+import { IsArithmeticError } from "../../exponents/utils";
 
 type FillZeroesWorks = { mass: 2; time: 0; length: 0 } extends FillZeroes<{ mass: 2; time: 0 }> ? true : never;
 const FillZeroesWorks: FillZeroesWorks = true;

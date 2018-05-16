@@ -1,5 +1,5 @@
 import { AddExponents } from "../addition";
-import { IsArithmeticError } from "./utils";
+import { IsArithmeticError } from "../utils";
 
 type SumOfNegative5AndNegative5IsError = IsArithmeticError<AddExponents<-5, -5>>;
 const SumOfNegative5AndNegative5IsError: SumOfNegative5AndNegative5IsError = true;

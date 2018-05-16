@@ -1,5 +1,5 @@
 import { MultiplyExponents } from "../multiplication";
-import { IsArithmeticError } from "./utils";
+import { IsArithmeticError } from "../utils";
 
 type ProductOfNegative5AndNegative5IsError = IsArithmeticError<MultiplyExponents<-5, -5>>;
 const ProductOfNegative5AndNegative5IsError: ProductOfNegative5AndNegative5IsError = true;
