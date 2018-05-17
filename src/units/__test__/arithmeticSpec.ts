@@ -1,57 +1,55 @@
 import { IsArithmeticError } from "../../exponents/utils";
-import { DivideUnits, ExponentiateUnit, FillZeroes, MultiplyUnits, NthRootUnit, StripZeroes } from "../types";
+import { DivideUnits, ExponentiateUnit, GetExponent, MultiplyUnits, NthRootUnit, StripZeroes } from "../types";
 
-type FillZeroesWorks = { mass: 2; time: 0; length: 0 } extends FillZeroes<{ mass: 2; time: 0 }> ? true : never;
-const FillZeroesWorks: FillZeroesWorks = true;
+type GetPresentExponentWorks = 2 extends GetExponent<{ a: 2; b: 3 }, "a"> ? true : never;
+const GetPresentExponentWorks: GetPresentExponentWorks = true;
 
-type StripZeroesWorks = { length: 1 } extends StripZeroes<{ mass: 0; length: 1; time: 0 }> ? true : never;
+type GetMissingExponentWorks = 0 extends GetExponent<{ a: 2; b: 3 }, "c"> ? true : never;
+const GetMissingExponentWorks: GetMissingExponentWorks = true;
+
+type GetUndefinedExponentWorks = 0 extends GetExponent<{ a: 2; b: undefined }, "b"> ? true : never;
+const GetUndefinedExponentWorks: GetUndefinedExponentWorks = true;
+
+type StripZeroesWorks = { b: 1 } extends StripZeroes<{ a: 0; b: 1; c: 0 }> ? true : never;
 const StripZeroesWorks: StripZeroesWorks = true;
 
-type SelfMultiplicationWorks = { mass: 4 } extends MultiplyUnits<{ mass: 2 }, { mass: 2 }> ? true : never;
+type SelfMultiplicationWorks = { a: 4 } extends MultiplyUnits<{ a: 2 }, { a: 2 }> ? true : never;
 const SelfMultiplicationWorks: SelfMultiplicationWorks = true;
 
-type MultiplySeveralDimensionsWorks = { length: 1; time: 1 } extends MultiplyUnits<
-    { mass: 2; length: -1 },
-    { time: 1; mass: -2; length: 2 }
->
+type MultiplySeveralDimensionsWorks = { b: 1; c: 1 } extends MultiplyUnits<{ a: 2; b: -1 }, { a: -2; b: 2; c: 1 }>
     ? true
     : never;
 const MultiplySeveralDimensionsWorks: MultiplySeveralDimensionsWorks = true;
 
-type MultiplicationPropagatesErrors = IsArithmeticError<MultiplyUnits<{ mass: -5; time: 2 }, { mass: -5; time: 1 }>>;
+type MultiplicationPropagatesErrors = IsArithmeticError<MultiplyUnits<{ a: -5; b: 2 }, { a: -5; b: 1 }>>;
 const MultiplicationPropagatesErrors: MultiplicationPropagatesErrors = true;
 
-type DivisionWorks = { length: 1; time: 1 } extends DivideUnits<
-    { mass: 2; length: -1 },
-    { time: -1; mass: 2; length: -2 }
->
-    ? true
-    : never;
+type DivisionWorks = { b: 1; c: 1 } extends DivideUnits<{ a: 2; b: -1 }, { a: 2; b: -2; c: -1 }> ? true : never;
 const DivisionWorks: DivisionWorks = true;
 
-type DivisionPropagatesErrors = IsArithmeticError<DivideUnits<{ mass: -5; time: 1 }, { mass: 5; time: 2 }>>;
+type DivisionPropagatesErrors = IsArithmeticError<DivideUnits<{ a: -5; b: 1 }, { a: 5; b: 2 }>>;
 const DivisionPropagatesErrors: DivisionPropagatesErrors = true;
 
-type RaisingToTheZeroWorks = {} extends ExponentiateUnit<{ mass: 2; length: -1 }, 0> ? true : never;
+type RaisingToTheZeroWorks = {} extends ExponentiateUnit<{ a: 2; b: -1 }, 0> ? true : never;
 const RaisingToTheZeroWorks: RaisingToTheZeroWorks = true;
 
-type RaisingToTheOneWorks = { length: 2; mass: 3 } extends ExponentiateUnit<{ length: 2; mass: 3 }, 1> ? true : never;
+type RaisingToTheOneWorks = { a: 2; b: 3 } extends ExponentiateUnit<{ a: 2; b: 3 }, 1> ? true : never;
 const RaisingToTheOneWorks: RaisingToTheOneWorks = true;
 
-type SquaringWorks = { length: 4; time: -2 } extends ExponentiateUnit<{ length: 2; time: -1 }, 2> ? true : never;
+type SquaringWorks = { a: 4; b: -2 } extends ExponentiateUnit<{ a: 2; b: -1 }, 2> ? true : never;
 const SquaringWorks: SquaringWorks = true;
 
-type CubingWorks = { mass: 3 } extends ExponentiateUnit<{ mass: 1 }, 3> ? true : never;
+type CubingWorks = { a: 3 } extends ExponentiateUnit<{ a: 1 }, 3> ? true : never;
 const CubingWorks: CubingWorks = true;
 
-type ExponentiationPropagatesErrors = IsArithmeticError<ExponentiateUnit<{ mass: -5; time: 1 }, -2>>;
+type ExponentiationPropagatesErrors = IsArithmeticError<ExponentiateUnit<{ a: -5; b: 1 }, -2>>;
 const ExponentiationPropagatesErrors: ExponentiationPropagatesErrors = true;
 
-type SquareRootingWorks = { length: 2; mass: -1 } extends NthRootUnit<{ length: 4; mass: -2 }, 2> ? true : never;
+type SquareRootingWorks = { a: 2; b: -1 } extends NthRootUnit<{ a: 4; b: -2 }, 2> ? true : never;
 const SquareRootingWorks: SquareRootingWorks = true;
 
-type CubeRootingWorks = { length: 1; time: -1 } extends NthRootUnit<{ length: 3; time: -3 }, 3> ? true : never;
+type CubeRootingWorks = { a: 1; b: -1 } extends NthRootUnit<{ a: 3; b: -3 }, 3> ? true : never;
 const CubeRootingWorks: CubeRootingWorks = true;
 
-type NthRootPropagatesErrors = IsArithmeticError<NthRootUnit<{ length: 3 }, 2>>;
+type NthRootPropagatesErrors = IsArithmeticError<NthRootUnit<{ b: 3 }, 2>>;
 const NthRootPropagatesErrors: NthRootPropagatesErrors = true;

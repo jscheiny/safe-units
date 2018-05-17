@@ -1,12 +1,10 @@
 import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponents/common";
-import { Dimension } from "./common";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits } from "./types";
 
-export type CompleteDimensionVector = { [Dim in Dimension]: Exponent };
+export type DimensionVector = Partial<{ [dimension: string]: Exponent }>;
 
-export type DimensionVector = Partial<CompleteDimensionVector>;
-
-export function basisVector<Dim extends Dimension>(dim: Dim): { [D in Dim]: 1 } {
+export function basisVector<Dimension extends string>(dim: Dimension): { [D in Dimension]: 1 } {
+    // TODO Remove cast to any somehow
     return { [dim]: 1 } as any;
 }
 
@@ -38,7 +36,8 @@ export function subtractVectors<Left extends DimensionVector, Right extends Dime
     left: Left,
     right: Right,
 ): DivideUnits<Left, Right> {
-    return addVectors(left, scaleVector(right, -1));
+    // TODO Remove cast to any somehow
+    return addVectors(left, scaleVector(right, -1)) as any;
 }
 
 export function scaleVector<Vector extends DimensionVector, Power extends Exponent>(
@@ -47,7 +46,9 @@ export function scaleVector<Vector extends DimensionVector, Power extends Expone
 ): ExponentiateUnit<Vector, Power> {
     const result: any = {};
     for (const dimension in vector) {
-        const exp = (vector[dimension as Dimension] || 0) * power;
+        // TODO Remove cast to exponent somehow
+        const originalExp = (vector[dimension] as Exponent) || 0;
+        const exp = originalExp * power;
         checkExponent(exp);
         if (exp) {
             result[dimension] = exp;
@@ -59,7 +60,9 @@ export function scaleVector<Vector extends DimensionVector, Power extends Expone
 export function inverseScaleVector<Vector extends DimensionVector, Root extends Exponent>(vector: Vector, root: Root) {
     const result: any = {};
     for (const dimension in vector) {
-        const exp = (vector[dimension as Dimension] || 0) / root;
+        // TODO Remove cast to exponent somehow
+        const originalExp = (vector[dimension] as Exponent) || 0;
+        const exp = originalExp / root;
         checkExponent(exp);
         if (exp) {
             result[dimension] = exp;
