@@ -1,5 +1,5 @@
-import { genOperatorTypes } from "./types";
-import { genOperatorTests } from "./tests";
+import { genOperatorTypes } from "./genTypes";
+import { genOperatorTests } from "./genTests";
 import { OperatorCodeGenOptions } from "./common";
 import { writeFile } from "fs";
 
