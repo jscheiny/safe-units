@@ -1,4 +1,4 @@
-import { Exponent, ArithmeticError } from "./common";
+import { ArithmeticError, Exponent } from "./common";
 import { DivideExponents } from "./division";
 
 export type IsArithmeticError<T> = T extends ArithmeticError ? true : false;
