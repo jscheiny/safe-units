@@ -1,5 +1,5 @@
-import * as SafeMath from "../math";
 import { Unit } from "../../units";
+import * as SafeMath from "../math";
 import { Measure } from "../measure";
 
 describe("Math", () => {

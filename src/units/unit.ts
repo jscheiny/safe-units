@@ -1,7 +1,7 @@
-import { Dimension } from "./common";
-import { MultiplyUnits, DivideUnits, ExponentiateUnit, NthRootUnit } from "./types";
-import { addVectors, subtractVectors, scaleVector, basisVector, DimensionVector, inverseScaleVector } from "./vector";
 import { Exponent } from "../exponents";
+import { Dimension } from "./common";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
+import { addVectors, basisVector, DimensionVector, inverseScaleVector, scaleVector, subtractVectors } from "./vector";
 
 export class Unit<Vector extends DimensionVector> {
     constructor(public readonly vector: Vector) {}
