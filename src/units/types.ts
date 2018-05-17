@@ -1,70 +1,71 @@
-import { AddExponents, ArithmeticError, Exponent, MultiplyExponents } from "../exponents";
-import { DivideExponents } from "../exponents/division";
-import { IsArithmeticError } from "../exponents/utils";
-import { Dimension } from "./common";
-import { CompleteDimensionVector, DimensionVector } from "./vector";
+import {
+    AddExponents,
+    ArithmeticError,
+    DivideExponents,
+    Exponent,
+    IsArithmeticError,
+    MultiplyExponents,
+} from "../exponents";
+import { ArithmeticError } from "../exponents/common";
+import { DimensionVector } from "./vector";
 
 // Arithmetic
 
-/**
- * Returns the product of two units. The result will be a minimal unit. This can be thought of as the sum of two
- * dimension vectors.
- */
-export type MultiplyUnits<Left extends DimensionVector, Right extends DimensionVector> = HandleErrors<
-    MultiplyImpl<FillZeroes<Left>, FillZeroes<Right>>
+/** Returns the product of two units. This is the sum of the two dimension vectors. */
+export type MultiplyUnits<
+    Basis extends string,
+    Left extends DimensionVector<Basis>,
+    Right extends DimensionVector<Basis>
+> = HandleErrors<
+    Basis,
+    { [Dim in Basis]: AddExponents<GetExponent<Basis, Left, Dim>, GetExponent<Basis, Right, Dim>> }
 >;
 
-export type MultiplyImpl<Left extends CompleteDimensionVector, Right extends CompleteDimensionVector> = {
-    [Dim in Dimension]: AddExponents<Left[Dim], Right[Dim]>
-};
-
-/**
- * Returns the quotient of two units. The result will be a minimal unit. This can be thought of as the difference of two
- * dimension vectors.
- */
-export type DivideUnits<Left extends DimensionVector, Right extends DimensionVector> = MultiplyUnits<
-    Left,
-    ExponentiateUnit<Right, -1>
+/** Returns the quotient of two units. This is the difference of two dimension vectors. */
+export type DivideUnits<
+    Basis extends string,
+    Left extends DimensionVector<Basis>,
+    Right extends DimensionVector<Basis>
+> = HandleErrors<
+    Basis,
+    {
+        [Dim in Basis]: AddExponents<
+            GetExponent<Basis, Left, Dim>,
+            MultiplyExponents<GetExponent<Basis, Right, Dim>, -1>
+        >
+    }
 >;
 
-/**
- * Returns the exponentation of a unit to a given power. The result will be a minimal unit. This can be thought of as
- * a scalar multiple of the dimension vector.
- */
-export type ExponentiateUnit<Vector extends DimensionVector, Power extends Exponent> = HandleErrors<
-    ExponentiateImpl<FillZeroes<Vector>, Power>
->;
+/** Returns the exponentation of a unit to a given power. This is a scalar multiple of the dimension vector. */
+export type ExponentiateUnit<
+    Basis extends string,
+    Vector extends DimensionVector<Basis>,
+    Power extends Exponent
+> = HandleErrors<Basis, { [Dim in Basis]: MultiplyExponents<GetExponent<Basis, Vector, Dim>, Power> }>;
 
-export type ExponentiateImpl<Vector extends CompleteDimensionVector, Power extends Exponent> = {
-    [Dim in Dimension]: MultiplyExponents<Vector[Dim], Power>
-};
-
-/**
- * Returns the nth root of a unit. The result will be a minimal unit. This can be thought of as a scalar multiple of
- * the dimension vector by the reciprocal of the root value.
- */
-export type NthRootUnit<Vector extends DimensionVector, Root extends Exponent> = HandleErrors<
-    NthRootUnitImpl<FillZeroes<Vector>, Root>
->;
-
-export type NthRootUnitImpl<Vector extends CompleteDimensionVector, Root extends Exponent> = {
-    [Dim in Dimension]: DivideExponents<Vector[Dim], Root>
-};
+/** Returns the nth root of a unit. This is a scalar multiple of the dimension vector by the reciprocal of the root. */
+export type NthRootUnit<
+    Basis extends string,
+    Vector extends DimensionVector<Basis>,
+    Root extends Exponent
+> = HandleErrors<Basis, { [Dim in Basis]: DivideExponents<GetExponent<Basis, Vector, Dim>, Root> }>;
 
 // Error handling
 
 /** Handle errors in the result of an arithmetic operation. */
-export type HandleErrors<Result extends ArithmeticResult> = true extends ResultHasError<Result>
+export type HandleErrors<Basis extends string, Result extends ArithmeticResult<Basis>> = true extends ResultHasError<
+    Result
+>
     ? ArithmeticError
-    : Clean<StripZeroes<RemoveErrors<Result>>>;
+    : Clean<StripZeroes<Basis, RemoveErrors<Basis, Result>>>;
 
 export type ResultHasError<Result> = { [Dim in keyof Result]: IsArithmeticError<Result[Dim]> }[keyof Result];
 
-export type RemoveErrors<Result extends ArithmeticResult> = {
-    [Dim in Dimension]: Result[Dim] extends ArithmeticError ? 0 : Result[Dim]
+export type RemoveErrors<Basis extends string, Result extends ArithmeticResult<Basis>> = {
+    [Dim in Basis]: Result[Dim] extends ArithmeticError ? 0 : Result[Dim]
 };
 
-export type ArithmeticResult = { [Dim in Dimension]: Exponent | ArithmeticError };
+export type ArithmeticResult<Basis extends string> = { [Dim in Basis]: Exponent | ArithmeticError | undefined };
 
 // Utility types
 
@@ -72,19 +73,18 @@ export type ArithmeticResult = { [Dim in Dimension]: Exponent | ArithmeticError 
 export type Clean<T> = { [K in keyof T]: T[K] };
 
 /** Removes all zero exponent dimensions from a dimension vector */
-export type StripZeroes<Vector extends CompleteDimensionVector> = Pick<Vector, NonZeroKeys<Vector>>;
+export type StripZeroes<Basis extends string, Vector extends DimensionVector<Basis>> = Pick<
+    Vector,
+    NonZeroKeys<Basis, Vector>
+>;
 
-export type NonZeroKeys<Vector extends DimensionVector> = {
+export type NonZeroKeys<Basis extends string, Vector extends DimensionVector<Basis>> = {
     [Dim in keyof Vector]: Vector[Dim] extends 0 ? never : Dim
 }[keyof Vector];
 
-/** Fills in any missing dimensions in a dimension vector with a zero exponent */
-export type FillZeroes<Vector extends DimensionVector> = {
-    [Dim in Dimension]: FillZeroesImpl<Vector>[Dim] extends undefined ? 0 : NonNullable<FillZeroesImpl<Vector>[Dim]>
-};
-
-export type FillZeroesImpl<Vector extends DimensionVector> = Vector & { [Dim in MissingDimensions<Vector>]: 0 };
-
-export type MissingDimensions<Vector extends DimensionVector> = {
-    [Dim in Dimension]: Vector[Dim] extends undefined ? Dim : never
-}[Dimension];
+/** Return the exponent associated with a given dimension in a dimension vector if present, otherwise return 0 */
+export type GetExponent<
+    Basis extends string,
+    Vector extends DimensionVector<Basis>,
+    Dim extends Basis
+> = undefined extends Vector[Dim] ? 0 : NonNullable<Vector[Dim]>;
