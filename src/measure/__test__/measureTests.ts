@@ -7,6 +7,27 @@ describe("Measures", () => {
     const mps = meter.per(second);
     const mps2 = mps.per(second);
 
+    describe("construction", () => {
+        it("should construct from a number of and a unit", () => {
+            const measure = Measure.of(10, mps2);
+            expect(measure.value).toBe(10);
+            expect(measure.unit).toEqual(mps2);
+        });
+
+        it("should construct from a number and another measure", () => {
+            const kilometer = Measure.of(1000, meter);
+            const measure = Measure.of(5.2, kilometer);
+            expect(measure.value).toBe(5200);
+            expect(measure.unit).toEqual(meter);
+        });
+
+        it("should construct scalar values", () => {
+            const scalar = Measure.scalar(3);
+            expect(scalar.value).toBe(3);
+            expect(scalar.unit).toEqual(Unit.scalar());
+        });
+    });
+
     describe("arithmetic", () => {
         it("should negate", () => {
             const value = Measure.of(10, mps);

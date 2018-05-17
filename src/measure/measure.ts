@@ -5,8 +5,16 @@ import { Exponent } from "../exponents";
 export class Measure<Vector extends DimensionVector> {
     constructor(public readonly value: number, public readonly unit: Unit<Vector>) {}
 
-    public static of<V extends DimensionVector>(value: number, unit: Unit<V>) {
-        return new Measure(value, unit);
+    public static scalar(value: number) {
+        return Measure.of(value, Unit.scalar());
+    }
+
+    public static of<V extends DimensionVector>(value: number, quantity: Unit<V> | Measure<V>): Measure<V> {
+        if (quantity instanceof Measure) {
+            return new Measure(value * quantity.value, quantity.unit);
+        } else {
+            return new Measure(value, quantity);
+        }
     }
 
     // Arithmetic

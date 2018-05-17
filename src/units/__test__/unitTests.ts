@@ -9,13 +9,15 @@ describe("Units", () => {
         expect(unit.vector).toEqual(vector);
     }
 
-    it("should create scalar units", () => {
-        expectVector(Unit.scalar(), {});
-    });
+    describe("construction", () => {
+        it("should construct scalar units", () => {
+            expectVector(Unit.scalar(), {});
+        });
 
-    it("should create base units", () => {
-        expectVector(length, { length: 1 });
-        expectVector(time, { time: 1 });
+        it("should construct base units", () => {
+            expectVector(length, { length: 1 });
+            expectVector(time, { time: 1 });
+        });
     });
 
     describe("multiplication", () => {
