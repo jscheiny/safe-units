@@ -2,6 +2,7 @@ import { Dimension } from "./common";
 import { AddExponents, Exponent, MultiplyExponents, ArithmeticError } from "../exponents";
 import { DimensionVector, CompleteDimensionVector } from "./vector";
 import { DivideExponents } from "../exponents/division";
+import { IsArithmeticError } from "../exponents/utils";
 
 // Arithmetic
 
@@ -57,9 +58,7 @@ export type HandleErrors<Result extends ArithmeticResult> = true extends ResultH
     ? ArithmeticError
     : Clean<StripZeroes<RemoveErrors<Result>>>;
 
-export type ResultHasError<Result> = {
-    [Dim in keyof Result]: Result[Dim] extends ArithmeticError ? true : false
-}[keyof Result];
+export type ResultHasError<Result> = { [Dim in keyof Result]: IsArithmeticError<Result[Dim]> }[keyof Result];
 
 export type RemoveErrors<Result extends ArithmeticResult> = {
     [Dim in Dimension]: Result[Dim] extends ArithmeticError ? 0 : Result[Dim]
