@@ -2,14 +2,17 @@ import { Exponent } from "../exponents";
 import { DimensionVector, Unit } from "../units";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "../units/types";
 
-export class Measure<Vector extends DimensionVector> {
-    constructor(public readonly value: number, public readonly unit: Unit<Vector>) {}
+export class Measure<Basis extends string, Vector extends DimensionVector<Basis>> {
+    constructor(public readonly value: number, public readonly unit: Unit<Basis, Vector>) {}
 
-    public static scalar(value: number) {
-        return Measure.of(value, Unit.scalar());
+    public static scalar<Basis extends string>(value: number) {
+        return Measure.of(value, Unit.scalar<Basis>());
     }
 
-    public static of<V extends DimensionVector>(value: number, quantity: Unit<V> | Measure<V>): Measure<V> {
+    public static of<Basis extends string, V extends DimensionVector<Basis>>(
+        value: number,
+        quantity: Unit<Basis, V> | Measure<Basis, V>,
+    ): Measure<Basis, V> {
         if (quantity instanceof Measure) {
             return new Measure(value * quantity.value, quantity.unit);
         } else {
@@ -19,65 +22,69 @@ export class Measure<Vector extends DimensionVector> {
 
     // Arithmetic
 
-    public plus(other: Measure<Vector>): Measure<Vector> {
+    public plus(other: Measure<Basis, Vector>): Measure<Basis, Vector> {
         return Measure.of(this.value + other.value, this.unit);
     }
 
-    public minus(other: Measure<Vector>): Measure<Vector> {
+    public minus(other: Measure<Basis, Vector>): Measure<Basis, Vector> {
         return Measure.of(this.value - other.value, this.unit);
     }
 
-    public negate(): Measure<Vector> {
+    public negate(): Measure<Basis, Vector> {
         return Measure.of(-this.value, this.unit);
     }
 
-    public times<Other extends DimensionVector>(other: Measure<Other>): Measure<MultiplyUnits<Vector, Other>> {
+    public times<Other extends DimensionVector<Basis>>(
+        other: Measure<Basis, Other>,
+    ): Measure<Basis, MultiplyUnits<Basis, Vector, Other>> {
         return Measure.of(this.value * other.value, this.unit.times(other.unit));
     }
 
-    public over<Other extends DimensionVector>(other: Measure<Other>): Measure<DivideUnits<Vector, Other>> {
+    public over<Other extends DimensionVector<Basis>>(
+        other: Measure<Basis, Other>,
+    ): Measure<Basis, DivideUnits<Basis, Vector, Other>> {
         return Measure.of(this.value / other.value, this.unit.over(other.unit));
     }
 
-    public toThe<Power extends Exponent>(power: Power): Measure<ExponentiateUnit<Vector, Power>> {
+    public toThe<Power extends Exponent>(power: Power): Measure<Basis, ExponentiateUnit<Basis, Vector, Power>> {
         return Measure.of(Math.pow(this.value, power), this.unit.toThe(power));
     }
 
-    public sqrt(): Measure<NthRootUnit<Vector, 2>> {
+    public sqrt(): Measure<Basis, NthRootUnit<Basis, Vector, 2>> {
         return Measure.of(Math.sqrt(this.value), this.unit.sqrt());
     }
 
-    public cbrt(): Measure<NthRootUnit<Vector, 3>> {
+    public cbrt(): Measure<Basis, NthRootUnit<Basis, Vector, 3>> {
         return Measure.of(Math.cbrt(this.value), this.unit.cbrt());
     }
 
     // Comparisons
 
-    public compareTo(other: Measure<Vector>): number {
+    public compareTo(other: Measure<Basis, Vector>): number {
         return this.value - other.value;
     }
 
-    public isLessThan(other: Measure<Vector>): boolean {
+    public isLessThan(other: Measure<Basis, Vector>): boolean {
         return this.compareTo(other) < 0;
     }
 
-    public isLessThanOrEqualTo(other: Measure<Vector>): boolean {
+    public isLessThanOrEqualTo(other: Measure<Basis, Vector>): boolean {
         return this.compareTo(other) <= 0;
     }
 
-    public isEqualTo(other: Measure<Vector>): boolean {
+    public isEqualTo(other: Measure<Basis, Vector>): boolean {
         return this.compareTo(other) === 0;
     }
 
-    public isNotEqualTo(other: Measure<Vector>): boolean {
+    public isNotEqualTo(other: Measure<Basis, Vector>): boolean {
         return this.compareTo(other) !== 0;
     }
 
-    public isGreaterThanOrEqualTo(other: Measure<Vector>): boolean {
+    public isGreaterThanOrEqualTo(other: Measure<Basis, Vector>): boolean {
         return this.compareTo(other) >= 0;
     }
 
-    public isGreaterThan(other: Measure<Vector>): boolean {
+    public isGreaterThan(other: Measure<Basis, Vector>): boolean {
         return this.compareTo(other) > 0;
     }
 }

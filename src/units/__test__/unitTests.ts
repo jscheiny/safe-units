@@ -2,16 +2,17 @@ import { Unit } from "../unit";
 import { DimensionVector } from "../vector";
 
 describe("Units", () => {
-    const length = Unit.basis("length");
-    const time = Unit.basis("time");
+    type Basis = "length" | "time";
+    const length = Unit.basis<Basis, "length">("length");
+    const time = Unit.basis<Basis, "time">("time");
 
-    function expectVector(unit: Unit<any>, vector: DimensionVector) {
+    function expectVector(unit: Unit<Basis, any>, vector: DimensionVector<Basis>) {
         expect(unit.vector).toEqual(vector);
     }
 
     describe("construction", () => {
         it("should construct scalar units", () => {
-            expectVector(Unit.scalar(), {});
+            expectVector(Unit.scalar<Basis>(), {});
         });
 
         it("should construct base units", () => {

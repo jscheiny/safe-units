@@ -3,8 +3,9 @@ import * as SafeMath from "../math";
 import { Measure } from "../measure";
 
 describe("Math", () => {
-    const meter = Unit.basis("length");
-    const second = Unit.basis("time");
+    type Basis = "length" | "time";
+    const meter = Unit.basis<Basis, "length">("length");
+    const second = Unit.basis<Basis, "time">("time");
     const mps = meter.per(second);
 
     it("arithmetic", () => {

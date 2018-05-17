@@ -1,19 +1,17 @@
 import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponents/common";
-import { Dimension } from "./common";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits } from "./types";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
 
-export type CompleteDimensionVector = { [Dim in Dimension]: Exponent };
+export type DimensionVector<Basis extends string> = { [Dim in Basis]?: Exponent };
 
-export type DimensionVector = Partial<CompleteDimensionVector>;
-
-export function basisVector<Dim extends Dimension>(dim: Dim): { [D in Dim]: 1 } {
+export function basisVector<Basis extends string, Dim extends Basis>(dim: Dim): { [D in Dim]: 1 } {
     return { [dim]: 1 } as any;
 }
 
-export function addVectors<Left extends DimensionVector, Right extends DimensionVector>(
-    left: Left,
-    right: Right,
-): MultiplyUnits<Left, Right> {
+export function addVectors<
+    Basis extends string,
+    Left extends DimensionVector<Basis>,
+    Right extends DimensionVector<Basis>
+>(left: Left, right: Right): MultiplyUnits<Basis, Left, Right> {
     const result: any = {};
     for (const dimension in left) {
         result[dimension] = left[dimension] || 0;
@@ -34,20 +32,21 @@ export function addVectors<Left extends DimensionVector, Right extends Dimension
     return result;
 }
 
-export function subtractVectors<Left extends DimensionVector, Right extends DimensionVector>(
-    left: Left,
-    right: Right,
-): DivideUnits<Left, Right> {
+export function subtractVectors<
+    Basis extends string,
+    Left extends DimensionVector<Basis>,
+    Right extends DimensionVector<Basis>
+>(left: Left, right: Right): DivideUnits<Basis, Left, Right> {
     return addVectors(left, scaleVector(right, -1));
 }
 
-export function scaleVector<Vector extends DimensionVector, Power extends Exponent>(
+export function scaleVector<Basis extends string, Vector extends DimensionVector<Basis>, Power extends Exponent>(
     vector: Vector,
     power: Power,
-): ExponentiateUnit<Vector, Power> {
+): ExponentiateUnit<Basis, Vector, Power> {
     const result: any = {};
     for (const dimension in vector) {
-        const exp = (vector[dimension as Dimension] || 0) * power;
+        const exp = (vector[dimension as Basis] || 0) * power;
         checkExponent(exp);
         if (exp) {
             result[dimension] = exp;
@@ -56,10 +55,13 @@ export function scaleVector<Vector extends DimensionVector, Power extends Expone
     return result;
 }
 
-export function inverseScaleVector<Vector extends DimensionVector, Root extends Exponent>(vector: Vector, root: Root) {
+export function inverseScaleVector<Basis extends string, Vector extends DimensionVector<Basis>, Root extends Exponent>(
+    vector: Vector,
+    root: Root,
+): NthRootUnit<Basis, Vector, Root> {
     const result: any = {};
     for (const dimension in vector) {
-        const exp = (vector[dimension as Dimension] || 0) / root;
+        const exp = (vector[dimension as Basis] || 0) / root;
         checkExponent(exp);
         if (exp) {
             result[dimension] = exp;
