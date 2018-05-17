@@ -39,7 +39,6 @@ def getCurriedMultiplicationTypeName(left):
 
 def main():
     emitImport()
-    emitNegationType()
     emitUncurriedMultiplicationType()
     for exp in exponents:
         if exp == 0 or exp == 1:
