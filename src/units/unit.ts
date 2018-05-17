@@ -1,16 +1,15 @@
 import { Exponent } from "../exponents";
-import { Dimension } from "./common";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
 import { addVectors, basisVector, DimensionVector, inverseScaleVector, scaleVector, subtractVectors } from "./vector";
 
 export class Unit<Vector extends DimensionVector> {
-    constructor(public readonly vector: Vector) {}
+    protected constructor(public readonly vector: Vector) {}
 
     public static scalar() {
         return new Unit({});
     }
 
-    public static basis<Dim extends Dimension>(dimension: Dim) {
+    public static basis<Dimension extends string>(dimension: Dimension) {
         return new Unit(basisVector(dimension));
     }
 
