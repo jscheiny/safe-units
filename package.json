@@ -5,7 +5,7 @@
     "scripts": {
         "codegen": "ts-node codegen/codegen",
         "compile": "tsc -p .",
-        "lint": "tslint -p tsconfig.json -c tslint.json 'src/**/*.ts'",
+        "lint": "tslint -p tsconfig.json -c tslint.json '{src,codegen}/**/*.ts'",
         "lint:fix": "yarn lint --fix",
         "test": "jest --config jest.config.js",
         "verify": "npm-run-all -s codegen compile lint test"

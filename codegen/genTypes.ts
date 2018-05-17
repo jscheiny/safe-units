@@ -1,11 +1,11 @@
 import {
     EXPONENTS,
-    indent,
-    genImport,
-    genValueName,
-    OperatorCodeGenOptions,
     genFileHeader,
+    genImport,
     genUncurriedTypeName,
+    genValueName,
+    indent,
+    OperatorCodeGenOptions,
 } from "./common";
 
 export function genOperatorTypes(options: OperatorCodeGenOptions): string {
