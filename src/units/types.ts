@@ -1,8 +1,8 @@
-import { Dimension } from "./common";
-import { AddExponents, Exponent, MultiplyExponents, ArithmeticError } from "../exponents";
-import { DimensionVector, CompleteDimensionVector } from "./vector";
+import { AddExponents, ArithmeticError, Exponent, MultiplyExponents } from "../exponents";
 import { DivideExponents } from "../exponents/division";
 import { IsArithmeticError } from "../exponents/utils";
+import { Dimension } from "./common";
+import { CompleteDimensionVector, DimensionVector } from "./vector";
 
 // Arithmetic
 

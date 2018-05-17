@@ -1,8 +1,8 @@
-import { Exponent, ArithmeticError, MinExponent, MaxExponent } from "./common";
 import { AddExponents } from "./addition";
+import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "./common";
+import { DivideExponents } from "./division";
 import { MultiplyExponents } from "./multiplication";
 import { IsArithmeticError, IsDivisible } from "./utils";
-import { DivideExponents } from "./division";
 
 export {
     AddExponents,
