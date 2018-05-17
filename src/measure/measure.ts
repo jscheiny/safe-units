@@ -1,5 +1,5 @@
 import { Unit, DimensionVector } from "../units";
-import { MultiplyUnits, DivideUnits, ExponentiateUnit } from "../units/types";
+import { MultiplyUnits, DivideUnits, ExponentiateUnit, NthRootUnit } from "../units/types";
 import { Exponent } from "../exponents";
 
 export class Measure<Vector extends DimensionVector> {
@@ -33,6 +33,14 @@ export class Measure<Vector extends DimensionVector> {
 
     public toThe<Power extends Exponent>(power: Power): Measure<ExponentiateUnit<Vector, Power>> {
         return Measure.of(Math.pow(this.value, power), this.unit.toThe(power));
+    }
+
+    public sqrt(): Measure<NthRootUnit<Vector, 2>> {
+        return Measure.of(Math.sqrt(this.value), this.unit.sqrt());
+    }
+
+    public cbrt(): Measure<NthRootUnit<Vector, 3>> {
+        return Measure.of(Math.cbrt(this.value), this.unit.cbrt());
     }
 
     // Comparisons

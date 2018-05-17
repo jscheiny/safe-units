@@ -1,6 +1,6 @@
 import { Dimension } from "./common";
-import { MultiplyUnits, DivideUnits, ExponentiateUnit } from "./types";
-import { addVectors, subtractVectors, scaleVector, basisVector, DimensionVector } from "./vector";
+import { MultiplyUnits, DivideUnits, ExponentiateUnit, NthRootUnit } from "./types";
+import { addVectors, subtractVectors, scaleVector, basisVector, DimensionVector, inverseScaleVector } from "./vector";
 import { Exponent } from "../exponents";
 
 export class Unit<Vector extends DimensionVector> {
@@ -30,6 +30,10 @@ export class Unit<Vector extends DimensionVector> {
         return new Unit(scaleVector(this.vector, power));
     }
 
+    public root<Root extends Exponent>(root: Root): Unit<NthRootUnit<Vector, Root>> {
+        return new Unit(inverseScaleVector(this.vector, root));
+    }
+
     public inverse() {
         return this.toThe(-1);
     }
@@ -40,5 +44,13 @@ export class Unit<Vector extends DimensionVector> {
 
     public cubed() {
         return this.toThe(3);
+    }
+
+    public sqrt() {
+        return this.root(2);
+    }
+
+    public cbrt() {
+        return this.root(3);
     }
 }

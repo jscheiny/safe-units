@@ -1,6 +1,7 @@
 import { Dimension } from "./common";
 import { AddExponents, Exponent, MultiplyExponents, ArithmeticError } from "../exponents";
 import { DimensionVector, CompleteDimensionVector } from "./vector";
+import { DivideExponents } from "../exponents/division";
 
 // Arithmetic
 
@@ -26,7 +27,7 @@ export type DivideUnits<Left extends DimensionVector, Right extends DimensionVec
 >;
 
 /**
- * Returns the exponentation of a unit to a given power. The result will be a minimal unit. This can be through of as
+ * Returns the exponentation of a unit to a given power. The result will be a minimal unit. This can be thought of as
  * a scalar multiple of the dimension vector.
  */
 export type ExponentiateUnit<Vector extends DimensionVector, Power extends Exponent> = HandleErrors<
@@ -35,6 +36,18 @@ export type ExponentiateUnit<Vector extends DimensionVector, Power extends Expon
 
 export type ExponentiateImpl<Vector extends CompleteDimensionVector, Power extends Exponent> = {
     [Dim in Dimension]: MultiplyExponents<Vector[Dim], Power>
+};
+
+/**
+ * Returns the nth root of a unit. The result will be a minimal unit. This can be thought of as a scalar multiple of
+ * the dimension vector by the reciprocal of the root value.
+ */
+export type NthRootUnit<Vector extends DimensionVector, Root extends Exponent> = HandleErrors<
+    NthRootUnitImpl<FillZeroes<Vector>, Root>
+>;
+
+export type NthRootUnitImpl<Vector extends CompleteDimensionVector, Root extends Exponent> = {
+    [Dim in Dimension]: DivideExponents<Vector[Dim], Root>
 };
 
 // Error handling

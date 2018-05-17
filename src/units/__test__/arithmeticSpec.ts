@@ -1,4 +1,4 @@
-import { StripZeroes, FillZeroes, MultiplyUnits, DivideUnits, ExponentiateUnit } from "../types";
+import { StripZeroes, FillZeroes, MultiplyUnits, DivideUnits, ExponentiateUnit, NthRootUnit } from "../types";
 import { IsArithmeticError } from "../../exponents/utils";
 
 type FillZeroesWorks = { mass: 2; time: 0; length: 0 } extends FillZeroes<{ mass: 2; time: 0 }> ? true : never;
@@ -46,3 +46,12 @@ const CubingWorks: CubingWorks = true;
 
 type ExponentiationPropagatesErrors = IsArithmeticError<ExponentiateUnit<{ mass: -5; time: 1 }, -2>>;
 const ExponentiationPropagatesErrors: ExponentiationPropagatesErrors = true;
+
+type SquareRootingWorks = { length: 2; mass: -1 } extends NthRootUnit<{ length: 4; mass: -2 }, 2> ? true : never;
+const SquareRootingWorks: SquareRootingWorks = true;
+
+type CubeRootingWorks = { length: 1; time: -1 } extends NthRootUnit<{ length: 3; time: -3 }, 3> ? true : never;
+const CubeRootingWorks: CubeRootingWorks = true;
+
+type NthRootPropagatesErrors = IsArithmeticError<NthRootUnit<{ length: 3 }, 2>>;
+const NthRootPropagatesErrors: NthRootPropagatesErrors = true;

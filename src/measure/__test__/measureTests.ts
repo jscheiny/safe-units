@@ -57,6 +57,18 @@ describe("Measures", () => {
             expect(toThe2.value).toBe(100);
             expect(toThe2.unit).toEqual(meter.squared());
         });
+
+        it("should square root", () => {
+            const value = Measure.of(100, meter.squared());
+            expect(value.sqrt().value).toBe(10);
+            expect(value.sqrt().unit).toEqual(meter);
+        });
+
+        it("should cube root", () => {
+            const value = Measure.of(64, mps.cubed());
+            expect(value.cbrt().value).toBe(4);
+            expect(value.cbrt().unit).toEqual(mps);
+        });
     });
 
     describe("Comparison", () => {

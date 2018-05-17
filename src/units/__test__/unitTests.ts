@@ -86,6 +86,26 @@ describe("Units", () => {
         });
     });
 
+    describe("division", () => {
+        it("should correctly divide units", () => {
+            const left = new Unit({
+                length: 2,
+                mass: 2,
+            });
+            const right = new Unit({
+                length: 2,
+                mass: -1,
+                time: 2,
+            });
+            const quotient: DimensionVector = {
+                mass: 3,
+                time: -2,
+            };
+            expectVector(left.per(right), quotient);
+            expectVector(left.over(right), quotient);
+        });
+    });
+
     describe("exponentiation", () => {
         it("should square a simple unit", () => {
             expectVector(length.squared(), {
@@ -153,34 +173,43 @@ describe("Units", () => {
         });
 
         it("should handle explicitly undefined and 0 exponents", () => {
-            const left = new Unit({
+            const unit = new Unit({
                 length: 2,
                 time: undefined,
                 mass: 0,
             });
-            expectVector(left.squared(), {
+            expectVector(unit.squared(), {
                 length: 4,
             });
         });
     });
 
-    describe("division", () => {
-        it("should correctly divide units", () => {
-            const left = new Unit({
+    describe("roots", () => {
+        it("should square root the unit", () => {
+            const unit = new Unit({ length: 4, mass: -2 });
+            expectVector(unit.sqrt(), { length: 2, mass: -1 });
+        });
+
+        it("should cube root the unit", () => {
+            const unit = new Unit({ length: 3, mass: -3 });
+            expectVector(unit.cbrt(), { length: 1, mass: -1 });
+        });
+
+        it("should throw an error when an exponent can't be divided", () => {
+            const unit = new Unit({ length: 4, mass: -3 });
+            expect(() => unit.sqrt()).toThrow();
+            expect(() => unit.cbrt()).toThrow();
+        });
+
+        it("should handle explicitly undefined and 0 exponents", () => {
+            const unit = new Unit({
                 length: 2,
-                mass: 2,
+                time: undefined,
+                mass: 0,
             });
-            const right = new Unit({
-                length: 2,
-                mass: -1,
-                time: 2,
+            expectVector(unit.sqrt(), {
+                length: 1,
             });
-            const quotient: DimensionVector = {
-                mass: 3,
-                time: -2,
-            };
-            expectVector(left.per(right), quotient);
-            expectVector(left.over(right), quotient);
         });
     });
 });

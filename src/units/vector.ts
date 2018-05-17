@@ -34,6 +34,13 @@ export function addVectors<Left extends DimensionVector, Right extends Dimension
     return result;
 }
 
+export function subtractVectors<Left extends DimensionVector, Right extends DimensionVector>(
+    left: Left,
+    right: Right,
+): DivideUnits<Left, Right> {
+    return addVectors(left, scaleVector(right, -1));
+}
+
 export function scaleVector<Vector extends DimensionVector, Power extends Exponent>(
     vector: Vector,
     power: Power,
@@ -49,15 +56,20 @@ export function scaleVector<Vector extends DimensionVector, Power extends Expone
     return result;
 }
 
-export function subtractVectors<Left extends DimensionVector, Right extends DimensionVector>(
-    left: Left,
-    right: Right,
-): DivideUnits<Left, Right> {
-    return addVectors(left, scaleVector(right, -1));
+export function inverseScaleVector<Vector extends DimensionVector, Root extends Exponent>(vector: Vector, root: Root) {
+    const result: any = {};
+    for (const dimension in vector) {
+        const exp = (vector[dimension as Dimension] || 0) / root;
+        checkExponent(exp);
+        if (exp) {
+            result[dimension] = exp;
+        }
+    }
+    return result;
 }
 
 function checkExponent(exp: number): void {
-    if (exp < MinExponent || exp > MaxExponent) {
+    if (exp < MinExponent || exp > MaxExponent || Math.floor(exp) !== exp) {
         throw new Error(ArithmeticError);
     }
 }
