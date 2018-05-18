@@ -1,12 +1,12 @@
 import { Exponent } from "../exponents";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
-import { addVectors, basisVector, DimensionVector, inverseScaleVector, scaleVector, subtractVectors } from "./vector";
+import { dimension, DimensionVector, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "./vector";
 
 export class Measure<U extends DimensionVector> {
     constructor(public readonly value: number, private readonly unit: U) {}
 
-    public static dimension<Dimension extends string>(dimension: Dimension) {
-        return new Measure(1, basisVector(dimension));
+    public static dimension<Dimension extends string>(dim: Dimension) {
+        return new Measure(1, dimension(dim));
     }
 
     public static scalar(value: number): Measure<{}> {
@@ -40,11 +40,11 @@ export class Measure<U extends DimensionVector> {
     }
 
     public times<V extends DimensionVector>(other: Measure<V>): Measure<MultiplyUnits<U, V>> {
-        return new Measure(this.value * other.value, addVectors(this.unit, other.unit));
+        return new Measure(this.value * other.value, multiplyUnits(this.unit, other.unit));
     }
 
     public over<V extends DimensionVector>(other: Measure<V>): Measure<DivideUnits<U, V>> {
-        return new Measure(this.value / other.value, subtractVectors(this.unit, other.unit));
+        return new Measure(this.value / other.value, divideUnits(this.unit, other.unit));
     }
 
     public per<V extends DimensionVector>(other: Measure<V>): Measure<DivideUnits<U, V>> {
@@ -52,7 +52,7 @@ export class Measure<U extends DimensionVector> {
     }
 
     public toThe<Power extends Exponent>(power: Power): Measure<ExponentiateUnit<U, Power>> {
-        return new Measure(Math.pow(this.value, power), scaleVector(this.unit, power));
+        return new Measure(Math.pow(this.value, power), exponentiateUnit(this.unit, power));
     }
 
     public squared(): Measure<ExponentiateUnit<U, 2>> {
@@ -64,11 +64,11 @@ export class Measure<U extends DimensionVector> {
     }
 
     public sqrt(): Measure<NthRootUnit<U, 2>> {
-        return new Measure(Math.sqrt(this.value), inverseScaleVector(this.unit, 2));
+        return new Measure(Math.sqrt(this.value), nthRootUnit(this.unit, 2));
     }
 
     public cbrt(): Measure<NthRootUnit<U, 3>> {
-        return new Measure(Math.cbrt(this.value), inverseScaleVector(this.unit, 3));
+        return new Measure(Math.cbrt(this.value), nthRootUnit(this.unit, 3));
     }
 
     // Comparisons

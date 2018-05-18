@@ -3,12 +3,12 @@ import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./typ
 
 export type DimensionVector = Partial<{ [dimension: string]: Exponent }>;
 
-export function basisVector<Dimension extends string>(dim: Dimension): { [D in Dimension]: 1 } {
+export function dimension<Dimension extends string>(dim: Dimension): { [D in Dimension]: 1 } {
     // TODO Remove cast to any somehow
     return { [dim]: 1 } as any;
 }
 
-export function addVectors<Left extends DimensionVector, Right extends DimensionVector>(
+export function multiplyUnits<Left extends DimensionVector, Right extends DimensionVector>(
     left: Left,
     right: Right,
 ): MultiplyUnits<Left, Right> {
@@ -32,15 +32,15 @@ export function addVectors<Left extends DimensionVector, Right extends Dimension
     return result;
 }
 
-export function subtractVectors<Left extends DimensionVector, Right extends DimensionVector>(
+export function divideUnits<Left extends DimensionVector, Right extends DimensionVector>(
     left: Left,
     right: Right,
 ): DivideUnits<Left, Right> {
     // TODO Remove cast to any somehow
-    return addVectors(left, scaleVector(right, -1)) as any;
+    return multiplyUnits(left, exponentiateUnit(right, -1)) as any;
 }
 
-export function scaleVector<Vector extends DimensionVector, Power extends Exponent>(
+export function exponentiateUnit<Vector extends DimensionVector, Power extends Exponent>(
     vector: Vector,
     power: Power,
 ): ExponentiateUnit<Vector, Power> {
@@ -57,7 +57,7 @@ export function scaleVector<Vector extends DimensionVector, Power extends Expone
     return result;
 }
 
-export function inverseScaleVector<Vector extends DimensionVector, Root extends Exponent>(
+export function nthRootUnit<Vector extends DimensionVector, Root extends Exponent>(
     vector: Vector,
     root: Root,
 ): NthRootUnit<Vector, Root> {
