@@ -1,7 +1,7 @@
-import { genOperatorTypes } from "./genTypes";
-import { genOperatorTests } from "./genTests";
-import { OperatorCodeGenOptions } from "./common";
 import { writeFile } from "fs";
+import { OperatorCodeGenOptions } from "./common";
+import { genOperatorTests } from "./genTests";
+import { genOperatorTypes } from "./genTypes";
 
 export function emitOperator(options: OperatorCodeGenOptions) {
     const { fileNamePrefix } = options;
