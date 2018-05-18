@@ -17,11 +17,11 @@ export class Measure<U extends DimensionVector> {
         return new Measure(value * quantity.value, quantity.unit);
     }
 
-    public getUnit(): Measure<U> {
+    public normalized(): Measure<U> {
         return new Measure(1, this.unit);
     }
 
-    public getUnitVector(): U {
+    public getUnit(): U {
         return this.unit;
     }
 

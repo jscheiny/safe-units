@@ -62,13 +62,13 @@ export function sum<U extends DimensionVector>(first: Measure<U>, ...rest: Array
 
 function wrapUnary(f: (x: number) => number) {
     return <U extends DimensionVector>(x: Measure<U>): Measure<U> => {
-        return Measure.of(f(x.value), x.getUnit());
+        return Measure.of(f(x.value), x.normalized());
     };
 }
 
 function warpNary(f: (...x: number[]) => number) {
     return <U extends DimensionVector>(first: Measure<U>, ...rest: Array<Measure<U>>): Measure<U> => {
-        return Measure.of(f(...values(first, ...rest)), first.getUnit());
+        return Measure.of(f(...values(first, ...rest)), first.normalized());
     };
 }
 
