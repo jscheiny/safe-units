@@ -10,20 +10,20 @@ describe("Measures", () => {
         it("should construct from a number of and a unit", () => {
             const measure = Measure.of(10, mps2);
             expect(measure.value).toBe(10);
-            expect(measure.getUnitVector()).toEqual(mps2.getUnitVector());
+            expect(measure.getUnit()).toEqual(mps2.getUnit());
         });
 
         it("should construct from a number and another measure", () => {
             const kilometer = Measure.of(1000, meter);
             const measure = Measure.of(5.2, kilometer);
             expect(measure.value).toBe(5200);
-            expect(measure.getUnitVector()).toEqual(meter.getUnitVector());
+            expect(measure.getUnit()).toEqual(meter.getUnit());
         });
 
         it("should construct scalar values", () => {
             const scalar = Measure.scalar(3);
             expect(scalar.value).toBe(3);
-            expect(scalar.getUnitVector()).toEqual({});
+            expect(scalar.getUnit()).toEqual({});
         });
     });
 

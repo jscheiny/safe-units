@@ -1,17 +1,14 @@
 import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponents/common";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
 
-export type DimensionVector = Partial<{ [dimension: string]: Exponent }>;
+export type Unit = Partial<{ [dimension: string]: Exponent }>;
 
-export function basisVector<Dimension extends string>(dim: Dimension): { [D in Dimension]: 1 } {
+export function dimension<D extends string>(dim: D): { [K in D]: 1 } {
     // TODO Remove cast to any somehow
     return { [dim]: 1 } as any;
 }
 
-export function addVectors<Left extends DimensionVector, Right extends DimensionVector>(
-    left: Left,
-    right: Right,
-): MultiplyUnits<Left, Right> {
+export function multiplyUnits<L extends Unit, R extends Unit>(left: L, right: R): MultiplyUnits<L, R> {
     const result: any = {};
     for (const dimension in left) {
         result[dimension] = left[dimension] || 0;
@@ -32,22 +29,16 @@ export function addVectors<Left extends DimensionVector, Right extends Dimension
     return result;
 }
 
-export function subtractVectors<Left extends DimensionVector, Right extends DimensionVector>(
-    left: Left,
-    right: Right,
-): DivideUnits<Left, Right> {
+export function divideUnits<L extends Unit, R extends Unit>(left: L, right: R): DivideUnits<L, R> {
     // TODO Remove cast to any somehow
-    return addVectors(left, scaleVector(right, -1)) as any;
+    return multiplyUnits(left, exponentiateUnit(right, -1)) as any;
 }
 
-export function scaleVector<Vector extends DimensionVector, Power extends Exponent>(
-    vector: Vector,
-    power: Power,
-): ExponentiateUnit<Vector, Power> {
+export function exponentiateUnit<U extends Unit, N extends Exponent>(unit: U, power: N): ExponentiateUnit<U, N> {
     const result: any = {};
-    for (const dimension in vector) {
+    for (const dimension in unit) {
         // TODO Remove cast to exponent somehow
-        const originalExp = (vector[dimension] as Exponent) || 0;
+        const originalExp = (unit[dimension] as Exponent) || 0;
         const exp = originalExp * power;
         checkExponent(exp);
         if (exp) {
@@ -57,14 +48,11 @@ export function scaleVector<Vector extends DimensionVector, Power extends Expone
     return result;
 }
 
-export function inverseScaleVector<Vector extends DimensionVector, Root extends Exponent>(
-    vector: Vector,
-    root: Root,
-): NthRootUnit<Vector, Root> {
+export function nthRootUnit<U extends Unit, N extends Exponent>(unit: U, root: N): NthRootUnit<U, N> {
     const result: any = {};
-    for (const dimension in vector) {
+    for (const dimension in unit) {
         // TODO Remove cast to exponent somehow
-        const originalExp = (vector[dimension] as Exponent) || 0;
+        const originalExp = (unit[dimension] as Exponent) || 0;
         const exp = originalExp / root;
         checkExponent(exp);
         if (exp) {

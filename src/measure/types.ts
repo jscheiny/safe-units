@@ -1,45 +1,28 @@
 import { AddExponents, ArithmeticError, Exponent, MultiplyExponents } from "../exponents";
 import { DivideExponents } from "../exponents/division";
 import { IsArithmeticError } from "../exponents/utils";
-import { DimensionVector } from "./vector";
+import { Unit } from "./units";
 
 // Arithmetic
 
-/**
- * Returns the product of two units. The result will be a minimal unit. This can be thought of as the sum of two
- * dimension vectors.
- */
-export type MultiplyUnits<Left extends DimensionVector, Right extends DimensionVector> = HandleErrors<
-    { [Dim in keyof Left | keyof Right]: AddExponents<GetExponent<Left, Dim>, GetExponent<Right, Dim>> }
+/** Returns the product of two units. This is the sum of two dimension vectors. */
+export type MultiplyUnits<L extends Unit, R extends Unit> = HandleErrors<
+    { [Dim in keyof L | keyof R]: AddExponents<GetExponent<L, Dim>, GetExponent<R, Dim>> }
 >;
 
-/**
- * Returns the quotient of two units. The result will be a minimal unit. This can be thought of as the difference of two
- * dimension vectors.
- */
-export type DivideUnits<Left extends DimensionVector, Right extends DimensionVector> = HandleErrors<
-    {
-        [Dim in keyof Left | keyof Right]: AddExponents<
-            GetExponent<Left, Dim>,
-            MultiplyExponents<GetExponent<Right, Dim>, -1>
-        >
-    }
+/** Returns the quotient of two units. This is the difference of two dimension vectors. */
+export type DivideUnits<L extends Unit, R extends Unit> = HandleErrors<
+    { [Dim in keyof L | keyof R]: AddExponents<GetExponent<L, Dim>, MultiplyExponents<GetExponent<R, Dim>, -1>> }
 >;
 
-/**
- * Returns the exponentation of a unit to a given power. The result will be a minimal unit. This can be thought of as
- * a scalar multiple of the dimension vector.
- */
-export type ExponentiateUnit<Vector extends DimensionVector, Power extends Exponent> = HandleErrors<
-    { [Dim in keyof Vector]: MultiplyExponents<GetExponent<Vector, Dim>, Power> }
+/** Returns the unit raised to a power. This is the scalar multiple of the dimension vector. */
+export type ExponentiateUnit<U extends Unit, N extends Exponent> = HandleErrors<
+    { [Dim in keyof U]: MultiplyExponents<GetExponent<U, Dim>, N> }
 >;
 
-/**
- * Returns the nth root of a unit. The result will be a minimal unit. This can be thought of as a scalar multiple of
- * the dimension vector by the reciprocal of the root value.
- */
-export type NthRootUnit<Vector extends DimensionVector, Root extends Exponent> = HandleErrors<
-    { [Dim in keyof Vector]: DivideExponents<GetExponent<Vector, Dim>, Root> }
+/** Returns the nth root of a unit. This is inverse scalar multiple of the dimension vector. */
+export type NthRootUnit<U extends Unit, N extends Exponent> = HandleErrors<
+    { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> }
 >;
 
 // Error handling
@@ -63,12 +46,10 @@ export type ArithmeticResult = { [dimension: string]: Exponent | ArithmeticError
 export type Clean<T> = { [K in keyof T]: T[K] };
 
 /** Removes all zero exponent dimensions from a dimension vector */
-export type StripZeroes<Vector extends DimensionVector> = Pick<Vector, NonZeroKeys<Vector>>;
+export type StripZeroes<U extends Unit> = Pick<U, NonZeroKeys<U>>;
 
-export type NonZeroKeys<Vector extends DimensionVector> = {
-    [Dim in keyof Vector]: Vector[Dim] extends 0 ? never : Dim
-}[keyof Vector];
+export type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: U[Dim] extends 0 ? never : Dim }[keyof U];
 
-export type GetExponent<Vector extends DimensionVector, Key extends string> = Key extends keyof Vector
-    ? (undefined extends Vector[Key] ? 0 : NonNullable<Vector[Key]>)
+export type GetExponent<U extends Unit, K extends string> = K extends keyof Unit
+    ? (undefined extends U[K] ? 0 : NonNullable<U[K]>)
     : 0;

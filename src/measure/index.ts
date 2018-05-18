@@ -1,5 +1,5 @@
 import * as SafeMath from "./math";
 import { Measure } from "./measure";
-import { DimensionVector } from "./vector";
+import { Unit } from "./units";
 
-export { DimensionVector, Measure, SafeMath };
+export { Unit, Measure, SafeMath };
