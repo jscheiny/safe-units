@@ -1,4 +1,4 @@
-import { dimension, DimensionVector, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "../vector";
+import { dimension, DimensionVector, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "../units";
 
 describe("Units", () => {
     const x = dimension("x");

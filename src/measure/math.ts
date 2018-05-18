@@ -1,7 +1,7 @@
 import { Exponent } from "../exponents";
 import { Measure } from "./measure";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
-import { DimensionVector } from "./vector";
+import { DimensionVector } from "./units";
 
 export const abs = wrapUnary(Math.abs);
 export const ceil = wrapUnary(Math.ceil);

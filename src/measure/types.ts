@@ -1,7 +1,7 @@
 import { AddExponents, ArithmeticError, Exponent, MultiplyExponents } from "../exponents";
 import { DivideExponents } from "../exponents/division";
 import { IsArithmeticError } from "../exponents/utils";
-import { DimensionVector } from "./vector";
+import { DimensionVector } from "./units";
 
 // Arithmetic
 

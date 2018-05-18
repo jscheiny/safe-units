@@ -1,6 +1,6 @@
 import { Exponent } from "../exponents";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
-import { dimension, DimensionVector, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "./vector";
+import { dimension, DimensionVector, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "./units";
 
 export class Measure<U extends DimensionVector> {
     constructor(public readonly value: number, private readonly unit: U) {}
