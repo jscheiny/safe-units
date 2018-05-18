@@ -1,223 +1,126 @@
-import { Unit } from "../unit";
-import { DimensionVector } from "../vector";
-
-class TestUnit<Vector extends DimensionVector> extends Unit<Vector> {
-    constructor(vector: Vector) {
-        super(vector);
-    }
-}
+import { addVectors, basisVector, DimensionVector, inverseScaleVector, scaleVector, subtractVectors } from "../vector";
 
 describe("Units", () => {
-    const length = Unit.basis("length");
-    const time = Unit.basis("time");
+    const x = basisVector("x");
+    const y = basisVector("y");
 
-    function expectVector(unit: Unit<any>, vector: DimensionVector) {
-        expect(unit.vector).toEqual(vector);
+    function vector<V extends DimensionVector>(v: V): V {
+        return v;
     }
 
-    describe("construction", () => {
-        it("should construct scalar units", () => {
-            expectVector(Unit.scalar(), {});
-        });
-
+    describe("bases", () => {
         it("should construct base units", () => {
-            expectVector(length, { length: 1 });
-            expectVector(time, { time: 1 });
+            expect(basisVector("x")).toEqual({ x: 1 });
         });
     });
 
     describe("multiplication", () => {
         it("should multiply two different base units correctly", () => {
-            expectVector(length.times(time), {
-                length: 1,
-                time: 1,
-            });
+            expect(addVectors(x, y)).toEqual({ x: 1, y: 1 });
         });
 
         it("should multiply two of the same base unit correctly", () => {
-            expectVector(length.times(length), {
-                length: 2,
-            });
+            expect(addVectors(x, x)).toEqual({ x: 2 });
         });
 
         it("should multiply complex units correctly", () => {
-            const left = new TestUnit({
-                length: 1,
-                time: -2,
-            });
-            const right = new TestUnit({
-                time: 1,
-                mass: 2,
-            });
-            expectVector(left.times(right), {
-                length: 1,
-                time: -1,
-                mass: 2,
-            });
+            const left = vector({ x: 1, y: -2 });
+            const right = vector({ y: 1, z: 2 });
+            expect(addVectors(left, right)).toEqual({ x: 1, y: -1, z: 2 });
         });
 
         it("should remove zero exponents from the result", () => {
-            const left = new TestUnit({
-                length: 1,
-                time: 2,
-                mass: 3,
-            });
-            const right = new TestUnit({
-                length: -1,
-                time: -2,
-                mass: -3,
-            });
-            expectVector(left.times(right), {});
+            const left = vector({ x: 1, y: 2, z: 3 });
+            const right = vector({ x: -1, y: -2, z: -3 });
+            expect(addVectors(left, right)).toEqual({});
         });
 
         it("should throw an error when an exponent is out of bounds", () => {
-            const positive = new TestUnit({ length: 3 });
-            expect(() => positive.times(positive)).toThrow();
+            const positive = vector({ x: 3 });
+            expect(() => addVectors(positive, positive)).toThrow();
 
-            const negative = positive.inverse();
-            expect(() => negative.times(negative)).toThrow();
+            const negative = vector({ x: -3 });
+            expect(() => addVectors(negative, negative)).toThrow();
         });
 
         it("should handle explicitly undefined and 0 exponents", () => {
-            const left = new TestUnit({
-                length: 2,
-                time: undefined,
-            });
-            const right = new TestUnit({
-                length: undefined,
-                mass: undefined,
-                time: 0,
-            });
-            expectVector(left.times(right), {
-                length: 2,
-            });
+            const left = vector({ x: 2, y: undefined });
+            const right = vector({ x: undefined, y: 0, z: undefined });
+            expect(addVectors(left, right)).toEqual({ x: 2 });
         });
     });
 
     describe("division", () => {
         it("should correctly divide units", () => {
-            const left = new TestUnit({
-                length: 2,
-                mass: 2,
-            });
-            const right = new TestUnit({
-                length: 2,
-                mass: -1,
-                time: 2,
-            });
-            const quotient: DimensionVector = {
-                mass: 3,
-                time: -2,
-            };
-            expectVector(left.per(right), quotient);
-            expectVector(left.over(right), quotient);
+            const left = vector({ x: 2, y: 2 });
+            const right = vector({ x: 2, y: -1, z: 2 });
+            expect(subtractVectors(left, right)).toEqual({ y: 3, z: -2 });
         });
     });
 
     describe("exponentiation", () => {
         it("should square a simple unit", () => {
-            expectVector(length.squared(), {
-                length: 2,
-            });
-            expectVector(time.squared(), {
-                time: 2,
-            });
+            expect(scaleVector(x, 2)).toEqual({ x: 2 });
         });
 
         it("should cube a simple unit", () => {
-            expectVector(length.cubed(), {
-                length: 3,
-            });
+            expect(scaleVector(x, 3)).toEqual({ x: 3 });
         });
 
         it("should square a complex unit", () => {
-            const unit = new TestUnit({
-                length: 1,
-                time: -2,
-            });
-            expectVector(unit.squared(), {
-                length: 2,
-                time: -4,
-            });
+            const unit = vector({ x: 1, y: -2 });
+            expect(scaleVector(unit, 2)).toEqual({ x: 2, y: -4 });
         });
 
         it("should invert a unit", () => {
-            const unit = new TestUnit({
-                length: -1,
-                time: 2,
-                mass: -3,
-            });
-            expectVector(unit.inverse(), {
-                length: 1,
-                time: -2,
-                mass: 3,
-            });
+            const unit = vector({ x: -1, y: 2, z: -3 });
+            expect(scaleVector(unit, -1)).toEqual({ x: 1, y: -2, z: 3 });
         });
 
         it("should return the same unit when raised to the one", () => {
-            const unit = new TestUnit({
-                length: -1,
-                time: 2,
-                mass: -3,
-            });
-            expectVector(unit.toThe(1), unit.vector);
+            const unit = vector({ x: -1, y: 2, z: -3 });
+            expect(scaleVector(unit, 1)).toEqual(unit);
         });
 
         it("should return a scalar unit when raised to the zero", () => {
-            const unit = new TestUnit({
-                length: -1,
-                time: 2,
-                mass: -3,
-            });
-            expectVector(unit.toThe(0), {});
+            const unit = vector({ x: -1, y: 2, z: -3 });
+            expect(scaleVector(unit, 0)).toEqual({});
         });
 
         it("should throw an error when an exponent is out of bounds", () => {
-            const unitA = new TestUnit({ length: 3 });
-            expect(() => unitA.squared()).toThrow();
+            const unitA = vector({ x: 3 });
+            expect(() => scaleVector(unitA, 2)).toThrow();
 
-            const unitB = new TestUnit({ length: 2 });
-            expect(() => unitB.toThe(-3)).toThrow();
+            const unitB = vector({ x: 2 });
+            expect(() => scaleVector(unitB, -3)).toThrow();
         });
 
         it("should handle explicitly undefined and 0 exponents", () => {
-            const unit = new TestUnit({
-                length: 2,
-                time: undefined,
-                mass: 0,
-            });
-            expectVector(unit.squared(), {
-                length: 4,
-            });
+            const unit = vector({ x: 2, y: undefined, z: 0 });
+            expect(scaleVector(unit, 2)).toEqual({ x: 4 });
         });
     });
 
     describe("roots", () => {
         it("should square root the unit", () => {
-            const unit = new TestUnit({ length: 4, mass: -2 });
-            expectVector(unit.sqrt(), { length: 2, mass: -1 });
+            const unit = vector({ x: 4, y: -2 });
+            expect(inverseScaleVector(unit, 2)).toEqual({ x: 2, y: -1 });
         });
 
         it("should cube root the unit", () => {
-            const unit = new TestUnit({ length: 3, mass: -3 });
-            expectVector(unit.cbrt(), { length: 1, mass: -1 });
+            const unit = vector({ x: 3, y: -3 });
+            expect(inverseScaleVector(unit, 3)).toEqual({ x: 1, y: -1 });
         });
 
         it("should throw an error when an exponent can't be divided", () => {
-            const unit = new TestUnit({ length: 4, mass: -3 });
-            expect(() => unit.sqrt()).toThrow();
-            expect(() => unit.cbrt()).toThrow();
+            const unit = vector({ x: 4, y: -3 });
+            expect(() => inverseScaleVector(unit, 2)).toThrow();
+            expect(() => inverseScaleVector(unit, 3)).toThrow();
         });
 
         it("should handle explicitly undefined and 0 exponents", () => {
-            const unit = new TestUnit({
-                length: 2,
-                time: undefined,
-                mass: 0,
-            });
-            expectVector(unit.sqrt(), {
-                length: 1,
-            });
+            const unit = vector({ x: 2, y: undefined, z: 0 });
+            expect(inverseScaleVector(unit, 2)).toEqual({ x: 1 });
         });
     });
 });
