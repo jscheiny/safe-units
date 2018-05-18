@@ -1,95 +1,104 @@
 import { Exponent } from "../exponents";
-import { DimensionVector, Unit } from "../units";
+import { DimensionVector } from "../units";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "../units/types";
+import { addVectors, basisVector, inverseScaleVector, scaleVector, subtractVectors } from "../units/vector";
 
-export class Measure<Vector extends DimensionVector> {
-    constructor(public readonly value: number, public readonly unit: Unit<Vector>) {}
+export class Measure<U extends DimensionVector> {
+    constructor(public readonly value: number, private readonly unit: U) {}
 
-    public static scalar(value: number) {
-        return Measure.of(value, Unit.scalar());
+    public static dimension<Dimension extends string>(dimension: Dimension) {
+        return new Measure(1, basisVector(dimension));
     }
 
-    public static of<V extends DimensionVector>(value: number, quantity: Unit<V> | Measure<V>): Measure<V> {
-        if (quantity instanceof Measure) {
-            return new Measure(value * quantity.value, quantity.unit);
-        } else {
-            return new Measure(value, quantity);
-        }
+    public static scalar(value: number): Measure<{}> {
+        return new Measure(value, {});
+    }
+
+    public static of<V extends DimensionVector>(value: number, quantity: Measure<V>): Measure<V> {
+        return new Measure(value * quantity.value, quantity.unit);
+    }
+
+    public getUnit(): Measure<U> {
+        return new Measure(1, this.unit);
+    }
+
+    public getUnitVector(): U {
+        return this.unit;
     }
 
     // Arithmetic
 
-    public plus(other: Measure<Vector>): Measure<Vector> {
-        return Measure.of(this.value + other.value, this.unit);
+    public plus(other: Measure<U>): Measure<U> {
+        return new Measure(this.value + other.value, this.unit);
     }
 
-    public minus(other: Measure<Vector>): Measure<Vector> {
-        return Measure.of(this.value - other.value, this.unit);
+    public minus(other: Measure<U>): Measure<U> {
+        return new Measure(this.value - other.value, this.unit);
     }
 
-    public negate(): Measure<Vector> {
-        return Measure.of(-this.value, this.unit);
+    public negate(): Measure<U> {
+        return new Measure(-this.value, this.unit);
     }
 
-    public times<Other extends DimensionVector>(other: Measure<Other>): Measure<MultiplyUnits<Vector, Other>> {
-        return Measure.of(this.value * other.value, this.unit.times(other.unit));
+    public times<V extends DimensionVector>(other: Measure<V>): Measure<MultiplyUnits<U, V>> {
+        return new Measure(this.value * other.value, addVectors(this.unit, other.unit));
     }
 
-    public over<Other extends DimensionVector>(other: Measure<Other>): Measure<DivideUnits<Vector, Other>> {
-        return Measure.of(this.value / other.value, this.unit.over(other.unit));
+    public over<V extends DimensionVector>(other: Measure<V>): Measure<DivideUnits<U, V>> {
+        return new Measure(this.value / other.value, subtractVectors(this.unit, other.unit));
     }
 
-    public per<Other extends DimensionVector>(other: Measure<Other>): Measure<DivideUnits<Vector, Other>> {
+    public per<V extends DimensionVector>(other: Measure<V>): Measure<DivideUnits<U, V>> {
         return this.over(other);
     }
 
-    public toThe<Power extends Exponent>(power: Power): Measure<ExponentiateUnit<Vector, Power>> {
-        return Measure.of(Math.pow(this.value, power), this.unit.toThe(power));
+    public toThe<Power extends Exponent>(power: Power): Measure<ExponentiateUnit<U, Power>> {
+        return new Measure(Math.pow(this.value, power), scaleVector(this.unit, power));
     }
 
-    public squared(): Measure<ExponentiateUnit<Vector, 2>> {
+    public squared(): Measure<ExponentiateUnit<U, 2>> {
         return this.toThe(2);
     }
 
-    public cubed(): Measure<ExponentiateUnit<Vector, 3>> {
+    public cubed(): Measure<ExponentiateUnit<U, 3>> {
         return this.toThe(3);
     }
 
-    public sqrt(): Measure<NthRootUnit<Vector, 2>> {
-        return Measure.of(Math.sqrt(this.value), this.unit.sqrt());
+    public sqrt(): Measure<NthRootUnit<U, 2>> {
+        return new Measure(Math.sqrt(this.value), inverseScaleVector(this.unit, 2));
     }
 
-    public cbrt(): Measure<NthRootUnit<Vector, 3>> {
-        return Measure.of(Math.cbrt(this.value), this.unit.cbrt());
+    public cbrt(): Measure<NthRootUnit<U, 3>> {
+        return new Measure(Math.cbrt(this.value), inverseScaleVector(this.unit, 3));
     }
 
     // Comparisons
 
-    public compareTo(other: Measure<Vector>): number {
+    public compareTo(other: Measure<U>): number {
         return this.value - other.value;
     }
 
-    public isLessThan(other: Measure<Vector>): boolean {
+    public isLessThan(other: Measure<U>): boolean {
         return this.compareTo(other) < 0;
     }
 
-    public isLessThanOrEqualTo(other: Measure<Vector>): boolean {
+    public isLessThanOrEqualTo(other: Measure<U>): boolean {
         return this.compareTo(other) <= 0;
     }
 
-    public isEqualTo(other: Measure<Vector>): boolean {
+    public isEqualTo(other: Measure<U>): boolean {
         return this.compareTo(other) === 0;
     }
 
-    public isNotEqualTo(other: Measure<Vector>): boolean {
+    public isNotEqualTo(other: Measure<U>): boolean {
         return this.compareTo(other) !== 0;
     }
 
-    public isGreaterThanOrEqualTo(other: Measure<Vector>): boolean {
+    public isGreaterThanOrEqualTo(other: Measure<U>): boolean {
         return this.compareTo(other) >= 0;
     }
 
-    public isGreaterThan(other: Measure<Vector>): boolean {
+    public isGreaterThan(other: Measure<U>): boolean {
         return this.compareTo(other) > 0;
     }
 }

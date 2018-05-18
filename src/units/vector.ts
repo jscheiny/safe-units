@@ -1,5 +1,5 @@
 import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponents/common";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits } from "./types";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
 
 export type DimensionVector = Partial<{ [dimension: string]: Exponent }>;
 
@@ -57,7 +57,10 @@ export function scaleVector<Vector extends DimensionVector, Power extends Expone
     return result;
 }
 
-export function inverseScaleVector<Vector extends DimensionVector, Root extends Exponent>(vector: Vector, root: Root) {
+export function inverseScaleVector<Vector extends DimensionVector, Root extends Exponent>(
+    vector: Vector,
+    root: Root,
+): NthRootUnit<Vector, Root> {
     const result: any = {};
     for (const dimension in vector) {
         // TODO Remove cast to exponent somehow
