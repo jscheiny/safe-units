@@ -1,7 +1,7 @@
 import { Exponent } from "../exponents";
 import { Measure } from "./measure";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
-import { DimensionVector } from "./units";
+import { Unit } from "./units";
 
 export const abs = wrapUnary(Math.abs);
 export const ceil = wrapUnary(Math.ceil);
@@ -13,44 +13,41 @@ export const min = warpNary(Math.min);
 export const round = wrapUnary(Math.round);
 export const trunc = wrapUnary(Math.trunc);
 
-export function pow<U extends DimensionVector, Power extends Exponent>(
-    x: Measure<U>,
-    y: Power,
-): Measure<ExponentiateUnit<U, Power>> {
+export function pow<U extends Unit, Y extends Exponent>(x: Measure<U>, y: Y): Measure<ExponentiateUnit<U, Y>> {
     return x.toThe(y);
 }
 
-export function sqrt<U extends DimensionVector>(x: Measure<U>): Measure<NthRootUnit<U, 2>> {
+export function sqrt<U extends Unit>(x: Measure<U>): Measure<NthRootUnit<U, 2>> {
     return x.sqrt();
 }
 
-export function cbrt<U extends DimensionVector>(x: Measure<U>): Measure<NthRootUnit<U, 3>> {
+export function cbrt<U extends Unit>(x: Measure<U>): Measure<NthRootUnit<U, 3>> {
     return x.cbrt();
 }
 
-export function add<U extends DimensionVector>(left: Measure<U>, right: Measure<U>): Measure<U> {
+export function add<U extends Unit>(left: Measure<U>, right: Measure<U>): Measure<U> {
     return left.plus(right);
 }
 
-export function subtract<U extends DimensionVector>(left: Measure<U>, right: Measure<U>): Measure<U> {
+export function subtract<U extends Unit>(left: Measure<U>, right: Measure<U>): Measure<U> {
     return left.minus(right);
 }
 
-export function multiply<L extends DimensionVector, R extends DimensionVector>(
+export function multiply<L extends Unit, R extends Unit>(
     left: Measure<L>,
     right: Measure<R>,
 ): Measure<MultiplyUnits<L, R>> {
     return left.times(right);
 }
 
-export function divide<L extends DimensionVector, R extends DimensionVector>(
+export function divide<L extends Unit, R extends Unit>(
     left: Measure<L>,
     right: Measure<R>,
 ): Measure<DivideUnits<L, R>> {
     return left.over(right);
 }
 
-export function sum<U extends DimensionVector>(first: Measure<U>, ...rest: Array<Measure<U>>): Measure<U> {
+export function sum<U extends Unit>(first: Measure<U>, ...rest: Array<Measure<U>>): Measure<U> {
     let result = first;
     for (const measure of rest) {
         result = result.plus(measure);
@@ -61,18 +58,18 @@ export function sum<U extends DimensionVector>(first: Measure<U>, ...rest: Array
 // Wrapper functions
 
 function wrapUnary(f: (x: number) => number) {
-    return <U extends DimensionVector>(x: Measure<U>): Measure<U> => {
+    return <U extends Unit>(x: Measure<U>): Measure<U> => {
         return Measure.of(f(x.value), x.normalized());
     };
 }
 
 function warpNary(f: (...x: number[]) => number) {
-    return <U extends DimensionVector>(first: Measure<U>, ...rest: Array<Measure<U>>): Measure<U> => {
+    return <U extends Unit>(first: Measure<U>, ...rest: Array<Measure<U>>): Measure<U> => {
         return Measure.of(f(...values(first, ...rest)), first.normalized());
     };
 }
 
-function values<U extends DimensionVector>(...measures: Array<Measure<U>>): number[] {
+function values<U extends Unit>(...measures: Array<Measure<U>>): number[] {
     return measures.map(measure => measure.value);
 }
 

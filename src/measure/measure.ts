@@ -1,8 +1,8 @@
 import { Exponent } from "../exponents";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
-import { dimension, DimensionVector, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "./units";
+import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit } from "./units";
 
-export class Measure<U extends DimensionVector> {
+export class Measure<U extends Unit> {
     constructor(public readonly value: number, private readonly unit: U) {}
 
     public static dimension<Dimension extends string>(dim: Dimension) {
@@ -13,7 +13,7 @@ export class Measure<U extends DimensionVector> {
         return new Measure(value, {});
     }
 
-    public static of<V extends DimensionVector>(value: number, quantity: Measure<V>): Measure<V> {
+    public static of<U extends Unit>(value: number, quantity: Measure<U>): Measure<U> {
         return new Measure(value * quantity.value, quantity.unit);
     }
 
@@ -39,19 +39,19 @@ export class Measure<U extends DimensionVector> {
         return new Measure(-this.value, this.unit);
     }
 
-    public times<V extends DimensionVector>(other: Measure<V>): Measure<MultiplyUnits<U, V>> {
+    public times<V extends Unit>(other: Measure<V>): Measure<MultiplyUnits<U, V>> {
         return new Measure(this.value * other.value, multiplyUnits(this.unit, other.unit));
     }
 
-    public over<V extends DimensionVector>(other: Measure<V>): Measure<DivideUnits<U, V>> {
+    public over<V extends Unit>(other: Measure<V>): Measure<DivideUnits<U, V>> {
         return new Measure(this.value / other.value, divideUnits(this.unit, other.unit));
     }
 
-    public per<V extends DimensionVector>(other: Measure<V>): Measure<DivideUnits<U, V>> {
+    public per<V extends Unit>(other: Measure<V>): Measure<DivideUnits<U, V>> {
         return this.over(other);
     }
 
-    public toThe<Power extends Exponent>(power: Power): Measure<ExponentiateUnit<U, Power>> {
+    public toThe<N extends Exponent>(power: N): Measure<ExponentiateUnit<U, N>> {
         return new Measure(Math.pow(this.value, power), exponentiateUnit(this.unit, power));
     }
 

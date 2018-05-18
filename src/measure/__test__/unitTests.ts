@@ -1,10 +1,10 @@
-import { dimension, DimensionVector, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "../units";
+import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit } from "../units";
 
 describe("Units", () => {
     const x = dimension("x");
     const y = dimension("y");
 
-    function unit<U extends DimensionVector>(unit: U): U {
+    function unit<U extends Unit>(unit: U): U {
         return unit;
     }
 
