@@ -63,6 +63,14 @@ export class Measure<U extends Unit> {
         return this.toThe(3);
     }
 
+    public inverse(): Measure<ExponentiateUnit<U, -1>> {
+        return new Measure(1 / this.value, exponentiateUnit(this.unit, -1));
+    }
+
+    public reciprocal(): Measure<ExponentiateUnit<U, -1>> {
+        return this.inverse();
+    }
+
     public sqrt(): Measure<NthRootUnit<U, 2>> {
         return new Measure(Math.sqrt(this.value), nthRootUnit(this.unit, 2));
     }
