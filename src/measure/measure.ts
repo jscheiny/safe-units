@@ -39,8 +39,20 @@ export class Measure<Vector extends DimensionVector> {
         return Measure.of(this.value / other.value, this.unit.over(other.unit));
     }
 
+    public per<Other extends DimensionVector>(other: Measure<Other>): Measure<DivideUnits<Vector, Other>> {
+        return this.over(other);
+    }
+
     public toThe<Power extends Exponent>(power: Power): Measure<ExponentiateUnit<Vector, Power>> {
         return Measure.of(Math.pow(this.value, power), this.unit.toThe(power));
+    }
+
+    public squared(): Measure<ExponentiateUnit<Vector, 2>> {
+        return this.toThe(2);
+    }
+
+    public cubed(): Measure<ExponentiateUnit<Vector, 3>> {
+        return this.toThe(3);
     }
 
     public sqrt(): Measure<NthRootUnit<Vector, 2>> {
