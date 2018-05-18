@@ -1,9 +1,8 @@
-import { Unit } from "../../units";
 import { Measure } from "../measure";
 
 describe("Measures", () => {
-    const meter = Unit.basis("length");
-    const second = Unit.basis("time");
+    const meter = Measure.dimension("length");
+    const second = Measure.dimension("time");
     const mps = meter.per(second);
     const mps2 = mps.per(second);
 
@@ -11,20 +10,20 @@ describe("Measures", () => {
         it("should construct from a number of and a unit", () => {
             const measure = Measure.of(10, mps2);
             expect(measure.value).toBe(10);
-            expect(measure.unit).toEqual(mps2);
+            expect(measure.getUnitVector()).toEqual(mps2.getUnitVector());
         });
 
         it("should construct from a number and another measure", () => {
             const kilometer = Measure.of(1000, meter);
             const measure = Measure.of(5.2, kilometer);
             expect(measure.value).toBe(5200);
-            expect(measure.unit).toEqual(meter);
+            expect(measure.getUnitVector()).toEqual(meter.getUnitVector());
         });
 
         it("should construct scalar values", () => {
             const scalar = Measure.scalar(3);
             expect(scalar.value).toBe(3);
-            expect(scalar.unit).toEqual(Unit.scalar());
+            expect(scalar.getUnitVector()).toEqual({});
         });
     });
 

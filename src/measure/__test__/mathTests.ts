@@ -1,10 +1,9 @@
-import { Unit } from "../../units";
 import * as SafeMath from "../math";
 import { Measure } from "../measure";
 
 describe("Math", () => {
-    const meter = Unit.basis("length");
-    const second = Unit.basis("time");
+    const meter = Measure.dimension("length");
+    const second = Measure.dimension("time");
     const mps = meter.per(second);
 
     it("arithmetic", () => {

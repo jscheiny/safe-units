@@ -1,7 +1,7 @@
 import { Exponent } from "../exponents";
-import { DimensionVector } from "../units";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "../units/types";
 import { Measure } from "./measure";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
+import { DimensionVector } from "./vector";
 
 export const abs = wrapUnary(Math.abs);
 export const ceil = wrapUnary(Math.ceil);
@@ -62,13 +62,13 @@ export function sum<U extends DimensionVector>(first: Measure<U>, ...rest: Array
 
 function wrapUnary(f: (x: number) => number) {
     return <U extends DimensionVector>(x: Measure<U>): Measure<U> => {
-        return Measure.of(f(x.value), x.unit);
+        return Measure.of(f(x.value), x.getUnit());
     };
 }
 
 function warpNary(f: (...x: number[]) => number) {
     return <U extends DimensionVector>(first: Measure<U>, ...rest: Array<Measure<U>>): Measure<U> => {
-        return Measure.of(f(...values(first, ...rest)), first.unit);
+        return Measure.of(f(...values(first, ...rest)), first.getUnit());
     };
 }
 
