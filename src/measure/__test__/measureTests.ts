@@ -61,17 +61,12 @@ describe("Measures", () => {
         it("should exponentiate", () => {
             const value = Measure.of(10, meter);
 
-            const toThe0 = value.toThe(0);
-            expect(toThe0).toEqual(Measure.scalar(1));
-
-            const toThe1 = value.toThe(1);
-            expect(toThe1).toEqual(Measure.of(10, meter));
-
-            const toThe2 = value.squared();
-            expect(toThe2).toEqual(Measure.of(100, meter.squared()));
-
-            const toThe3 = value.cubed();
-            expect(toThe3).toEqual(Measure.of(1000, meter.cubed()));
+            expect(value.inverse()).toEqual(Measure.of(0.1, meter.inverse()));
+            expect(value.reciprocal()).toEqual(Measure.of(0.1, meter.inverse()));
+            expect(value.toThe(0)).toEqual(Measure.scalar(1));
+            expect(value.toThe(1)).toEqual(Measure.of(10, meter));
+            expect(value.squared()).toEqual(Measure.of(100, meter.squared()));
+            expect(value.cubed()).toEqual(Measure.of(1000, meter.cubed()));
         });
 
         it("should square root", () => {
