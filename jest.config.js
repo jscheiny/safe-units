@@ -11,6 +11,7 @@ module.exports = {
         ".*Tests\.ts",
         ".*Spec\.ts",
         "index.ts",
+        "src/units/.*"
     ],
     coverageThreshold: {
         global: {
