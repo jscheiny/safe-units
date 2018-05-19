@@ -129,7 +129,7 @@ export class Measure<U extends Unit> {
     }
 
     public in(unit: Measure<U>): string {
-        if (unit.symbol == null) {
+        if (unit.symbol === undefined) {
             return this.toString();
         }
         const value = this.value / unit.value;

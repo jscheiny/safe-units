@@ -76,7 +76,7 @@ export function unitToString(unit: Unit): string {
     let first = true;
     for (const dimension in unit) {
         const exponent = unit[dimension];
-        if (exponent === 0 || exponent == null) {
+        if (exponent === 0 || exponent === undefined) {
             continue;
         }
         if (!first) {
@@ -94,7 +94,7 @@ export function unitToString(unit: Unit): string {
 
 function isScalarUnit(unit: Unit): boolean {
     for (const dimension in unit) {
-        if (unit.hasOwnProperty(dimension) && unit[dimension] !== 0 && unit[dimension] != null) {
+        if (unit.hasOwnProperty(dimension) && unit[dimension] !== 0 && unit[dimension] !== undefined) {
             return false;
         }
     }
