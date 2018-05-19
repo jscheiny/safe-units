@@ -27,7 +27,7 @@ export const katals: Units.CatalyticActivity = moles.per(seconds).withSymbol("ka
 function createPrefix(symbolPrefix: string, multiplier: number) {
     return <U extends Unit>(unit: Measure<U>): Measure<U> => {
         const symbol = unit.getSymbol();
-        const newSymbol = symbol != null ? `${symbolPrefix}${symbol}` : undefined;
+        const newSymbol = symbol !== undefined ? `${symbolPrefix}${symbol}` : undefined;
         return Measure.of(multiplier, unit, newSymbol);
     };
 }
