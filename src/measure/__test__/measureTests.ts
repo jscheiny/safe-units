@@ -1,4 +1,4 @@
-import { Measure } from "../measure";
+import { cubic, Measure, square } from "../measure";
 import { Unit } from "../units";
 
 describe("Measures", () => {
@@ -73,7 +73,8 @@ describe("Measures", () => {
             expect(value.toThe(0)).toEqual(Measure.scalar(1));
             expect(value.toThe(1)).toEqual(Measure.of(10, meter));
             expect(value.squared()).toEqual(Measure.of(100, meter.squared()));
-            expect(value.cubed()).toEqual(Measure.of(1000, meter.cubed()));
+            expect(square(value)).toEqual(Measure.of(100, meter.squared()));
+            expect(cubic(value)).toEqual(Measure.of(1000, meter.cubed()));
         });
 
         it("should square root", () => {

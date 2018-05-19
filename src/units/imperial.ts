@@ -1,8 +1,8 @@
-import { Measure } from "../measure";
+import { cubic, Measure } from "../measure";
 import { grains, inches, pounds } from "./common";
 
 // Liquid Volume
-export const fluidOunces = Measure.of(1.7339, inches.cubed(), "fl oz");
+export const fluidOunces = Measure.of(1.7339, cubic(inches), "fl oz");
 export const gills = Measure.of(5, fluidOunces, "gi");
 export const pints = Measure.of(20, fluidOunces, "pt");
 export const quarts = Measure.of(2, pints, "qt");

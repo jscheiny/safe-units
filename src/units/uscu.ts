@@ -1,4 +1,4 @@
-import { Measure } from "../measure";
+import { cubic, Measure } from "../measure";
 import { grams, meters } from "./base";
 import { grains, inches, pounds } from "./common";
 import { micro } from "./metric";
@@ -30,7 +30,7 @@ export const dryQuart = Measure.of(2, dryPint, "dry qt");
 export const dryGallon = Measure.of(4, dryQuart, "dry gal");
 export const peck = Measure.of(2, dryGallon, "pk");
 export const bushel = Measure.of(4, peck, "bu");
-export const dryBarrel = Measure.of(7056, inches.cubed(), "dry bbl");
+export const dryBarrel = Measure.of(7056, cubic(inches), "dry bbl");
 
 // Mass
 export const dram = Measure.of(1.771_845_195_3125, grams, "dr");

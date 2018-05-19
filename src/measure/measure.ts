@@ -136,3 +136,11 @@ export class Measure<U extends Unit> {
         return `${value} ${unit.symbol}`;
     }
 }
+
+export function square<U extends Unit>(measure: Measure<U>): Measure<ExponentiateUnit<U, 2>> {
+    return measure.squared();
+}
+
+export function cubic<U extends Unit>(measure: Measure<U>): Measure<ExponentiateUnit<U, 3>> {
+    return measure.cubed();
+}

@@ -3,7 +3,10 @@ import * as Base from "./base";
 
 // Base units
 
-Measure.dimension("");
+// Due to how the TS "declaration" compiler option behaves, when exporting types that are implemented via `typeof
+// Measure` we need to import the Measure class so that this typing isn't "private." However, we don't actually use
+// any Measures in this file so we construct this unused scalar to get the compiler to quit complaining.
+Measure.scalar(0);
 
 export type Length = typeof Base.meters;
 const Length: Length = Base.meters;
@@ -95,13 +98,6 @@ export type Jounce = typeof Jounce;
 
 export const VolumetricFlow = Volume.over(Time);
 export type VolumetricFlow = typeof VolumetricFlow;
-
-// TODO How do I implement these?
-// export const AngularVelocity = Angle.over(Time);
-// export type AngularVelocity = typeof AngularVelocity;
-
-// export const AngularAcceleration = Angle.over(Time.squared());
-// export type AngularAcceleration = typeof AngularAcceleration;
 
 export const Momentum = Force.times(Time);
 export type Momentum = typeof Momentum;

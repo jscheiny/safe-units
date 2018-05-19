@@ -1,4 +1,4 @@
-import { Measure } from "../measure";
+import { cubic, Measure, square } from "../measure";
 import { grams, meters, seconds } from "./base";
 import { milli, nano, pascals } from "./metric";
 
@@ -7,13 +7,13 @@ export const carats = Measure.of(200, milli(grams));
 
 // Length
 export const angstroms = Measure.of(0.1, nano(meters));
-export const ares = Measure.of(100, meters.squared());
+export const ares = Measure.of(100, square(meters));
 
 // Area
-export const hectares = Measure.of(10000, meters.squared());
+export const hectares = Measure.of(10000, square(meters));
 
 // Volume
-export const liters = Measure.of(0.001, meters.cubed());
+export const liters = Measure.of(0.001, cubic(meters));
 
 // Velocity
 export const speedOfLight = Measure.of(299_792_458, meters.per(seconds));
