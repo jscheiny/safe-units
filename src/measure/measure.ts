@@ -1,10 +1,15 @@
 import { Exponent } from "../exponents";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
-import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit } from "./units";
+import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit, unitToString } from "./units";
 
 export class Measure<U extends Unit> {
-    constructor(public readonly value: number, private readonly unit: U) {}
+    protected constructor(
+        public readonly value: number,
+        private readonly unit: U,
+        private readonly symbol?: string | undefined,
+    ) {}
 
+    // TODO add more specificity about dimensions naming/display
     public static dimension<Dimension extends string>(dim: Dimension) {
         return new Measure(1, dimension(dim));
     }
@@ -13,12 +18,16 @@ export class Measure<U extends Unit> {
         return new Measure(value, {});
     }
 
-    public static of<U extends Unit>(value: number, quantity: Measure<U>): Measure<U> {
-        return new Measure(value * quantity.value, quantity.unit);
+    public static of<U extends Unit>(value: number, quantity: Measure<U>, symbol?: string): Measure<U> {
+        return new Measure(value * quantity.value, quantity.unit, symbol);
     }
 
-    public normalized(): Measure<U> {
-        return new Measure(1, this.unit);
+    public withSymbol(symbol: string): Measure<U> {
+        return new Measure(this.value, this.unit, symbol);
+    }
+
+    public getSymbol(): string | undefined {
+        return this.symbol;
     }
 
     public getUnit(): U {
@@ -26,6 +35,10 @@ export class Measure<U extends Unit> {
     }
 
     // Arithmetic
+
+    public normalized(): Measure<U> {
+        return new Measure(1, this.unit);
+    }
 
     public plus(other: Measure<U>): Measure<U> {
         return new Measure(this.value + other.value, this.unit);
@@ -107,5 +120,19 @@ export class Measure<U extends Unit> {
 
     public isGreaterThan(other: Measure<U>): boolean {
         return this.compareTo(other) > 0;
+    }
+
+    // Formatting
+
+    public toString(): string {
+        return `${this.value} ${unitToString(this.unit)}`;
+    }
+
+    public in(unit: Measure<U>): string {
+        if (unit.symbol == null) {
+            return this.toString();
+        }
+        const value = this.value / unit.value;
+        return `${value} ${unit.symbol}`;
     }
 }
