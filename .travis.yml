@@ -6,3 +6,5 @@ install:
   - yarn
 script:
   - yarn verify
+notifications:
+  email: false
