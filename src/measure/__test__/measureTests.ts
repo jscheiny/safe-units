@@ -2,8 +2,8 @@ import { Measure } from "../measure";
 import { Unit } from "../units";
 
 describe("Measures", () => {
-    const meter = Measure.dimension("m");
-    const second = Measure.dimension("s");
+    const meter = Measure.dimension("L");
+    const second = Measure.dimension("T");
     const mps = meter.per(second);
     const mps2 = mps.per(second);
 
@@ -12,6 +12,17 @@ describe("Measures", () => {
             super(value, unit, symbol);
         }
     }
+
+    describe("dimension", () => {
+        it("should create dimensions with value 1", () => {
+            expect(Measure.dimension("foo")).toEqual({ value: 1, unit: { foo: 1 } });
+        });
+
+        it("should throw an error when creating duplicate dimensions with symbols", () => {
+            Measure.dimension("first", "1");
+            expect(() => Measure.dimension("first", "one")).toThrow();
+        });
+    });
 
     describe("construction", () => {
         it("should construct from a number of and a unit", () => {
@@ -164,17 +175,17 @@ describe("Measures", () => {
         });
 
         it("should format base units", () => {
-            expect(meter.toString()).toBe("1 m");
-            expect(Measure.of(5.3, meter).toString()).toBe("5.3 m");
+            expect(meter.toString()).toBe("1 L");
+            expect(Measure.of(5.3, meter).toString()).toBe("5.3 L");
         });
 
         it("should format complex units", () => {
-            expect(Measure.of(5, meter.squared()).toString()).toBe("5 m^2");
-            expect(Measure.of(5, second.inverse()).toString()).toBe("5 s^-1");
-            expect(Measure.of(5, meter.times(second)).toString()).toBe("5 m * s");
-            expect(Measure.of(5, meter.over(second)).toString()).toBe("5 m * s^-1");
-            expect(Measure.of(5, meter.cubed().over(second)).toString()).toBe("5 m^3 * s^-1");
-            expect(Measure.of(5, meter.cubed().over(second.squared())).toString()).toBe("5 m^3 * s^-2");
+            expect(Measure.of(5, meter.squared()).toString()).toBe("5 L^2");
+            expect(Measure.of(5, second.inverse()).toString()).toBe("5 T^-1");
+            expect(Measure.of(5, meter.times(second)).toString()).toBe("5 L * T");
+            expect(Measure.of(5, meter.over(second)).toString()).toBe("5 L * T^-1");
+            expect(Measure.of(5, meter.cubed().over(second)).toString()).toBe("5 L^3 * T^-1");
+            expect(Measure.of(5, meter.cubed().over(second.squared())).toString()).toBe("5 L^3 * T^-2");
         });
 
         it("should not format using symbol even if present", () => {
@@ -182,7 +193,7 @@ describe("Measures", () => {
                 Measure.of(5, meter.squared())
                     .withSymbol("m2")
                     .toString(),
-            ).toBe("5 m^2");
+            ).toBe("5 L^2");
             expect(
                 Measure.scalar(0)
                     .withSymbol("rad")
@@ -201,7 +212,15 @@ describe("Measures", () => {
 
         it("should use normal formatting if the other measure has no symbol", () => {
             const glorbs = Measure.of(100, meter);
-            expect(Measure.of(1000, meter).in(glorbs)).toBe("1000 m");
+            expect(Measure.of(1000, meter).in(glorbs)).toBe("1000 L");
+        });
+
+        it("should use base unit symbols to format when available", () => {
+            const m = Measure.dimension("test-length", "meter");
+            const s = Measure.dimension("test-time", "second");
+            expect(m.toString()).toBe("1 meter");
+            expect(Measure.of(1, m.per(s)).toString()).toBe("1 meter * second^-1");
+            expect(Measure.of(1, m.squared().per(s.squared())).toString()).toBe("1 meter^2 * second^-2");
         });
     });
 });

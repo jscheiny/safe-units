@@ -1,6 +1,7 @@
 import { Exponent } from "../exponents";
+import { formatUnit, setDimensionSymbol } from "./format";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
-import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit, unitToString } from "./units";
+import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit } from "./units";
 
 export class Measure<U extends Unit> {
     protected constructor(
@@ -9,8 +10,10 @@ export class Measure<U extends Unit> {
         private readonly symbol?: string | undefined,
     ) {}
 
-    // TODO add more specificity about dimensions naming/display
-    public static dimension<Dimension extends string>(dim: Dimension) {
+    public static dimension<Dimension extends string>(dim: Dimension, symbol?: string) {
+        if (symbol) {
+            setDimensionSymbol(dim, symbol);
+        }
         return new Measure(1, dimension(dim));
     }
 
@@ -125,7 +128,7 @@ export class Measure<U extends Unit> {
     // Formatting
 
     public toString(): string {
-        return `${this.value} ${unitToString(this.unit)}`;
+        return `${this.value} ${formatUnit(this.unit)}`;
     }
 
     public in(unit: Measure<U>): string {
