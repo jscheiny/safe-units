@@ -67,36 +67,3 @@ function checkExponent(exp: number): void {
         throw new Error(ArithmeticError);
     }
 }
-
-export function unitToString(unit: Unit): string {
-    if (isScalarUnit(unit)) {
-        return "scalar";
-    }
-    let result = "";
-    let first = true;
-    for (const dimension in unit) {
-        const exponent = unit[dimension];
-        if (exponent === 0 || exponent === undefined) {
-            continue;
-        }
-        if (!first) {
-            result += " * ";
-        }
-        result += dimension;
-        if (exponent !== 1) {
-            result += `^${exponent}`;
-        }
-        first = false;
-    }
-
-    return result;
-}
-
-function isScalarUnit(unit: Unit): boolean {
-    for (const dimension in unit) {
-        if (unit.hasOwnProperty(dimension) && unit[dimension] !== 0 && unit[dimension] !== undefined) {
-            return false;
-        }
-    }
-    return true;
-}
