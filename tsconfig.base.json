@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "declaration": true,
         "module": "commonjs",
         "moduleResolution": "node",
         "noFallthroughCasesInSwitch": true,
@@ -9,18 +8,15 @@
         "noImplicitThis": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "outDir": "./dist",
         "pretty": true,
         "removeComments": false,
         "sourceMap": true,
         "strict": true,
-        "stripInternal": true,
         "target": "es5",
         "lib": [
             "es5",
             "es2015",
             "es2015.core"
-        ],
-    },
-    
+        ]
+    }
 }
