@@ -8,9 +8,9 @@ export const carats: Mass = Measure.of(200, milli(grams));
 
 // Length
 export const angstroms: Length = Measure.of(0.1, nano(meters));
-export const ares: Length = Measure.of(100, square(meters));
 
 // Area
+export const ares: Area = Measure.of(100, square(meters));
 export const hectares: Area = Measure.of(10000, square(meters));
 
 // Volume
