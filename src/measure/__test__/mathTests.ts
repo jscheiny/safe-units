@@ -1,16 +1,15 @@
+import { meters, seconds } from "../../unit";
 import * as SafeMath from "../math";
 import { Measure } from "../measure";
 
 describe("Math", () => {
-    const meter = Measure.dimension("length");
-    const second = Measure.dimension("time");
-    const mps = meter.per(second);
+    const mps = meters.per(seconds);
 
     it("arithmetic", () => {
         expect(SafeMath.add(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(0, mps));
         expect(SafeMath.subtract(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(10, mps));
-        expect(SafeMath.multiply(Measure.of(5, mps), Measure.of(10, second))).toEqual(Measure.of(50, meter));
-        expect(SafeMath.divide(Measure.of(50, meter), Measure.of(10, second))).toEqual(Measure.of(5, mps));
+        expect(SafeMath.multiply(Measure.of(5, mps), Measure.of(10, seconds))).toEqual(Measure.of(50, meters));
+        expect(SafeMath.divide(Measure.of(50, meters), Measure.of(10, seconds))).toEqual(Measure.of(5, mps));
     });
 
     it("abs", () => {
@@ -18,7 +17,7 @@ describe("Math", () => {
     });
 
     it("cbrt", () => {
-        expect(SafeMath.cbrt(Measure.of(64, second.cubed()))).toEqual(Measure.of(4, second));
+        expect(SafeMath.cbrt(Measure.of(64, seconds.cubed()))).toEqual(Measure.of(4, seconds));
     });
 
     it("ceil", () => {
@@ -30,7 +29,7 @@ describe("Math", () => {
     });
 
     it("hypot", () => {
-        expect(SafeMath.hypot(Measure.of(3, meter), Measure.of(4, meter))).toEqual(Measure.of(5, meter));
+        expect(SafeMath.hypot(Measure.of(3, meters), Measure.of(4, meters))).toEqual(Measure.of(5, meters));
     });
 
     it("max", () => {
@@ -42,7 +41,7 @@ describe("Math", () => {
     });
 
     it("pow", () => {
-        expect(SafeMath.pow(Measure.of(10, meter), 3)).toEqual(Measure.of(1000, meter.cubed()));
+        expect(SafeMath.pow(Measure.of(10, meters), 3)).toEqual(Measure.of(1000, meters.cubed()));
     });
 
     it("round", () => {
@@ -50,7 +49,7 @@ describe("Math", () => {
     });
 
     it("sqrt", () => {
-        expect(SafeMath.sqrt(Measure.of(25, meter.squared()))).toEqual(Measure.of(5, meter));
+        expect(SafeMath.sqrt(Measure.of(25, meters.squared()))).toEqual(Measure.of(5, meters));
     });
 
     it("sum", () => {
