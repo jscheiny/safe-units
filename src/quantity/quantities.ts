@@ -1,12 +1,12 @@
 import { Measure } from "../measure";
 import * as Base from "../unit/base";
 
-// Base units
+// Dimensionless
 
-// Due to how the TS "declaration" compile option behaves, when exporting types that are implemented via `typeof
-// Measure` we need to import the Measure class so that this typing isn't "private." However, we don't actually use
-// any Measures in this file so we construct this unused scalar to get the compiler to quit complaining.
-Measure.scalar(0);
+export const Scalar = Measure.scalar(1);
+export type Scalar = typeof Scalar;
+
+// Base units
 
 export type Length = typeof Base.meters;
 const Length: Length = Base.meters;
