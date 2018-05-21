@@ -5,7 +5,7 @@ import { genOperatorTypes } from "./genTypes";
 
 export function emitOperator(options: OperatorCodeGenOptions) {
     const { fileNamePrefix } = options;
-    const prefix = "src/exponents";
+    const prefix = "src/exponent";
     emitFile(`${prefix}/${fileNamePrefix}.ts`, genOperatorTypes(options));
     emitFile(`${prefix}/__test__/${fileNamePrefix}Spec.ts`, genOperatorTests(options));
 }

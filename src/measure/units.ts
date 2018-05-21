@@ -1,4 +1,4 @@
-import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponents/common";
+import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponent/common";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
 
 export type Unit = Partial<{ [dimension: string]: Exponent }>;
