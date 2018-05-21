@@ -9,25 +9,25 @@ export type Scalar = typeof Scalar;
 // Base units
 
 export type Length = typeof Base.meters;
-const Length: Length = Base.meters;
+export const Length: Length = Base.meters;
 
 export type Mass = typeof Base.kilograms;
-const Mass: Mass = Base.kilograms;
+export const Mass: Mass = Base.kilograms;
 
 export type Time = typeof Base.seconds;
-const Time: Time = Base.seconds;
+export const Time: Time = Base.seconds;
 
 export type ElectricalCurrent = typeof Base.amperes;
-const ElectricalCurrent: ElectricalCurrent = Base.amperes;
+export const ElectricalCurrent: ElectricalCurrent = Base.amperes;
 
 export type Temperature = typeof Base.kelvin;
-const Temperature: Temperature = Base.kelvin;
+export const Temperature: Temperature = Base.kelvin;
 
 export type AmountOfSubstance = typeof Base.moles;
-const AmountOfSubstance: AmountOfSubstance = Base.moles;
+export const AmountOfSubstance: AmountOfSubstance = Base.moles;
 
 export type LuminousIntensity = typeof Base.candela;
-const LuminousIntensity: LuminousIntensity = Base.candela;
+export const LuminousIntensity: LuminousIntensity = Base.candela;
 
 // Named SI units
 
