@@ -1,4 +1,4 @@
-import { IsArithmeticError } from "../../exponents/utils";
+import { IsArithmeticError } from "../../exponent/utils";
 import { DivideUnits, ExponentiateUnit, GetExponent, MultiplyUnits, NthRootUnit, StripZeroes } from "../types";
 
 type GetPresentExponentWorks = 2 extends GetExponent<{ a: 2; b: 3 }, "a"> ? true : never;
