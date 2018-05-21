@@ -1,6 +1,6 @@
 import { Measure, Unit } from "../measure";
+import { Quantity } from "../quantity";
 import { amperes, kilograms, meters, moles, seconds } from "./base";
-import * as Quantity from "./quantities";
 
 export const hertz: Quantity.Frequency = seconds.inverse().withSymbol("Hz");
 export const newtons: Quantity.Force = kilograms.times(meters.per(seconds.squared())).withSymbol("N");
