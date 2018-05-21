@@ -1,5 +1,5 @@
 import { Measure } from "../measure";
-import * as Base from "../units/base";
+import * as Base from "../unit/base";
 
 // Base units
 
