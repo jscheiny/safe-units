@@ -4,22 +4,22 @@ import { milli, nano, pascals } from "./metric";
 import { Area, Length, Mass, Pressure, Velocity, Volume } from "./types";
 
 // Mass
-export const carats: Mass = Measure.of(200, milli(grams));
+export const carats: Mass = Measure.of(200, milli(grams), "ct");
 
 // Length
-export const angstroms: Length = Measure.of(0.1, nano(meters));
+export const angstroms: Length = Measure.of(0.1, nano(meters), "Å");
 
 // Area
-export const ares: Area = Measure.of(100, square(meters));
-export const hectares: Area = Measure.of(10000, square(meters));
+export const ares: Area = Measure.of(100, square(meters), "a");
+export const hectares: Area = Measure.of(10000, square(meters), "ha");
 
 // Volume
-export const liters: Volume = Measure.of(0.001, cubic(meters));
+export const liters: Volume = Measure.of(0.001, cubic(meters), "L");
 
 // Velocity
-export const speedOfLight: Velocity = Measure.of(299_792_458, meters.per(seconds));
+export const speedOfLight: Velocity = Measure.of(299_792_458, meters.per(seconds), "C");
 
 // Pressure
-export const bars: Pressure = Measure.of(10_000, pascals);
-export const atmospheres: Pressure = Measure.of(101_325, pascals);
-export const torrs: Pressure = Measure.of(1 / 760, atmospheres);
+export const bars: Pressure = Measure.of(10_000, pascals, "bar");
+export const atmospheres: Pressure = Measure.of(101_325, pascals, "atm");
+export const torrs: Pressure = Measure.of(1 / 760, atmospheres, "Torr");
