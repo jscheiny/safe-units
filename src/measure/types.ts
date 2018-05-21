@@ -1,6 +1,11 @@
-import { AddExponents, ArithmeticError, Exponent, MultiplyExponents } from "../exponent";
-import { DivideExponents } from "../exponent/division";
-import { IsArithmeticError } from "../exponent/utils";
+import {
+    AddExponents,
+    ArithmeticError,
+    DivideExponents,
+    Exponent,
+    IsArithmeticError,
+    MultiplyExponents,
+} from "../exponent";
 import { Unit } from "./units";
 
 // Arithmetic

@@ -76,6 +76,13 @@ describe("Measures", () => {
             expect(left.per(right)).toEqual(Measure.of(2, mps2));
         });
 
+        it("should scale", () => {
+            const value = Measure.of(10, mps);
+            const three = Measure.scalar(3);
+            expect(value.scale(2)).toEqual(Measure.of(20, mps));
+            expect(value.scale(three)).toEqual(Measure.of(30, mps));
+        });
+
         it("should exponentiate", () => {
             const value = Measure.of(10, meter);
 

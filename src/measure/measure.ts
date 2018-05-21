@@ -1,4 +1,5 @@
 import { Exponent } from "../exponent";
+import { Scalar } from "../quantity";
 import { formatUnit, setDimensionSymbol } from "./format";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit } from "./units";
@@ -53,6 +54,11 @@ export class Measure<U extends Unit> {
 
     public negate(): Measure<U> {
         return new Measure(-this.value, this.unit);
+    }
+
+    public scale(scalar: number | Scalar): Measure<U> {
+        const scalarValue = typeof scalar === "number" ? scalar : scalar.value;
+        return new Measure(scalarValue * this.value, this.unit);
     }
 
     public times<V extends Unit>(other: Measure<V>): Measure<MultiplyUnits<U, V>> {
