@@ -1,3 +1,5 @@
+import * as Unit from "./unit";
+
 export * from "./measure";
-export * from "./units";
 export * from "./quantity";
+export { Unit };
