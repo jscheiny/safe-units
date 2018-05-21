@@ -1,7 +1,7 @@
 import { cubic, Measure, square } from "../measure";
 import { grams, meters, seconds } from "./base";
 import { milli, nano, pascals } from "./metric";
-import { Area, Length, Mass, Pressure, Velocity, Volume } from "./types";
+import { Area, Length, Mass, Pressure, Velocity, Volume } from "./quantities";
 
 // Mass
 export const carats: Mass = Measure.of(200, milli(grams), "ct");
