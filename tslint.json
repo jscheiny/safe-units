@@ -13,6 +13,12 @@
                 "trailingComma": "all"
             }
         ],
+        "member-ordering": [
+            true,
+            {
+                "order": "statics-first"
+            }
+        ],
         "ordered-imports": true
     }
 }
