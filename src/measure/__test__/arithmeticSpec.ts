@@ -1,7 +1,15 @@
 import { IsArithmeticError } from "../../exponent";
-import { DivideUnits, ExponentiateUnit, GetExponent, MultiplyUnits, NthRootUnit, StripZeroes } from "../types";
+import {
+    DivideUnits,
+    ExponentiateUnit,
+    GetExponent,
+    MultiplyUnits,
+    NthRootableUnit,
+    NthRootUnit,
+    StripZeroes,
+} from "../types";
 
-type GetPresentExponentWorks = 2 extends GetExponent<{ a: 2; b: 3 }, "a"> ? true : never;
+type GetPresentExponentWorks = 2 extends GetExponent<{ a: 2; b: 3 }, "a"> ? true : false;
 const GetPresentExponentWorks: GetPresentExponentWorks = true;
 
 type GetMissingExponentWorks = 0 extends GetExponent<{ a: 2; b: 3 }, "c"> ? true : never;
@@ -51,5 +59,14 @@ const SquareRootingWorks: SquareRootingWorks = true;
 type CubeRootingWorks = { a: 1; b: -1 } extends NthRootUnit<{ a: 3; b: -3 }, 3> ? true : never;
 const CubeRootingWorks: CubeRootingWorks = true;
 
-type NthRootPropagatesErrors = IsArithmeticError<NthRootUnit<{ b: 3 }, 2>>;
-const NthRootPropagatesErrors: NthRootPropagatesErrors = true;
+type NthRootableUnitAcceptsPerfectSquares = { a: 2; b: -4; c: 0 } extends NthRootableUnit<2> ? true : never;
+const NthRootableUnitAcceptsPerfectSquares: NthRootableUnitAcceptsPerfectSquares = true;
+
+type NthRootableUnitRejectsNonPerfectSquares = { a: 2; b: 1 } extends NthRootableUnit<2> ? never : true;
+const NthRootableUnitRejectsNonPerfectSquares: NthRootableUnitRejectsNonPerfectSquares = true;
+
+type NthRootableUnitAcceptsPerfectCubes = { a: 3; b: -3 } extends NthRootableUnit<3> ? true : never;
+const NthRootableUnitAcceptsPerfectCubes: NthRootableUnitAcceptsPerfectCubes = true;
+
+type NthRootableUnitRejectsNonPerfectCubes = { a: 3; b: 2 } extends NthRootableUnit<3> ? never : true;
+const NthRootableUnitRejectsNonPerfectCubes: NthRootableUnitRejectsNonPerfectCubes = true;
