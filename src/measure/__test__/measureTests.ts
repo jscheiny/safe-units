@@ -196,6 +196,16 @@ describe("Measures", () => {
             expect(Measure.of(5, meter.cubed().over(second.squared())).toString()).toBe("5 L^3 * T^-2");
         });
 
+        it("should have consistent formatting no matter how the unit is constructed", () => {
+            const metersTimesSecond = "5 L * T";
+            expect(Measure.of(5, meter.times(second)).toString()).toBe(metersTimesSecond);
+            expect(Measure.of(5, second.times(meter)).toString()).toBe(metersTimesSecond);
+
+            const metersPerSecond = "5 L * T^-1";
+            expect(Measure.of(5, meter.per(second)).toString()).toBe(metersPerSecond);
+            expect(Measure.of(5, second.inverse().times(meter)).toString()).toBe(metersPerSecond);
+        });
+
         it("should not format using symbol even if present", () => {
             expect(
                 Measure.of(5, meter.squared())

@@ -1,3 +1,4 @@
+import { Exponent } from "../exponent";
 import { Unit } from "./units";
 
 // TODO Remove cache and do this statelessly
@@ -10,34 +11,39 @@ export function setDimensionSymbol(dimension: string, symbol: string) {
     DimensionSymbolCache[dimension] = symbol;
 }
 
+type DimensionAndExponent = [string, Exponent];
+
 export function formatUnit(unit: Unit): string {
-    if (isScalarUnit(unit)) {
+    const sorted = sortDimensions(unit);
+    if (sorted.length === 0) {
         return "scalar";
     }
 
-    const parts: string[] = [];
+    return sorted.map(formatDimension).join(" * ");
+}
+
+function sortDimensions(unit: Unit): DimensionAndExponent[] {
+    const dimensions: DimensionAndExponent[] = [];
     for (const dimension in unit) {
         const exponent = unit[dimension];
         if (exponent === 0 || exponent === undefined) {
             continue;
         }
-        parts.push(formatDimension(dimension, exponent));
+        dimensions.push([dimension, exponent]);
     }
 
-    return parts.join(" * ");
+    dimensions.sort(([leftDim], [rightDim]) => {
+        if (leftDim < rightDim) {
+            return -1;
+        }
+        return 1;
+    });
+
+    return dimensions;
 }
 
-function formatDimension(dimension: string, exponent: number) {
+function formatDimension([dimension, exponent]: DimensionAndExponent): string {
     const dimensionStr = dimension in DimensionSymbolCache ? DimensionSymbolCache[dimension] : dimension;
     const exponentStr = exponent !== 1 ? `^${exponent}` : "";
     return `${dimensionStr}${exponentStr}`;
-}
-
-function isScalarUnit(unit: Unit): boolean {
-    for (const dimension in unit) {
-        if (unit.hasOwnProperty(dimension) && unit[dimension] !== 0 && unit[dimension] !== undefined) {
-            return false;
-        }
-    }
-    return true;
 }
