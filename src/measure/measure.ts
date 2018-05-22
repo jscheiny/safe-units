@@ -5,11 +5,61 @@ import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootU
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit } from "./units";
 
 export class Measure<U extends Unit> {
-    protected constructor(
-        public readonly value: number,
-        private readonly unit: U,
-        private readonly symbol?: string | undefined,
-    ) {}
+    // Math functions
+
+    public static abs = wrapUnary(Math.abs);
+    public static ceil = wrapUnary(Math.ceil);
+    public static floor = wrapUnary(Math.floor);
+    public static fround = wrapUnary(Math.fround);
+    public static hypot = warpNary(Math.hypot);
+    public static max = warpNary(Math.max);
+    public static min = warpNary(Math.min);
+    public static round = wrapUnary(Math.round);
+    public static trunc = wrapUnary(Math.trunc);
+
+    public static pow<U extends Unit, Y extends Exponent>(x: Measure<U>, y: Y): Measure<ExponentiateUnit<U, Y>> {
+        return x.toThe(y);
+    }
+
+    public static sqrt<U extends NthRootableUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>> {
+        return new Measure(Math.sqrt(x.value), nthRootUnit(x.unit, 2));
+    }
+
+    public static cbrt<U extends NthRootableUnit<3>>(x: Measure<U>): Measure<NthRootUnit<U, 3>> {
+        return new Measure(Math.cbrt(x.value), nthRootUnit(x.unit, 3));
+    }
+
+    public static add<U extends Unit>(left: Measure<U>, right: Measure<U>): Measure<U> {
+        return left.plus(right);
+    }
+
+    public static subtract<U extends Unit>(left: Measure<U>, right: Measure<U>): Measure<U> {
+        return left.minus(right);
+    }
+
+    public static multiply<L extends Unit, R extends Unit>(
+        left: Measure<L>,
+        right: Measure<R>,
+    ): Measure<MultiplyUnits<L, R>> {
+        return left.times(right);
+    }
+
+    public static divide<L extends Unit, R extends Unit>(
+        left: Measure<L>,
+        right: Measure<R>,
+    ): Measure<DivideUnits<L, R>> {
+        return left.over(right);
+    }
+
+    public static sum<U extends Unit>(first: Measure<U>, ...rest: Array<Measure<U>>): Measure<U> {
+        let result = first;
+        for (const measure of rest) {
+            result = result.plus(measure);
+        }
+        return result;
+    }
+
+    // Construction functions
 
     public static dimension<Dimension extends string>(dim: Dimension, symbol?: string) {
         if (symbol) {
@@ -26,13 +76,13 @@ export class Measure<U extends Unit> {
         return new Measure(value * quantity.value, quantity.unit, symbol);
     }
 
-    public static sqrt<U extends NthRootableUnit<2>>(measure: Measure<U>): Measure<NthRootUnit<U, 2>> {
-        return new Measure(Math.sqrt(measure.value), nthRootUnit(measure.unit, 2));
-    }
+    // Instance methods
 
-    public static cbrt<U extends NthRootableUnit<3>>(measure: Measure<U>): Measure<NthRootUnit<U, 3>> {
-        return new Measure(Math.cbrt(measure.value), nthRootUnit(measure.unit, 3));
-    }
+    protected constructor(
+        public readonly value: number,
+        private readonly unit: U,
+        private readonly symbol?: string | undefined,
+    ) {}
 
     public withSymbol(symbol: string): Measure<U> {
         return new Measure(this.value, this.unit, symbol);
@@ -152,4 +202,20 @@ export function square<U extends Unit>(measure: Measure<U>): Measure<Exponentiat
 
 export function cubic<U extends Unit>(measure: Measure<U>): Measure<ExponentiateUnit<U, 3>> {
     return measure.cubed();
+}
+
+function wrapUnary(f: (x: number) => number) {
+    return <U extends Unit>(x: Measure<U>): Measure<U> => {
+        return Measure.of(f(x.value), x.normalized());
+    };
+}
+
+function warpNary(f: (...x: number[]) => number) {
+    return <U extends Unit>(first: Measure<U>, ...rest: Array<Measure<U>>): Measure<U> => {
+        return Measure.of(f(...values(first, ...rest)), first.normalized());
+    };
+}
+
+function values<U extends Unit>(...measures: Array<Measure<U>>): number[] {
+    return measures.map(measure => measure.value);
 }
