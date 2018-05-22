@@ -105,8 +105,8 @@ describe("Units", () => {
 
         it("should throw an error when an exponent can't be divided", () => {
             const u = unit({ x: 4, y: -3 });
-            expect(() => nthRootUnit(u, 2)).toThrow();
-            expect(() => nthRootUnit(u, 3)).toThrow();
+            expect(() => nthRootUnit(u as any, 2)).toThrow();
+            expect(() => nthRootUnit(u as any, 3)).toThrow();
         });
 
         it("should handle explicitly undefined and 0 exponents", () => {

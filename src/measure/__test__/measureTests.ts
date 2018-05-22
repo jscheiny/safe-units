@@ -94,16 +94,6 @@ describe("Measures", () => {
             expect(square(value)).toEqual(Measure.of(100, meter.squared()));
             expect(cubic(value)).toEqual(Measure.of(1000, meter.cubed()));
         });
-
-        it("should square root", () => {
-            const value = Measure.of(100, meter.squared());
-            expect(value.sqrt()).toEqual(Measure.of(10, meter));
-        });
-
-        it("should cube root", () => {
-            const value = Measure.of(64, mps.cubed());
-            expect(value.cbrt()).toEqual(Measure.of(4, mps));
-        });
     });
 
     describe("comparison", () => {
@@ -167,7 +157,7 @@ describe("Measures", () => {
             expect(km.normalized().getSymbol()).toBeUndefined();
             expect(km.negate().getSymbol()).toBeUndefined();
             expect(km.squared().getSymbol()).toBeUndefined();
-            expect(km.sqrt().getSymbol()).toBeUndefined();
+            // expect(km.sqrt().getSymbol()).toBeUndefined();
             expect(km.inverse().getSymbol()).toBeUndefined();
             expect(km.plus(dm).getSymbol()).toBeUndefined();
             expect(km.minus(dm).getSymbol()).toBeUndefined();

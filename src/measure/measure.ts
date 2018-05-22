@@ -1,7 +1,7 @@
 import { Exponent } from "../exponent";
 import { Scalar } from "../quantity";
 import { formatUnit, setDimensionSymbol } from "./format";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit } from "./types";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit } from "./units";
 
 export class Measure<U extends Unit> {
@@ -24,6 +24,14 @@ export class Measure<U extends Unit> {
 
     public static of<U extends Unit>(value: number, quantity: Measure<U>, symbol?: string): Measure<U> {
         return new Measure(value * quantity.value, quantity.unit, symbol);
+    }
+
+    public static sqrt<U extends NthRootableUnit<2>>(measure: Measure<U>): Measure<NthRootUnit<U, 2>> {
+        return new Measure(Math.sqrt(measure.value), nthRootUnit(measure.unit, 2));
+    }
+
+    public static cbrt<U extends NthRootableUnit<3>>(measure: Measure<U>): Measure<NthRootUnit<U, 3>> {
+        return new Measure(Math.cbrt(measure.value), nthRootUnit(measure.unit, 3));
     }
 
     public withSymbol(symbol: string): Measure<U> {
@@ -91,14 +99,6 @@ export class Measure<U extends Unit> {
 
     public reciprocal(): Measure<ExponentiateUnit<U, -1>> {
         return this.inverse();
-    }
-
-    public sqrt(): Measure<NthRootUnit<U, 2>> {
-        return new Measure(Math.sqrt(this.value), nthRootUnit(this.unit, 2));
-    }
-
-    public cbrt(): Measure<NthRootUnit<U, 3>> {
-        return new Measure(Math.cbrt(this.value), nthRootUnit(this.unit, 3));
     }
 
     // Comparisons

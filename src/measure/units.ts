@@ -1,5 +1,5 @@
 import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponent";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootUnit } from "./types";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit } from "./types";
 
 export type Unit = Partial<{ [dimension: string]: Exponent }>;
 
@@ -48,7 +48,7 @@ export function exponentiateUnit<U extends Unit, N extends Exponent>(unit: U, po
     return result;
 }
 
-export function nthRootUnit<U extends Unit, N extends Exponent>(unit: U, root: N): NthRootUnit<U, N> {
+export function nthRootUnit<U extends NthRootableUnit<N>, N extends Exponent>(unit: U, root: N): NthRootUnit<U, N> {
     const result: any = {};
     for (const dimension in unit) {
         // TODO Remove cast to exponent somehow

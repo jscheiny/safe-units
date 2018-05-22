@@ -4,6 +4,7 @@ import {
     DivideExponents,
     Exponent,
     IsArithmeticError,
+    MultiplesOf,
     MultiplyExponents,
 } from "../exponent";
 import { Unit } from "./units";
@@ -26,9 +27,13 @@ export type ExponentiateUnit<U extends Unit, N extends Exponent> = HandleErrors<
 >;
 
 /** Returns the nth root of a unit. This is inverse scalar multiple of the dimension vector. */
-export type NthRootUnit<U extends Unit, N extends Exponent> = HandleErrors<
+export type NthRootUnit<U extends NthRootableUnit<N>, N extends Exponent> = HandleErrors<
     { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> }
 >;
+
+export type NthRootableUnit<N extends Exponent> = Partial<{
+    [dimension: string]: MultiplesOf<N>;
+}>;
 
 // Error handling
 
