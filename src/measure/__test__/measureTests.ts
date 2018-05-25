@@ -39,10 +39,10 @@ describe("Measures", () => {
             expect(measure.getUnit()).toEqual(meter.getUnit());
         });
 
-        it("should construct scalar values", () => {
-            const scalar = Measure.scalar(3);
-            expect(scalar.value).toBe(3);
-            expect(scalar.getUnit()).toEqual({});
+        it("should construct dimensionless values", () => {
+            const dimensionless = Measure.dimensionless(3);
+            expect(dimensionless.value).toBe(3);
+            expect(dimensionless.getUnit()).toEqual({});
         });
     });
 
@@ -79,7 +79,7 @@ describe("Measures", () => {
 
         it("should scale", () => {
             const value = Measure.of(10, mps);
-            const three = Measure.scalar(3);
+            const three = Measure.dimensionless(3);
             expect(value.scale(2)).toEqual(Measure.of(20, mps));
             expect(value.scale(three)).toEqual(Measure.of(30, mps));
         });
@@ -89,7 +89,7 @@ describe("Measures", () => {
 
             expect(value.inverse()).toEqual(Measure.of(0.1, meter.inverse()));
             expect(value.reciprocal()).toEqual(Measure.of(0.1, meter.inverse()));
-            expect(value.toThe(0)).toEqual(Measure.scalar(1));
+            expect(value.toThe(0)).toEqual(Measure.dimensionless(1));
             expect(value.toThe(1)).toEqual(Measure.of(10, meter));
             expect(value.squared()).toEqual(Measure.of(100, meter.squared()));
             expect(square(value)).toEqual(Measure.of(100, meter.squared()));
@@ -168,9 +168,9 @@ describe("Measures", () => {
     });
 
     describe("formatting", () => {
-        it("should format scalar units", () => {
-            expect(Measure.scalar(10).toString()).toBe("10 scalar");
-            expect(new TestMeasure(10, { x: 0, y: undefined }).toString()).toBe("10 scalar");
+        it("should format dimensionless units", () => {
+            expect(Measure.dimensionless(10).toString()).toBe("10");
+            expect(new TestMeasure(10, { x: 0, y: undefined }).toString()).toBe("10");
         });
 
         it("should format base units", () => {
@@ -204,10 +204,10 @@ describe("Measures", () => {
                     .toString(),
             ).toBe("5 L^2");
             expect(
-                Measure.scalar(0)
+                Measure.dimensionless(0)
                     .withSymbol("rad")
                     .toString(),
-            ).toBe("0 scalar");
+            ).toBe("0");
         });
 
         it("should skip formatting explicitly 0 and undefined dimension", () => {

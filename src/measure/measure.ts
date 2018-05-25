@@ -1,5 +1,5 @@
 import { Exponent } from "../exponent";
-import { Scalar } from "../quantity";
+import { Dimensionless } from "../quantity";
 import { formatUnit, setDimensionSymbol } from "./format";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit } from "./types";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit } from "./units";
@@ -68,7 +68,7 @@ export class Measure<U extends Unit> {
         return new Measure(1, dimension(dim));
     }
 
-    public static scalar(value: number): Measure<{}> {
+    public static dimensionless(value: number): Measure<{}> {
         return new Measure(value, {});
     }
 
@@ -114,9 +114,9 @@ export class Measure<U extends Unit> {
         return new Measure(-this.value, this.unit);
     }
 
-    public scale(scalar: number | Scalar): Measure<U> {
-        const scalarValue = typeof scalar === "number" ? scalar : scalar.value;
-        return new Measure(scalarValue * this.value, this.unit);
+    public scale(value: number | Dimensionless): Measure<U> {
+        const numericValue = typeof value === "number" ? value : value.value;
+        return new Measure(numericValue * this.value, this.unit);
     }
 
     public times<V extends Unit>(other: Measure<V>): Measure<MultiplyUnits<U, V>> {
@@ -184,7 +184,7 @@ export class Measure<U extends Unit> {
     // Formatting
 
     public toString(): string {
-        return `${this.value} ${formatUnit(this.unit)}`;
+        return `${this.value}${formatUnit(this.unit)}`;
     }
 
     public in(unit: Measure<U>): string {

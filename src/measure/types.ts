@@ -26,7 +26,7 @@ export type ExponentiateUnit<U extends Unit, N extends Exponent> = HandleErrors<
     { [Dim in keyof U]: MultiplyExponents<GetExponent<U, Dim>, N> }
 >;
 
-/** Returns the nth root of a unit. This is inverse scalar multiple of the dimension vector. */
+/** Returns the nth root of a unit. This is the inverse scalar multiple of the dimension vector. */
 export type NthRootUnit<U extends NthRootableUnit<N>, N extends Exponent> = HandleErrors<
     { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> }
 >;

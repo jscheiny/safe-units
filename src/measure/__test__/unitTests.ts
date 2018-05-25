@@ -80,7 +80,7 @@ describe("Units", () => {
             expect(exponentiateUnit(input, 1)).toEqual(input);
         });
 
-        it("should return a scalar unit when raised to the zero", () => {
+        it("should return a dimensionless unit when raised to the zero", () => {
             expect(exponentiateUnit(unit({ x: -1, y: 2, z: -3 }), 0)).toEqual({});
         });
 
