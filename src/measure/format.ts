@@ -16,10 +16,10 @@ type DimensionAndExponent = [string, Exponent];
 export function formatUnit(unit: Unit): string {
     const sorted = sortDimensions(unit);
     if (sorted.length === 0) {
-        return "scalar";
+        return "";
     }
 
-    return sorted.map(formatDimension).join(" * ");
+    return " " + sorted.map(formatDimension).join(" * ");
 }
 
 function sortDimensions(unit: Unit): DimensionAndExponent[] {
