@@ -18,7 +18,7 @@ export function genOperatorTests(options: OperatorCodeGenOptions): string {
     return lines.join("\n");
 }
 
-export function genImports(options: OperatorCodeGenOptions): string[] {
+function genImports(options: OperatorCodeGenOptions): string[] {
     return [
         genImport([genUncurriedTypeName(options)], `../${options.fileNamePrefix}`),
         genImport(["IsArithmeticError"], "../utils"),

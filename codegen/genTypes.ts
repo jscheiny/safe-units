@@ -18,7 +18,7 @@ export function genOperatorTypes(options: OperatorCodeGenOptions): string {
     return lines.join("\n");
 }
 
-export function genImports(): string[] {
+function genImports(): string[] {
     return [genImport(["ArithmeticError", "Exponent"], "./common"), ""];
 }
 
