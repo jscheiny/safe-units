@@ -17,8 +17,8 @@ export const Mass: Mass = Base.kilograms;
 export type Time = typeof Base.seconds;
 export const Time: Time = Base.seconds;
 
-export type ElectricalCurrent = typeof Base.amperes;
-export const ElectricalCurrent: ElectricalCurrent = Base.amperes;
+export type ElectricCurrent = typeof Base.amperes;
+export const ElectricCurrent: ElectricCurrent = Base.amperes;
 
 export type Temperature = typeof Base.kelvin;
 export const Temperature: Temperature = Base.kelvin;
@@ -46,25 +46,25 @@ export type Energy = typeof Energy;
 export const Power = Energy.over(Time);
 export type Power = typeof Power;
 
-export const Voltage = Power.over(ElectricalCurrent);
+export const Voltage = Power.over(ElectricCurrent);
 export type Voltage = typeof Voltage;
 
-export const ElectricCharge = ElectricalCurrent.times(Time);
+export const ElectricCharge = ElectricCurrent.times(Time);
 export type ElectricCharge = typeof ElectricCharge;
 
 export const ElectricalCapacitance = ElectricCharge.over(Voltage);
 export type ElectricalCapacitance = typeof ElectricalCapacitance;
 
-export const ElectricalResistance = Voltage.over(ElectricalCurrent);
+export const ElectricalResistance = Voltage.over(ElectricCurrent);
 export type ElectricalResistance = typeof ElectricalResistance;
 
-export const ElectricalConductance = ElectricalCurrent.over(Voltage);
+export const ElectricalConductance = ElectricCurrent.over(Voltage);
 export type ElectricalConductance = typeof ElectricalConductance;
 
 export const ElectricalInductance = ElectricalResistance.times(Time);
 export type ElectricalInductance = typeof ElectricalInductance;
 
-export const MagneticFlux = Energy.over(ElectricalCurrent);
+export const MagneticFlux = Energy.over(ElectricCurrent);
 export type MagneticFlux = typeof MagneticFlux;
 
 export const MagneticFluxDensity = Voltage.times(Time).over(Length.squared());
@@ -168,7 +168,7 @@ export type ElectricDisplacementField = typeof ElectricDisplacementField;
 export const ElectricChargeDensity = ElectricCharge.over(Volume);
 export type ElectricChargeDensity = typeof ElectricChargeDensity;
 
-export const ElectricCurrentDensity = ElectricalCurrent.over(Area);
+export const ElectricCurrentDensity = ElectricCurrent.over(Area);
 export type ElectricCurrentDensity = typeof ElectricCurrentDensity;
 
 export const ElectricalConductivity = ElectricalConductance.over(Length);
@@ -186,7 +186,7 @@ export type MagneticPermeability = typeof MagneticPermeability;
 export const EletricFieldStrength = Voltage.over(Length);
 export type EletricFieldStrength = typeof EletricFieldStrength;
 
-export const MagneticFieldStrength = ElectricalCurrent.over(Length);
+export const MagneticFieldStrength = ElectricCurrent.over(Length);
 export type MagneticFieldStrength = typeof MagneticFieldStrength;
 
 export const Luminance = LuminousIntensity.over(Area);
