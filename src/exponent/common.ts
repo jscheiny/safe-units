@@ -6,7 +6,7 @@ export const MinExponent: MinExponent = -5;
 export type MaxExponent = 5;
 export const MaxExponent: MaxExponent = 5;
 
-export type Exponent = -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4;
+export type Exponent = -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5;
 
 export type ArithmeticError = "UnitError" & "Arithmetic out of bounds";
 export const ArithmeticError = "Arithmetic out of bounds";

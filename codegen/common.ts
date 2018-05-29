@@ -1,5 +1,3 @@
-export const EXPONENTS = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
-
 export interface CommonOperatorCodeGenOptions {
     minExponent: number;
     maxExponent: number;
@@ -16,10 +14,14 @@ export interface OperatorCodeGenOptions extends CommonOperatorCodeGenOptions {
 
 export function getExponents({ minExponent, maxExponent }: CommonOperatorCodeGenOptions): number[] {
     const exponents: number[] = [];
-    for (let exponent = minExponent; exponent !== maxExponent; exponent++) {
+    for (let exponent = minExponent; exponent <= maxExponent; exponent++) {
         exponents.push(exponent);
     }
     return exponents;
+}
+
+export function isExponent(exponent: number, { minExponent, maxExponent }: CommonOperatorCodeGenOptions): boolean {
+    return exponent >= minExponent && exponent <= maxExponent && exponent === Math.floor(exponent);
 }
 
 export function genFileHeader(disableTslint: boolean = true): string[] {

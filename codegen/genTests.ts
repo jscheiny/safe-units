@@ -1,16 +1,18 @@
 import {
-    EXPONENTS,
     genFileHeader,
     genImport,
     genUncurriedTypeName,
     genValueName,
+    getExponents,
+    isExponent,
     OperatorCodeGenOptions,
 } from "./common";
 
 export function genOperatorTests(options: OperatorCodeGenOptions): string {
     const lines: string[] = [...genFileHeader(), ...genImports(options)];
-    for (const left of EXPONENTS) {
-        for (const right of EXPONENTS) {
+    const exponents = getExponents(options);
+    for (const left of exponents) {
+        for (const right of exponents) {
             lines.push(...genTest(options, left, right));
             lines.push("");
         }
@@ -28,7 +30,7 @@ function genImports(options: OperatorCodeGenOptions): string[] {
 
 function genTest(options: OperatorCodeGenOptions, left: number, right: number): string[] {
     const result = options.compute(left, right);
-    if (EXPONENTS.indexOf(result) !== -1) {
+    if (isExponent(result, options)) {
         return genValueTest(options, left, right, result);
     } else {
         return genErrorTest(options, left, right);
