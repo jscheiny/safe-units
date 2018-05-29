@@ -1,6 +1,15 @@
-import { emitOperator } from "./emit";
+import { CommonOperatorCodeGenOptions } from "./common";
+import { emitCommonTypes, emitOperator } from "./emit";
+
+const common: CommonOperatorCodeGenOptions = {
+    minExponent: -5,
+    maxExponent: 5,
+};
+
+emitCommonTypes(common);
 
 emitOperator({
+    ...common,
     fileNamePrefix: "addition",
     uncurriedTypeNamePrefix: "Add",
     curriedTypeNamePrefix: "Add",
@@ -12,6 +21,7 @@ emitOperator({
 });
 
 emitOperator({
+    ...common,
     fileNamePrefix: "multiplication",
     uncurriedTypeNamePrefix: "Multiply",
     curriedTypeNamePrefix: "MultiplyBy",
@@ -24,6 +34,7 @@ emitOperator({
 });
 
 emitOperator({
+    ...common,
     fileNamePrefix: "division",
     uncurriedTypeNamePrefix: "Divide",
     curriedTypeNamePrefix: "DividedBy",

@@ -1,17 +1,23 @@
 import { writeFile } from "fs";
-import { OperatorCodeGenOptions } from "./common";
+import { CommonOperatorCodeGenOptions, OperatorCodeGenOptions } from "./common";
+import { genCommonTypes } from "./genCommon";
 import { genOperatorTests } from "./genTests";
 import { genOperatorTypes } from "./genTypes";
 
+const PATH_PREFIX = "src/exponent/";
+
+export function emitCommonTypes(options: CommonOperatorCodeGenOptions) {
+    emitFile("common.ts", genCommonTypes(options));
+}
+
 export function emitOperator(options: OperatorCodeGenOptions) {
     const { fileNamePrefix } = options;
-    const prefix = "src/exponent";
-    emitFile(`${prefix}/${fileNamePrefix}.ts`, genOperatorTypes(options));
-    emitFile(`${prefix}/__test__/${fileNamePrefix}Spec.ts`, genOperatorTests(options));
+    emitFile(`${fileNamePrefix}.ts`, genOperatorTypes(options));
+    emitFile(`__test__/${fileNamePrefix}Spec.ts`, genOperatorTests(options));
 }
 
 function emitFile(path: string, content: string) {
-    writeFile(path, content, error => {
+    writeFile(PATH_PREFIX + path, content, error => {
         if (error) {
             console.error(`There was an error writing to ${path}`);
         } else {

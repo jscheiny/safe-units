@@ -1,31 +1,33 @@
 import {
-    EXPONENTS,
     genFileHeader,
     genImport,
     genUncurriedTypeName,
     genValueName,
+    getExponents,
     indent,
+    isExponent,
     OperatorCodeGenOptions,
 } from "./common";
 
 export function genOperatorTypes(options: OperatorCodeGenOptions): string {
-    let lines: string[] = [...genFileHeader(), ...genImports(), ...genUncurriedType(options)];
-    for (const left of EXPONENTS) {
+    const exponents = getExponents(options);
+    let lines: string[] = [...genFileHeader(), ...genImports(), ...genUncurriedType(options, exponents)];
+    for (const left of exponents) {
         if (!(left in options.specialCases)) {
-            lines.push(...genCurriedType(options, left));
+            lines.push(...genCurriedType(options, exponents, left));
         }
     }
     return lines.join("\n");
 }
 
-export function genImports(): string[] {
+function genImports(): string[] {
     return [genImport(["ArithmeticError", "Exponent"], "./common"), ""];
 }
 
-function genUncurriedType(options: OperatorCodeGenOptions): string[] {
+function genUncurriedType(options: OperatorCodeGenOptions, exponents: number[]): string[] {
     const lines = [`export type ${genUncurriedTypeName(options, "L extends Exponent", "R extends Exponent")}`];
     let first = true;
-    for (const left of EXPONENTS) {
+    for (const left of exponents) {
         const operator = first ? "=" : ":";
         const prefix = indent(`${operator} L extends ${left} ?`);
         first = false;
@@ -40,12 +42,12 @@ function genUncurriedType(options: OperatorCodeGenOptions): string[] {
     return lines;
 }
 
-function genCurriedType(options: OperatorCodeGenOptions, left: number): string[] {
+function genCurriedType(options: OperatorCodeGenOptions, exponents: number[], left: number): string[] {
     const lines = [`export type ${genCurriedTypeName(options, left)}<N extends Exponent>`];
     let first = true;
-    for (const right of EXPONENTS) {
+    for (const right of exponents) {
         const result = options.compute(left, right);
-        if (EXPONENTS.indexOf(result) !== -1) {
+        if (isExponent(result, options)) {
             const operator = first ? "=" : ":";
             first = false;
             lines.push(indent(`${operator} N extends ${right} ? ${result}`));
