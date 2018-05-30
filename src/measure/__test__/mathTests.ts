@@ -1,4 +1,5 @@
-import { meters, seconds } from "../../unit/base";
+import { degrees, pi } from "../../unit/angle";
+import { meters, radians, seconds } from "../../unit/base";
 import * as SafeMath from "../math";
 import { Measure } from "../measure";
 
@@ -10,6 +11,18 @@ describe("Math", () => {
         expect(SafeMath.subtract(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(10, mps));
         expect(SafeMath.multiply(Measure.of(5, mps), Measure.of(10, seconds))).toEqual(Measure.of(50, meters));
         expect(SafeMath.divide(Measure.of(50, meters), Measure.of(10, seconds))).toEqual(Measure.of(5, mps));
+    });
+
+    it("trig", () => {
+        const zeroRadians = Measure.of(0, radians);
+        const zero = Measure.dimensionless(0);
+        expect(SafeMath.cos(zeroRadians)).toEqual(Measure.dimensionless(1));
+        expect(SafeMath.sin(zeroRadians)).toEqual(zero);
+        expect(SafeMath.tan(zeroRadians)).toEqual(zero);
+        expect(SafeMath.acos(zero)).toEqual(Measure.of(0.5, pi));
+        expect(SafeMath.asin(zero)).toEqual(zeroRadians);
+        expect(SafeMath.atan(zero)).toEqual(zeroRadians);
+        expect(SafeMath.atan2(Measure.of(5, meters), Measure.of(5, meters))).toEqual(Measure.of(45, degrees));
     });
 
     it("abs", () => {
