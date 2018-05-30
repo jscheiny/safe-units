@@ -1,5 +1,5 @@
 import { Exponent } from "../exponent";
-import { Unit } from "./units";
+import { Unit } from "./types";
 
 // TODO Remove cache and do this statelessly
 const DimensionSymbolCache: { [dimension: string]: string } = {};

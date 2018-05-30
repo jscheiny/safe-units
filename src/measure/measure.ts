@@ -1,8 +1,8 @@
 import { Exponent } from "../exponent";
 import { Dimensionless } from "../quantity";
 import { formatUnit, setDimensionSymbol } from "./format";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits } from "./types";
-import { dimension, divideUnits, exponentiateUnit, multiplyUnits, Unit } from "./units";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, Unit } from "./types";
+import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./units";
 
 export class Measure<U extends Unit> {
     // Construction functions

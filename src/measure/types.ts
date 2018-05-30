@@ -7,7 +7,8 @@ import {
     MultiplesOf,
     MultiplyExponents,
 } from "../exponent";
-import { Unit } from "./units";
+
+export type Unit = Partial<{ [dimension: string]: Exponent }>;
 
 // Arithmetic
 
