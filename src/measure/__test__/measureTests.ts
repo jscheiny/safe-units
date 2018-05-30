@@ -1,18 +1,10 @@
-import { meters, seconds } from "../../unit";
 import { cubic, Measure, square } from "../measure";
-import { Unit } from "../units";
 
 describe("Measures", () => {
     const meter = Measure.dimension("L");
     const second = Measure.dimension("T");
     const mps = meter.per(second);
     const mps2 = mps.per(second);
-
-    class TestMeasure<U extends Unit> extends Measure<Unit> {
-        constructor(value: number, unit: U, symbol?: string | undefined) {
-            super(value, unit, symbol);
-        }
-    }
 
     describe("dimension", () => {
         it("should create dimensions with value 1", () => {
@@ -170,7 +162,7 @@ describe("Measures", () => {
     describe("formatting", () => {
         it("should format dimensionless units", () => {
             expect(Measure.dimensionless(10).toString()).toBe("10");
-            expect(new TestMeasure(10, { x: 0, y: undefined }).toString()).toBe("10");
+            expect(Measure.unsafeConstruct(10, { x: 0, y: undefined }).toString()).toBe("10");
         });
 
         it("should format base units", () => {
@@ -211,7 +203,7 @@ describe("Measures", () => {
         });
 
         it("should skip formatting explicitly 0 and undefined dimension", () => {
-            expect(new TestMeasure(10, { x: 0, y: undefined, z: 2 }).toString()).toBe("10 z^2");
+            expect(Measure.unsafeConstruct(10, { x: 0, y: undefined, z: 2 }).toString()).toBe("10 z^2");
         });
 
         it("should format measures as other measures with symbols", () => {
@@ -230,71 +222,6 @@ describe("Measures", () => {
             expect(m.toString()).toBe("1 meter");
             expect(Measure.of(1, m.per(s)).toString()).toBe("1 meter * second^-1");
             expect(Measure.of(1, m.squared().per(s.squared())).toString()).toBe("1 meter^2 * second^-2");
-        });
-    });
-
-    describe("math", () => {
-        const mps = meters.per(seconds);
-
-        it("arithmetic", () => {
-            expect(Measure.add(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(0, mps));
-            expect(Measure.subtract(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(10, mps));
-            expect(Measure.multiply(Measure.of(5, mps), Measure.of(10, seconds))).toEqual(Measure.of(50, meters));
-            expect(Measure.divide(Measure.of(50, meters), Measure.of(10, seconds))).toEqual(Measure.of(5, mps));
-        });
-
-        it("abs", () => {
-            expect(Measure.abs(Measure.of(-10, mps))).toEqual(Measure.of(10, mps));
-        });
-
-        it("cbrt", () => {
-            expect(Measure.cbrt(Measure.of(64, seconds.cubed()))).toEqual(Measure.of(4, seconds));
-        });
-
-        it("ceil", () => {
-            expect(Measure.ceil(Measure.of(3.4, mps))).toEqual(Measure.of(4, mps));
-        });
-
-        it("floor", () => {
-            expect(Measure.floor(Measure.of(7.8, mps))).toEqual(Measure.of(7, mps));
-        });
-
-        it("hypot", () => {
-            expect(Measure.hypot(Measure.of(3, meters), Measure.of(4, meters))).toEqual(Measure.of(5, meters));
-        });
-
-        it("max", () => {
-            expect(Measure.max(Measure.of(10, mps), Measure.of(5, mps), Measure.of(15, mps))).toEqual(
-                Measure.of(15, mps),
-            );
-        });
-
-        it("min", () => {
-            expect(Measure.min(Measure.of(10, mps), Measure.of(5, mps), Measure.of(15, mps))).toEqual(
-                Measure.of(5, mps),
-            );
-        });
-
-        it("pow", () => {
-            expect(Measure.pow(Measure.of(10, meters), 3)).toEqual(Measure.of(1000, meters.cubed()));
-        });
-
-        it("round", () => {
-            expect(Measure.round(Measure.of(7.8, mps))).toEqual(Measure.of(8, mps));
-        });
-
-        it("sqrt", () => {
-            expect(Measure.sqrt(Measure.of(25, meters.squared()))).toEqual(Measure.of(5, meters));
-        });
-
-        it("sum", () => {
-            expect(Measure.sum(Measure.of(10, mps), Measure.of(5, mps), Measure.of(15, mps))).toEqual(
-                Measure.of(30, mps),
-            );
-        });
-
-        it("trunc", () => {
-            expect(Measure.trunc(Measure.of(-7.8, mps))).toEqual(Measure.of(-7, mps));
         });
     });
 });

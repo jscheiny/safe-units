@@ -33,13 +33,13 @@ const error: Velocity = length.times(time); // Error: A measure of m*s isn't ass
 ### Measure arithmetic
 
 ```typescript
-import { Area, Force, Length, Mass, Measure, Pressure, Quantity, Unit, Volume } from "uni-ts";
+import { Area, Force, Length, Mass, Measure, Pressure, Quantity, SafeMath, Unit, Volume } from "uni-ts";
 
 const length: Length = Measure.of(30, Unit.feet);
 const width: Length = Measure.of(20, Unit.miles);
 const height: Length = Measure.of(10, Unit.meters);
 const area: Area = length.times(width);
-const squareSide: Length = Measure.sqrt(area);
+const squareSide: Length = SafeMath.sqrt(area);
 const volume: Volume = area.times(height);
 const perimeter: Length = length.scale(2).plus(width.scale(2));
 const mass: Mass = Measure.of(100, Unit.pounds);
@@ -51,13 +51,15 @@ const pressure: Pressure = force.over(area);
 ### Type errors
 
 ```typescript
+import { Length, Force, Measure, SafeMath } from "uni-ts";
+
 const length: Length = Measure.of(10, Unit.meters);
 const time: Time = Measure.of(10, Unit.seconds);
 length.plus(time); // Error: Measures of different units cannot be added
 length.minus(time); // Error: Measures of different units cannot be subtracted
 
 const force: Force = length.over(time) // Error: Measure of m/s is not assignable to measure of kg*m/s^2
-const root = Measure.sqrt(length) // Error: Can't take sqrt of measure of m since it's not a perfect square
+const root = SafeMath.sqrt(length) // Error: Can't take sqrt of measure of m since it's not a perfect square
 ```
 
 ### Naming units

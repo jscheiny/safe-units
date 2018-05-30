@@ -1,4 +1,5 @@
+import * as SafeMath from "./math";
 import { Unit } from "./units";
 
-export { Unit };
+export { SafeMath, Unit };
 export * from "./measure";
