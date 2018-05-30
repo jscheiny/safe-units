@@ -29,6 +29,14 @@ export const AmountOfSubstance: AmountOfSubstance = Base.moles;
 export type LuminousIntensity = typeof Base.candela;
 export const LuminousIntensity: LuminousIntensity = Base.candela;
 
+// Angular base units
+
+export type PlaneAngle = typeof Base.radians;
+export const PlaneAngle: PlaneAngle = Base.radians;
+
+export type SolidAngle = typeof Base.steradians;
+export const SolidAngle: SolidAngle = Base.steradians;
+
 // Derived units
 
 export const Frequency = Time.inverse();
@@ -181,8 +189,8 @@ export type MagneticRigidity = typeof MagneticRigidity;
 export const MagneticDipoleMoment = Energy.over(MagneticFluxDensity);
 export type MagneticDipoleMoment = typeof MagneticDipoleMoment;
 
-export const MagnetomotiveForce = Length.over(ElectricalInductance);
-export type MagnetomotiveForce = typeof MagnetomotiveForce;
+export const MagneticSusceptibility = Length.over(ElectricalInductance);
+export type MagneticSusceptibility = typeof MagneticSusceptibility;
 
 export const Irradiance = Power.over(Area);
 export type Irradiance = typeof Irradiance;
@@ -253,38 +261,40 @@ export type AngularMomentum = typeof AngularMomentum;
 export const SpecificAngularMomentum = AngularMomentum.over(Mass);
 export type SpecificAngularMomentum = typeof SpecificAngularMomentum;
 
-// ========================================================================================
+export const Luminance = LuminousIntensity.over(Area);
+export type Luminance = typeof Luminance;
 
-// TODO How do I implement these?
-// export const LuminousEnergy = lumen.times(second);
-// export type LuminousEnergy = typeof LuminousEnergy;
+// Angular derived units
 
-// export const LuminousExposure = lux.times(second);
-// export type LuminousExposure = typeof LuminousExposure;
+export const LuminousFlux = LuminousIntensity.times(SolidAngle);
+export type LuminousFlux = typeof LuminousFlux;
 
-// export const LuminousEfficiency = lumen.over(Power);
-// export type LuminousEfficiency = typeof LuminousEfficiency;
+export const Illuminance = LuminousFlux.over(Area);
+export type Illuminance = typeof Illuminance;
 
-// export const RadiantIntensity = Power.over(steradian);
-// export type RadiantIntensity = typeof RadiantIntensity;
+export const LuminousEnergy = LuminousFlux.times(Time);
+export type LuminousEnergy = typeof LuminousEnergy;
 
-// export const SpectralIntensity = Power.over(steradian.times(Length));
-// export type SpectralIntensity = typeof SpectralIntensity;
+export const LuminousExposure = Illuminance.times(Time);
+export type LuminousExposure = typeof LuminousExposure;
 
-// export const Radiance = Power.over(steradian.times(Length.squared()));
-// export type Radiance = typeof Radiance;
+export const LuminousEfficiency = LuminousFlux.over(Power);
+export type LuminousEfficiency = typeof LuminousEfficiency;
 
-// export const SpectralRadiance = Power.over(steradian.times(Length.cubed()));
-// export type SpectralRadiance = typeof SpectralRadiance;
+export const RadiantIntensity = Power.over(SolidAngle);
+export type RadiantIntensity = typeof RadiantIntensity;
 
-// export const Luminance = LuminousIntensity.over(Area);
-// export type Luminance = typeof Luminance;
+export const SpectralIntensity = RadiantIntensity.over(Length);
+export type SpectralIntensity = typeof SpectralIntensity;
 
-// export const LuminousExposure = ElectricCharge.over(Mass);
-// export type LuminousExposure = typeof LuminousExposure;
+export const Radiance = RadiantIntensity.over(Area);
+export type Radiance = typeof Radiance;
 
-// export const RadiantExposure = Energy.over(Area);
-// export type RadiantExposure = typeof RadiantExposure;
+export const SpectralRadiance = RadiantIntensity.over(Volume);
+export type SpectralRadiance = typeof SpectralRadiance;
 
-// export const SpectralPower = Power.over(Length);
-// export type SpectralPower = typeof SpectralPower;
+export const AngularVelocity = PlaneAngle.over(Time);
+export type AngularVelocity = typeof AngularVelocity;
+
+export const AngularAcceleration = AngularVelocity.over(Time);
+export type AngularAcceleration = typeof AngularAcceleration;
