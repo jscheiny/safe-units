@@ -18,8 +18,8 @@ export const webers: Quantity.MagneticFlux = joules.per(amperes).withSymbol("Wb"
 export const teslas: Quantity.MagneticFluxDensity = volts.times(seconds.per(meters.squared())).withSymbol("T");
 export const sieverts: Quantity.RadiationDose = joules.per(kilograms).withSymbol("Sv");
 export const katals: Quantity.CatalyticActivity = moles.per(seconds).withSymbol("kat");
-export const lumens: Quantity.LuminousFlux = candela.times(steradians);
-export const luxes: Quantity.Illuminance = lumens.per(meters.squared());
+export const lumens: Quantity.LuminousFlux = candela.times(steradians).withSymbol("lm");
+export const luxes: Quantity.Illuminance = lumens.per(meters.squared()).withSymbol("lx");
 
 // Prefixes
 

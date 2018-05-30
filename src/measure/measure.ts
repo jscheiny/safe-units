@@ -10,7 +10,7 @@ export class Measure<U extends Unit> {
         if (symbol) {
             setDimensionSymbol(dim, symbol);
         }
-        return new Measure(1, dimension(dim));
+        return new Measure(1, dimension(dim), symbol);
     }
 
     public static dimensionless(value: number): Measure<{}> {
