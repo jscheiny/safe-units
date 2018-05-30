@@ -2,7 +2,8 @@
     "extends": [
         "tslint-config-standard",
         "tslint-config-prettier",
-        "tslint-plugin-prettier"
+        "tslint-plugin-prettier",
+        "tslint-no-circular-imports"
     ],
     "rules": {
         "prettier": [
