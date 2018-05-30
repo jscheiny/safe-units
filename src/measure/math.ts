@@ -1,17 +1,29 @@
 import { Exponent } from "../exponent/common";
+import { Dimensionless, Length, PlaneAngle } from "../quantity/quantities";
+import { radians } from "../unit/base";
 import { Measure } from "./measure";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit, Unit } from "./types";
 import { nthRootUnit } from "./units";
 
 export const abs = wrapUnary(Math.abs);
+export const acos = wrapInverseTrig(Math.acos);
+export const asin = wrapInverseTrig(Math.asin);
+export const atan = wrapInverseTrig(Math.atan);
 export const ceil = wrapUnary(Math.ceil);
+export const cos = wrapTrig(Math.cos);
 export const floor = wrapUnary(Math.floor);
 export const fround = wrapUnary(Math.fround);
 export const hypot = warpNary(Math.hypot);
 export const max = warpNary(Math.max);
 export const min = warpNary(Math.min);
 export const round = wrapUnary(Math.round);
+export const sin = wrapTrig(Math.sin);
+export const tan = wrapTrig(Math.tan);
 export const trunc = wrapUnary(Math.trunc);
+
+export function atan2(y: Length, x: Length): PlaneAngle {
+    return Measure.of(Math.atan2(y.value, x.value), radians);
+}
 
 export function pow<U extends Unit, Y extends Exponent>(x: Measure<U>, y: Y): Measure<ExponentiateUnit<U, Y>> {
     return x.toThe(y);
@@ -58,6 +70,18 @@ export function sum<U extends Unit>(first: Measure<U>, ...rest: Array<Measure<U>
 function wrapUnary(f: (x: number) => number) {
     return <U extends Unit>(x: Measure<U>): Measure<U> => {
         return Measure.of(f(x.value), x.normalized());
+    };
+}
+
+function wrapTrig(f: (x: number) => number) {
+    return (angle: PlaneAngle): Dimensionless => {
+        return Measure.dimensionless(f(angle.value));
+    };
+}
+
+function wrapInverseTrig(f: (x: number) => number) {
+    return (angle: Dimensionless): PlaneAngle => {
+        return Measure.of(f(angle.value), radians);
     };
 }
 
