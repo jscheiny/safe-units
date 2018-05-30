@@ -1,7 +1,5 @@
-import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponent";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit } from "./types";
-
-export type Unit = Partial<{ [dimension: string]: Exponent }>;
+import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponent/common";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit, Unit } from "./types";
 
 export function dimension<D extends string>(dim: D): { [K in D]: 1 } {
     // TODO Remove cast to any somehow

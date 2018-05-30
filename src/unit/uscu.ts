@@ -1,5 +1,5 @@
-import { cubic, Measure } from "../measure";
-import { Quantity } from "../quantity";
+import { cubic, Measure } from "../measure/measure";
+import * as Quantity from "../quantity/quantities";
 import { grams, meters } from "./base";
 import { grains, inches, pounds } from "./common";
 import { micro } from "./metric";

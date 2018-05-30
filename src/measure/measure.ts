@@ -1,8 +1,7 @@
-import { Exponent } from "../exponent";
-import { Dimensionless } from "../quantity";
+import { Exponent } from "../exponent/common";
 import { formatUnit, setDimensionSymbol } from "./format";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits } from "./types";
-import { dimension, divideUnits, exponentiateUnit, multiplyUnits, Unit } from "./units";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, Unit } from "./types";
+import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./units";
 
 export class Measure<U extends Unit> {
     // Construction functions
@@ -11,7 +10,7 @@ export class Measure<U extends Unit> {
         if (symbol) {
             setDimensionSymbol(dim, symbol);
         }
-        return new Measure(1, dimension(dim));
+        return new Measure(1, dimension(dim), symbol);
     }
 
     public static dimensionless(value: number): Measure<{}> {
@@ -64,7 +63,7 @@ export class Measure<U extends Unit> {
         return new Measure(-this.value, this.unit);
     }
 
-    public scale(value: number | Dimensionless): Measure<U> {
+    public scale(value: number | Measure<{}>): Measure<U> {
         const numericValue = typeof value === "number" ? value : value.value;
         return new Measure(numericValue * this.value, this.unit);
     }

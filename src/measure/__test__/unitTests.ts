@@ -1,4 +1,5 @@
-import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit, Unit } from "../units";
+import { Unit } from "../types";
+import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "../units";
 
 describe("Units", () => {
     const x = dimension("x");

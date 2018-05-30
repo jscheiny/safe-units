@@ -1,5 +1,5 @@
-import { cubic, Measure, square } from "../measure";
-import { Quantity } from "../quantity";
+import { cubic, Measure, square } from "../measure/measure";
+import * as Quantity from "../quantity/quantities";
 import { grams, meters, seconds } from "./base";
 import { milli, nano, pascals } from "./metric";
 

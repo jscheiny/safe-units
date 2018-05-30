@@ -1,4 +1,4 @@
-import { Measure } from "../measure";
+import { Measure } from "../measure/measure";
 import { radians } from "./base";
 
 export const pi = Measure.of(Math.PI, radians, "pi");

@@ -1,7 +1,7 @@
-import { Measure } from "../../measure";
+import { Measure } from "../../measure/measure";
 import * as Quantity from "../quantities";
 
-describe("Quantity", () => {
+describe("Quantities", () => {
     const QuantityNames = Object.keys(Quantity);
 
     function forEachQuantity(fn: (quantity: Measure<any>, name: string) => void) {
@@ -10,7 +10,7 @@ describe("Quantity", () => {
         });
     }
 
-    it("No two quantities should be the same", () => {
+    it("no two quantities should have the same dimensions", () => {
         forEachQuantity((a, aName) => {
             forEachQuantity((b, bName) => {
                 if (aName === bName) {
@@ -26,7 +26,7 @@ describe("Quantity", () => {
         });
     });
 
-    it("All quantities should be normalized", () => {
+    it("all quantities should be normalized", () => {
         forEachQuantity(quantity => {
             expect(quantity.value).toBe(1);
         });

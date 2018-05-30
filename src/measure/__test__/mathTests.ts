@@ -1,4 +1,4 @@
-import { meters, seconds } from "../../unit";
+import { meters, seconds } from "../../unit/base";
 import * as SafeMath from "../math";
 import { Measure } from "../measure";
 
