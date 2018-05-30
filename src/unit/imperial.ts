@@ -1,5 +1,5 @@
-import { cubic, Measure } from "../measure";
-import { Quantity } from "../quantity";
+import { cubic, Measure } from "../measure/measure";
+import * as Quantity from "../quantity/quantities";
 import { grains, inches, pounds } from "./common";
 
 // Liquid Volume

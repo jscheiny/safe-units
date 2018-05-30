@@ -1,5 +1,5 @@
-import { Measure } from "../measure";
-import { Quantity } from "../quantity";
+import { Measure } from "../measure/measure";
+import * as Quantity from "../quantity/quantities";
 import { grams, meters, seconds } from "./base";
 
 // Time

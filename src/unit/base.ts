@@ -1,4 +1,4 @@
-import { Measure } from "../measure";
+import { Measure } from "../measure/measure";
 
 export const meters = Measure.dimension("length", "m");
 export const kilograms = Measure.dimension("mass", "kg");

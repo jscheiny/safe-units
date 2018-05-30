@@ -1,4 +1,4 @@
-import { Measure } from "../../measure";
+import { Measure } from "../../measure/measure";
 import * as Quantity from "../quantities";
 
 describe("Quantity", () => {

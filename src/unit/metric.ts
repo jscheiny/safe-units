@@ -1,5 +1,6 @@
-import { Measure, Unit } from "../measure";
-import { Quantity } from "../quantity";
+import { Measure } from "../measure/measure";
+import { Unit } from "../measure/types";
+import * as Quantity from "../quantity/quantities";
 import { amperes, candela, kilograms, meters, moles, seconds, steradians } from "./base";
 
 export const hertz: Quantity.Frequency = seconds.inverse().withSymbol("Hz");

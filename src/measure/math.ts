@@ -1,4 +1,4 @@
-import { Exponent } from "../exponent";
+import { Exponent } from "../exponent/common";
 import { Measure } from "./measure";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit, Unit } from "./types";
 import { nthRootUnit } from "./units";
