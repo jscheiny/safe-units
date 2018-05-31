@@ -1,11 +1,11 @@
-import { CommonOperatorCodeGenOptions, genFileHeader, getExponents } from "./common";
+import { CommonSpec, genFileHeader, getExponents } from "./common";
 
-export function genCommonTypes(options: CommonOperatorCodeGenOptions): string {
+export function genCommonTypes(spec: CommonSpec): string {
     return [
         ...genFileHeader(false),
-        ...genExtremaType("Min", options.minExponent),
-        ...genExtremaType("Max", options.maxExponent),
-        ...genUnionType(options),
+        ...genExtremaType("Min", spec.minExponent),
+        ...genExtremaType("Max", spec.maxExponent),
+        ...genUnionType(spec),
         ...genErrorType(),
     ].join("\n");
 }
@@ -17,8 +17,8 @@ function genExtremaType(prefix: string, exponent: number): string[] {
     return [type, value, ""];
 }
 
-function genUnionType(options: CommonOperatorCodeGenOptions): string[] {
-    const exponents = getExponents(options).join(" | ");
+function genUnionType(spec: CommonSpec): string[] {
+    const exponents = getExponents(spec).join(" | ");
     return [`export type Exponent = ${exponents};`, ""];
 }
 

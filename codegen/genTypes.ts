@@ -6,15 +6,15 @@ import {
     getExponents,
     indent,
     isExponent,
-    OperatorCodeGenOptions,
+    OperatorSpec,
 } from "./common";
 
-export function genOperatorTypes(options: OperatorCodeGenOptions): string {
-    const exponents = getExponents(options);
-    let lines: string[] = [...genFileHeader(), ...genImports(), ...genUncurriedType(options, exponents)];
+export function genOperatorTypes(spec: OperatorSpec): string {
+    const exponents = getExponents(spec);
+    let lines: string[] = [...genFileHeader(), ...genImports(), ...genUncurriedType(spec, exponents)];
     for (const left of exponents) {
-        if (!(left in options.specialCases)) {
-            lines.push(...genCurriedType(options, exponents, left));
+        if (!(left in spec.specialCases)) {
+            lines.push(...genCurriedType(spec, exponents, left));
         }
     }
     return lines.join("\n");
@@ -24,17 +24,17 @@ function genImports(): string[] {
     return [genImport(["ArithmeticError", "Exponent"], "./common"), ""];
 }
 
-function genUncurriedType(options: OperatorCodeGenOptions, exponents: number[]): string[] {
-    const lines = [`export type ${genUncurriedTypeName(options, "L extends Exponent", "R extends Exponent")}`];
+function genUncurriedType(spec: OperatorSpec, exponents: number[]): string[] {
+    const lines = [`export type ${genUncurriedTypeName(spec, "L extends Exponent", "R extends Exponent")}`];
     let first = true;
     for (const left of exponents) {
         const operator = first ? "=" : ":";
         const prefix = indent(`${operator} L extends ${left} ?`);
         first = false;
-        if (left in options.specialCases) {
-            lines.push(`${prefix} ${options.specialCases[left]}`);
+        if (left in spec.specialCases) {
+            lines.push(`${prefix} ${spec.specialCases[left]}`);
         } else {
-            lines.push(`${prefix} ${genCurriedTypeName(options, left)}<R>`);
+            lines.push(`${prefix} ${genCurriedTypeName(spec, left)}<R>`);
         }
     }
     lines.push(genErrorCase());
@@ -42,12 +42,12 @@ function genUncurriedType(options: OperatorCodeGenOptions, exponents: number[]):
     return lines;
 }
 
-function genCurriedType(options: OperatorCodeGenOptions, exponents: number[], left: number): string[] {
-    const lines = [`export type ${genCurriedTypeName(options, left)}<N extends Exponent>`];
+function genCurriedType(spec: OperatorSpec, exponents: number[], left: number): string[] {
+    const lines = [`export type ${genCurriedTypeName(spec, left)}<N extends Exponent>`];
     let first = true;
     for (const right of exponents) {
-        const result = options.compute(left, right);
-        if (isExponent(result, options)) {
+        const result = spec.compute(left, right);
+        if (isExponent(result, spec)) {
             const operator = first ? "=" : ":";
             first = false;
             lines.push(indent(`${operator} N extends ${right} ? ${result}`));
@@ -58,7 +58,7 @@ function genCurriedType(options: OperatorCodeGenOptions, exponents: number[], le
     return lines;
 }
 
-function genCurriedTypeName({ curriedTypeNamePrefix }: OperatorCodeGenOptions, value: number): string {
+function genCurriedTypeName({ curriedTypeNamePrefix }: OperatorSpec, value: number): string {
     return `${curriedTypeNamePrefix}${genValueName(value)}`;
 }
 

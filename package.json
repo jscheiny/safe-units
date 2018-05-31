@@ -3,14 +3,16 @@
     "version": "0.0.1",
     "license": "MIT",
     "scripts": {
-        "codegen": "npm-run-all -s compile:codegen node:codegen",
+        "codegen:produce": "npm-run-all -s compile:codegen node:codegen:produce",
+        "codegen:verify": "npm-run-all -s compile:codegen node:codegen:verify",
         "compile:src": "tsc -p src",
         "compile:codegen": "tsc -p codegen",
         "lint": "tslint -p src/tsconfig.json -c tslint.json '{src,codegen}/**/*.ts'",
         "lint:fix": "yarn lint --fix",
-        "node:codegen": "ts-node codegen/main",
+        "node:codegen:produce": "ts-node codegen/produce",
+        "node:codegen:verify": "ts-node codegen/verify",
         "test": "jest --config jest.config.js",
-        "verify": "npm-run-all -s codegen compile:src lint test"
+        "verify": "npm-run-all -s codegen:verify compile:src lint test"
     },
     "devDependencies": {
         "@types/jest": "^22.2.3",
