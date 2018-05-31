@@ -5,54 +5,54 @@ import {
     genValueName,
     getExponents,
     isExponent,
-    OperatorCodeGenOptions,
+    OperatorSpec,
 } from "./common";
 
-export function genOperatorTests(options: OperatorCodeGenOptions): string {
-    const lines: string[] = [...genFileHeader(), ...genImports(options)];
-    const exponents = getExponents(options);
+export function genOperatorTests(spec: OperatorSpec): string {
+    const lines: string[] = [...genFileHeader(), ...genImports(spec)];
+    const exponents = getExponents(spec);
     for (const left of exponents) {
         for (const right of exponents) {
-            lines.push(...genTest(options, left, right));
+            lines.push(...genTest(spec, left, right));
             lines.push("");
         }
     }
     return lines.join("\n");
 }
 
-function genImports(options: OperatorCodeGenOptions): string[] {
+function genImports(spec: OperatorSpec): string[] {
     return [
-        genImport([genUncurriedTypeName(options)], `../${options.fileNamePrefix}`),
+        genImport([genUncurriedTypeName(spec)], `../${spec.fileNamePrefix}`),
         genImport(["IsArithmeticError"], "../utils"),
         "",
     ];
 }
 
-function genTest(options: OperatorCodeGenOptions, left: number, right: number): string[] {
-    const result = options.compute(left, right);
-    if (isExponent(result, options)) {
-        return genValueTest(options, left, right, result);
+function genTest(spec: OperatorSpec, left: number, right: number): string[] {
+    const result = spec.compute(left, right);
+    if (isExponent(result, spec)) {
+        return genValueTest(spec, left, right, result);
     } else {
-        return genErrorTest(options, left, right);
+        return genErrorTest(spec, left, right);
     }
 }
 
-function genValueTest(options: OperatorCodeGenOptions, left: number, right: number, result: number): string[] {
-    const typeName = genTestBaseName(options, left, right);
+function genValueTest(spec: OperatorSpec, left: number, right: number, result: number): string[] {
+    const typeName = genTestBaseName(spec, left, right);
     return [
-        `type ${typeName} = ${genUncurriedTypeName(options, left, right)};`,
+        `type ${typeName} = ${genUncurriedTypeName(spec, left, right)};`,
         `const ${typeName}: ${typeName} = ${result};`,
     ];
 }
 
-function genErrorTest(options: OperatorCodeGenOptions, left: number, right: number): string[] {
-    const typeName = `${genTestBaseName(options, left, right)}IsError`;
+function genErrorTest(spec: OperatorSpec, left: number, right: number): string[] {
+    const typeName = `${genTestBaseName(spec, left, right)}IsError`;
     return [
-        `type ${typeName} = IsArithmeticError<${genUncurriedTypeName(options, left, right)}>;`,
+        `type ${typeName} = IsArithmeticError<${genUncurriedTypeName(spec, left, right)}>;`,
         `const ${typeName}: ${typeName} = true;`,
     ];
 }
 
-function genTestBaseName(options: OperatorCodeGenOptions, left: number, right: number) {
-    return `${options.testTypeNamePrefix}Of${genValueName(left)}And${genValueName(right)}`;
+function genTestBaseName(spec: OperatorSpec, left: number, right: number) {
+    return `${spec.testTypeNamePrefix}Of${genValueName(left)}And${genValueName(right)}`;
 }

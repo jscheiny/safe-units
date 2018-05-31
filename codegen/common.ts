@@ -1,9 +1,13 @@
-export interface CommonOperatorCodeGenOptions {
+export interface CodeGenSpec extends CommonSpec {
+    operators: PartialOperatorSpec[];
+}
+
+export interface CommonSpec {
     minExponent: number;
     maxExponent: number;
 }
 
-export interface OperatorCodeGenOptions extends CommonOperatorCodeGenOptions {
+export interface PartialOperatorSpec {
     fileNamePrefix: string;
     uncurriedTypeNamePrefix: string;
     curriedTypeNamePrefix: string;
@@ -12,7 +16,9 @@ export interface OperatorCodeGenOptions extends CommonOperatorCodeGenOptions {
     compute: (left: number, right: number) => number;
 }
 
-export function getExponents({ minExponent, maxExponent }: CommonOperatorCodeGenOptions): number[] {
+export interface OperatorSpec extends CommonSpec, PartialOperatorSpec {}
+
+export function getExponents({ minExponent, maxExponent }: CommonSpec): number[] {
     const exponents: number[] = [];
     for (let exponent = minExponent; exponent <= maxExponent; exponent++) {
         exponents.push(exponent);
@@ -20,7 +26,7 @@ export function getExponents({ minExponent, maxExponent }: CommonOperatorCodeGen
     return exponents;
 }
 
-export function isExponent(exponent: number, { minExponent, maxExponent }: CommonOperatorCodeGenOptions): boolean {
+export function isExponent(exponent: number, { minExponent, maxExponent }: CommonSpec): boolean {
     return exponent >= minExponent && exponent <= maxExponent && exponent === Math.floor(exponent);
 }
 
@@ -46,9 +52,9 @@ export function genImport(symbols: string[], source: string): string {
     return `import { ${symbols.join(", ")} } from "${source}";`;
 }
 
-export function genUncurriedTypeName(options: OperatorCodeGenOptions, left?: string | number, right?: string | number) {
+export function genUncurriedTypeName(spec: OperatorSpec, left?: string | number, right?: string | number) {
     const args = left !== undefined && right !== undefined ? `<${left}, ${right}>` : "";
-    return `${options.uncurriedTypeNamePrefix}Exponents${args}`;
+    return `${spec.uncurriedTypeNamePrefix}Exponents${args}`;
 }
 
 export function genValueName(value: number): string {
