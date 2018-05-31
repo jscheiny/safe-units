@@ -15,7 +15,7 @@ type QuotientOfNegative5AndNegative3IsError = IsArithmeticError<DivideExponents<
 const QuotientOfNegative5AndNegative3IsError: QuotientOfNegative5AndNegative3IsError = true;
 
 type QuotientOfNegative5AndNegative2IsError = IsArithmeticError<DivideExponents<-5, -2>>;
-const QuotientOfNegative5AndNegative2IsError: QuotientOfNegative5AndNegative2IsError = true;
+const QuotientOfNegative5AndNegative2IsError: QuotientOfNegative5AndNegative2IsError = false;
 
 type QuotientOfNegative5AndNegative1 = DivideExponents<-5, -1>;
 const QuotientOfNegative5AndNegative1: QuotientOfNegative5AndNegative1 = 5;
