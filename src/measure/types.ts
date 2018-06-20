@@ -37,7 +37,7 @@ export type NthRootableUnit<N extends Exponent> = Partial<{
 /** Handle errors in the result of an arithmetic operation. */
 export type HandleErrors<Result extends ArithmeticResult> = true extends ResultHasError<Result>
     ? ArithmeticError
-    : Clean<StripZeroes<RemoveErrors<Result>>>;
+    : StripZeroes<RemoveErrors<Result>>;
 
 export type ResultHasError<Result> = { [Dim in keyof Result]: IsArithmeticError<Result[Dim]> }[keyof Result];
 
@@ -49,14 +49,11 @@ export type ArithmeticResult = { [dimension: string]: Exponent | ArithmeticError
 
 // Utility types
 
-/** Ensures that a type will be displayed nicely in editors / compiler output */
-export type Clean<T> = { [K in keyof T]: T[K] };
-
 /** Removes all zero exponent dimensions from a dimension vector */
 export type StripZeroes<U extends Unit> = Pick<U, NonZeroKeys<U>>;
 
 export type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: U[Dim] extends 0 ? never : Dim }[keyof U];
 
-export type GetExponent<U extends Unit, K extends string> = K extends keyof Unit
+export type GetExponent<U extends Unit, K> = K extends keyof Unit
     ? (undefined extends U[K] ? 0 : NonNullable<U[K]>)
     : 0;
