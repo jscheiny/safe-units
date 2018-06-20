@@ -9,8 +9,8 @@
         "compile:codegen": "tsc -p codegen",
         "lint": "tslint -p src/tsconfig.json -c tslint.json '{src,codegen}/**/*.ts'",
         "lint:fix": "yarn lint --fix",
-        "node:codegen:produce": "ts-node codegen/produce",
-        "node:codegen:verify": "ts-node codegen/verify",
+        "node:codegen:produce": "node codegen/dist/produce",
+        "node:codegen:verify": "node codegen/dist/verify",
         "test": "jest --config jest.config.js",
         "verify": "npm-run-all -s codegen:verify compile:src lint test"
     },
