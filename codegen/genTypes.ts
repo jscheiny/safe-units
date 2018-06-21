@@ -1,6 +1,6 @@
 import {
     genFileHeader,
-    genImport,
+    genImports,
     genUncurriedTypeName,
     genValueName,
     getExponents,
@@ -11,7 +11,7 @@ import {
 
 export function genOperatorTypes(spec: OperatorSpec): string {
     const exponents = getExponents(spec);
-    let lines: string[] = [...genFileHeader(), ...genImports(), ...genUncurriedType(spec, exponents)];
+    let lines: string[] = [...genFileHeader(), ...genTypesImports(), ...genUncurriedType(spec, exponents)];
     for (const left of exponents) {
         if (!(left in spec.specialCases)) {
             lines.push(...genCurriedType(spec, exponents, left));
@@ -20,8 +20,8 @@ export function genOperatorTypes(spec: OperatorSpec): string {
     return lines.join("\n");
 }
 
-function genImports(): string[] {
-    return [genImport(["ArithmeticError", "Exponent"], "./common"), ""];
+function genTypesImports(): string[] {
+    return [...genImports({ symbols: ["ArithmeticError", "Exponent"], source: "./common" }), ""];
 }
 
 function genUncurriedType(spec: OperatorSpec, exponents: number[]): string[] {

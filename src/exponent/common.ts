@@ -10,3 +10,4 @@ export type Exponent = -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5;
 
 export type ArithmeticError = "UnitError" & "Arithmetic out of bounds";
 export const ArithmeticError = "Arithmetic out of bounds";
+export type IsArithmeticError<T> = T extends ArithmeticError ? true : false;

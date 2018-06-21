@@ -38,18 +38,29 @@ export function genFileHeader(disableTslint: boolean = true): string[] {
     return header;
 }
 
-export function genImport(symbols: string[], source: string): string {
-    symbols.sort((first, second) => {
-        if (first < second) {
-            return -1;
-        }
-        if (first > second) {
-            return 1;
-        }
-        return 0;
-    });
+interface ImportSpec {
+    symbols: string[];
+    source: string;
+}
 
+export function genImports(...imports: ImportSpec[]): string[] {
+    imports.sort((first, second) => order(first.source, second.source));
+    return imports.map(genImport);
+}
+
+function genImport({ symbols, source }: ImportSpec): string {
+    symbols.sort(order);
     return `import { ${symbols.join(", ")} } from "${source}";`;
+}
+
+function order(first: string, second: string) {
+    if (first < second) {
+        return -1;
+    }
+    if (first > second) {
+        return 1;
+    }
+    return 0;
 }
 
 export function genUncurriedTypeName(spec: OperatorSpec, left?: string | number, right?: string | number) {
