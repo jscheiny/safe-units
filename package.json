@@ -13,14 +13,15 @@
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
     "scripts": {
+        "build": "npm-run-all -s codegen compile:src",
         "codegen": "npm-run-all -s compile:codegen node:codegen",
         "compile:src": "tsc -p src",
         "compile:codegen": "tsc -p codegen",
         "lint": "tslint -p src/tsconfig.json -c tslint.json '{src,codegen}/**/*.ts'",
         "lint:fix": "yarn lint --fix",
         "node:codegen": "node codegen/dist/emit",
-        "test": "jest --config jest.config.js",
-        "verify": "npm-run-all -s codegen compile:src lint test"
+        "test": "jest --config jest.config.json",
+        "verify": "npm-run-all -s build lint test"
     },
     "devDependencies": {
         "@types/jest": "^22.2.3",
