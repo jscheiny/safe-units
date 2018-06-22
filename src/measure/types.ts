@@ -1,8 +1,11 @@
-import { AddExponents } from "../exponent/addition";
-import { ArithmeticError, Exponent } from "../exponent/common";
-import { DivideExponents } from "../exponent/division";
-import { MultiplyExponents } from "../exponent/multiplication";
-import { IsArithmeticError, MultiplesOf } from "../exponent/utils";
+import {
+    AddExponents,
+    ArithmeticError,
+    DivideExponents,
+    Exponent,
+    IsArithmeticError,
+    MultiplyExponents,
+} from "../exponent";
 
 export type Unit = Partial<{ [dimension: string]: Exponent }>;
 
@@ -31,6 +34,8 @@ export type NthRootUnit<U extends NthRootableUnit<N>, N extends Exponent> = Hand
 export type NthRootableUnit<N extends Exponent> = Partial<{
     [dimension: string]: MultiplesOf<N>;
 }>;
+
+export type MultiplesOf<N extends Exponent> = Exclude<MultiplyExponents<Exponent, N>, ArithmeticError>;
 
 // Error handling
 

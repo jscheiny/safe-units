@@ -1,4 +1,4 @@
-import { Exponent } from "../exponent/common";
+import { Exponent } from "../exponent";
 import { Unit } from "./types";
 
 // TODO Remove cache and do this statelessly

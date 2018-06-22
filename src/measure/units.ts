@@ -1,4 +1,4 @@
-import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponent/common";
+import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponent";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit, Unit } from "./types";
 
 export function dimension<D extends string>(dim: D): { [K in D]: 1 } {

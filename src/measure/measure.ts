@@ -1,4 +1,4 @@
-import { Exponent } from "../exponent/common";
+import { Exponent } from "../exponent";
 import { formatUnit, setDimensionSymbol } from "./format";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, Unit } from "./types";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./units";
