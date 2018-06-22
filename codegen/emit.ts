@@ -70,3 +70,5 @@ function emitFile({ path, source }: EmitPlan, callback?: () => void) {
         }
     });
 }
+
+emit();
