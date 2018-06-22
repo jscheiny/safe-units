@@ -1,17 +1,4 @@
-import { Exponent } from "../exponent";
-import { Unit } from "./types";
-
-// TODO Remove cache and do this statelessly
-const DimensionSymbolCache: { [dimension: string]: string } = {};
-
-export function setDimensionSymbol(dimension: string, symbol: string) {
-    if (dimension in DimensionSymbolCache) {
-        throw new Error(`UniTS: Dimension "${dimension}" has already been declared.`);
-    }
-    DimensionSymbolCache[dimension] = symbol;
-}
-
-type DimensionAndExponent = [string, Exponent];
+import { SymbolAndExponent, Unit } from "./types";
 
 export function formatUnit(unit: Unit): string {
     const sorted = sortDimensions(unit);
@@ -22,18 +9,22 @@ export function formatUnit(unit: Unit): string {
     return " " + sorted.map(formatDimension).join(" * ");
 }
 
-function sortDimensions(unit: Unit): DimensionAndExponent[] {
-    const dimensions: DimensionAndExponent[] = [];
+function sortDimensions(unit: Unit): SymbolAndExponent[] {
+    const dimensions: SymbolAndExponent[] = [];
     for (const dimension in unit) {
-        const exponent = unit[dimension];
+        const symbolAndExponent = unit[dimension];
+        if (symbolAndExponent === undefined) {
+            continue;
+        }
+        const [, exponent] = symbolAndExponent;
         if (exponent === 0 || exponent === undefined) {
             continue;
         }
-        dimensions.push([dimension, exponent]);
+        dimensions.push(symbolAndExponent);
     }
 
-    dimensions.sort(([leftDim], [rightDim]) => {
-        if (leftDim < rightDim) {
+    dimensions.sort(([leftSymbol], [rightSymbol]) => {
+        if (leftSymbol < rightSymbol) {
             return -1;
         }
         return 1;
@@ -42,8 +33,7 @@ function sortDimensions(unit: Unit): DimensionAndExponent[] {
     return dimensions;
 }
 
-function formatDimension([dimension, exponent]: DimensionAndExponent): string {
-    const dimensionStr = dimension in DimensionSymbolCache ? DimensionSymbolCache[dimension] : dimension;
+function formatDimension([symbol, exponent]: SymbolAndExponent): string {
     const exponentStr = exponent !== 1 ? `^${exponent}` : "";
-    return `${dimensionStr}${exponentStr}`;
+    return `${symbol}${exponentStr}`;
 }

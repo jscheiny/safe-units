@@ -1,5 +1,5 @@
 import { Exponent } from "../exponent";
-import { formatUnit, setDimensionSymbol } from "./format";
+import { formatUnit } from "./format";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, Unit } from "./types";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./units";
 
@@ -7,10 +7,7 @@ export class Measure<U extends Unit> {
     // Construction functions
 
     public static dimension<Dimension extends string>(dim: Dimension, symbol?: string) {
-        if (symbol) {
-            setDimensionSymbol(dim, symbol);
-        }
-        return new Measure(1, dimension(dim), symbol);
+        return new Measure(1, dimension(dim, symbol), symbol);
     }
 
     public static dimensionless(value: number): Measure<{}> {

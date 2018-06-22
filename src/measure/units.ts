@@ -1,30 +1,59 @@
 import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponent";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit, Unit } from "./types";
+import {
+    DivideUnits,
+    ExponentiateUnit,
+    MultiplyUnits,
+    NthRootableUnit,
+    NthRootUnit,
+    SymbolAndExponent,
+    Unit,
+} from "./types";
 
-export function dimension<D extends string>(dim: D): { [K in D]: 1 } {
+export function dimension<D extends string>(dim: D, symbol?: string): { [K in D]: [string, 1] } {
     // TODO Remove cast to any somehow
-    return { [dim]: 1 } as any;
+    return { [dim]: [symbol || dim, 1] } as any;
 }
 
 export function multiplyUnits<L extends Unit, R extends Unit>(left: L, right: R): MultiplyUnits<L, R> {
-    const result: any = {};
+    const result: Unit = {};
     for (const dimension in left) {
-        result[dimension] = left[dimension] || 0;
+        const symbolAndExponent = copySymbolAndExponent(left, dimension);
+        if (symbolAndExponent !== undefined) {
+            result[dimension] = symbolAndExponent;
+        }
     }
     for (const dimension in right) {
+        const symbolAndExponent = copySymbolAndExponent(right, dimension);
+        if (symbolAndExponent === undefined) {
+            continue;
+        }
+        const [, exponent] = symbolAndExponent;
         if (dimension in result) {
-            const exp = (result[dimension] += right[dimension] || 0);
-            checkExponent(exp);
+            const newExponent = result[dimension]![1] + exponent;
+            if (isExponent(newExponent)) {
+                result[dimension]![1] = newExponent;
+            } else {
+                throw new Error(ArithmeticError);
+            }
         } else {
-            result[dimension] = right[dimension] || 0;
+            result[dimension] = symbolAndExponent;
         }
     }
     for (const dimension in result) {
-        if (result[dimension] === 0) {
+        if (result[dimension]![1] === 0) {
             delete result[dimension];
         }
     }
-    return result;
+    return result as any;
+}
+
+function copySymbolAndExponent(unit: Unit, dimension: string): SymbolAndExponent | undefined {
+    const result = unit[dimension];
+    if (result === undefined) {
+        return undefined;
+    }
+    const [symbol, exponent] = result;
+    return [symbol, exponent];
 }
 
 export function divideUnits<L extends Unit, R extends Unit>(left: L, right: R): DivideUnits<L, R> {
@@ -33,35 +62,33 @@ export function divideUnits<L extends Unit, R extends Unit>(left: L, right: R): 
 }
 
 export function exponentiateUnit<U extends Unit, N extends Exponent>(unit: U, power: N): ExponentiateUnit<U, N> {
-    const result: any = {};
-    for (const dimension in unit) {
-        // TODO Remove cast to exponent somehow
-        const originalExp = (unit[dimension] as Exponent) || 0;
-        const exp = originalExp * power;
-        checkExponent(exp);
-        if (exp) {
-            result[dimension] = exp;
-        }
-    }
-    return result;
+    return expAndRootImpl(unit, exponent => exponent * power);
 }
 
 export function nthRootUnit<U extends NthRootableUnit<N>, N extends Exponent>(unit: U, root: N): NthRootUnit<U, N> {
-    const result: any = {};
+    return expAndRootImpl(unit, exponent => exponent / root);
+}
+
+function expAndRootImpl(unit: Unit, updateExponent: (exp: Exponent) => number): any {
+    const result: Unit = {};
     for (const dimension in unit) {
-        // TODO Remove cast to exponent somehow
-        const originalExp = (unit[dimension] as Exponent) || 0;
-        const exp = originalExp / root;
-        checkExponent(exp);
-        if (exp) {
-            result[dimension] = exp;
+        const symbolAndExponent = unit[dimension];
+        if (symbolAndExponent === undefined) {
+            continue;
+        }
+        const [symbol, exponent] = symbolAndExponent;
+        const newExponent = updateExponent(exponent);
+        if (isExponent(newExponent)) {
+            if (newExponent !== 0) {
+                result[dimension] = [symbol, newExponent];
+            }
+        } else {
+            throw new Error(ArithmeticError);
         }
     }
     return result;
 }
 
-function checkExponent(exp: number): void {
-    if (exp < MinExponent || exp > MaxExponent || Math.floor(exp) !== exp) {
-        throw new Error(ArithmeticError);
-    }
+function isExponent(exp: number): exp is Exponent {
+    return exp >= MinExponent && exp <= MaxExponent && Math.floor(exp) === exp;
 }
