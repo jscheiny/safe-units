@@ -1,4 +1,5 @@
 import { cubic, Measure, square } from "../measure";
+import { addSymbols } from "./testUtils";
 
 describe("Measures", () => {
     const meter = Measure.dimension("L");
@@ -8,12 +9,7 @@ describe("Measures", () => {
 
     describe("dimension", () => {
         it("should create dimensions with value 1", () => {
-            expect(Measure.dimension("foo")).toEqual({ value: 1, unit: { foo: 1 } });
-        });
-
-        it("should throw an error when creating duplicate dimensions with symbols", () => {
-            Measure.dimension("first", "1");
-            expect(() => Measure.dimension("first", "one")).toThrow();
+            expect(Measure.dimension("foo", "f")).toEqual({ value: 1, unit: { foo: ["f", 1] }, symbol: "f" });
         });
     });
 
@@ -150,7 +146,6 @@ describe("Measures", () => {
             expect(km.normalized().getSymbol()).toBeUndefined();
             expect(km.negate().getSymbol()).toBeUndefined();
             expect(km.squared().getSymbol()).toBeUndefined();
-            // expect(km.sqrt().getSymbol()).toBeUndefined();
             expect(km.inverse().getSymbol()).toBeUndefined();
             expect(km.plus(dm).getSymbol()).toBeUndefined();
             expect(km.minus(dm).getSymbol()).toBeUndefined();
@@ -162,7 +157,7 @@ describe("Measures", () => {
     describe("formatting", () => {
         it("should format dimensionless units", () => {
             expect(Measure.dimensionless(10).toString()).toBe("10");
-            expect(Measure.unsafeConstruct(10, { x: 0, y: undefined }).toString()).toBe("10");
+            expect(Measure.unsafeConstruct(10, addSymbols({ x: 0, y: undefined })).toString()).toBe("10");
         });
 
         it("should format base units", () => {
@@ -203,7 +198,7 @@ describe("Measures", () => {
         });
 
         it("should skip formatting explicitly 0 and undefined dimension", () => {
-            expect(Measure.unsafeConstruct(10, { x: 0, y: undefined, z: 2 }).toString()).toBe("10 z^2");
+            expect(Measure.unsafeConstruct(10, addSymbols({ x: 0, y: undefined, z: 2 })).toString()).toBe("10 z^2");
         });
 
         it("should format measures as other measures with symbols", () => {

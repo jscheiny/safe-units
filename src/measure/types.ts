@@ -7,7 +7,10 @@ import {
     MultiplyExponents,
 } from "../exponent";
 
-export type Unit = Partial<{ [dimension: string]: Exponent }>;
+export type SymbolAndExponent = [string, Exponent];
+type SymbolAnd<E extends Exponent> = [string, E];
+
+export type Unit = Partial<{ [dimension: string]: SymbolAndExponent }>;
 
 // Arithmetic
 
@@ -32,7 +35,7 @@ export type NthRootUnit<U extends NthRootableUnit<N>, N extends Exponent> = Hand
 >;
 
 export type NthRootableUnit<N extends Exponent> = Partial<{
-    [dimension: string]: MultiplesOf<N>;
+    [dimension: string]: SymbolAnd<MultiplesOf<N>>;
 }>;
 
 export type MultiplesOf<N extends Exponent> = Exclude<MultiplyExponents<Exponent, N>, ArithmeticError>;
@@ -47,7 +50,7 @@ export type HandleErrors<Result extends ArithmeticResult> = true extends ResultH
 export type ResultHasError<Result> = { [Dim in keyof Result]: IsArithmeticError<Result[Dim]> }[keyof Result];
 
 export type RemoveErrors<Result extends ArithmeticResult> = {
-    [Dim in keyof Result]: Result[Dim] extends ArithmeticError ? 0 : Result[Dim]
+    [Dim in keyof Result]: SymbolAnd<Result[Dim] extends ArithmeticError ? 0 : Result[Dim]>
 };
 
 export type ArithmeticResult = { [dimension: string]: Exponent | ArithmeticError };
@@ -57,8 +60,8 @@ export type ArithmeticResult = { [dimension: string]: Exponent | ArithmeticError
 /** Removes all zero exponent dimensions from a dimension vector */
 export type StripZeroes<U extends Unit> = Pick<U, NonZeroKeys<U>>;
 
-export type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: U[Dim] extends 0 ? never : Dim }[keyof U];
+export type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]>[1] extends 0 ? never : Dim }[keyof U];
 
 export type GetExponent<U extends Unit, K> = K extends keyof Unit
-    ? (undefined extends U[K] ? 0 : NonNullable<U[K]>)
+    ? (undefined extends U[K] ? 0 : NonNullable<U[K]>[1])
     : 0;
