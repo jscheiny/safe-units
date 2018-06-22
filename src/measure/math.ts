@@ -1,4 +1,4 @@
-import { Exponent } from "../exponent/common";
+import { Exponent } from "../exponent";
 import { Dimensionless, Length, PlaneAngle } from "../quantity/quantities";
 import { radians } from "../unit/base";
 import { Measure } from "./measure";

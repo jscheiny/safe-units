@@ -1,4 +1,4 @@
-import { IsArithmeticError } from "../../exponent/common";
+import { IsArithmeticError } from "../../exponent";
 import {
     DivideUnits,
     ExponentiateUnit,

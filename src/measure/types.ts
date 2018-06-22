@@ -1,7 +1,11 @@
-import { AddExponents } from "../exponent/addition";
-import { ArithmeticError, Exponent, IsArithmeticError } from "../exponent/common";
-import { DivideExponents } from "../exponent/division";
-import { MultiplyExponents } from "../exponent/multiplication";
+import {
+    AddExponents,
+    ArithmeticError,
+    DivideExponents,
+    Exponent,
+    IsArithmeticError,
+    MultiplyExponents,
+} from "../exponent";
 
 export type Unit = Partial<{ [dimension: string]: Exponent }>;
 
