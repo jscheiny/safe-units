@@ -3,7 +3,7 @@ import { Unit } from "../types";
 
 type UnitWithoutSymbols = { [dimension: string]: Exponent | undefined };
 export type AddSymbols<U extends UnitWithoutSymbols> = {
-    [D in keyof U]: undefined extends U[D] ? undefined : [D, U[D]]
+    [D in keyof U]: undefined extends U[D] ? undefined : [string, U[D]]
 };
 
 export function addSymbols<U extends UnitWithoutSymbols>(unit: U): AddSymbols<U> {

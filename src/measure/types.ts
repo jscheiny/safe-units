@@ -7,8 +7,8 @@ import {
     MultiplyExponents,
 } from "../exponent";
 
-export type SymbolAndExponent = [string, Exponent];
 type SymbolAnd<E extends Exponent> = [string, E];
+export type SymbolAndExponent = SymbolAnd<Exponent>;
 
 export type Unit = Partial<{ [dimension: string]: SymbolAndExponent }>;
 
@@ -38,30 +38,24 @@ export type NthRootableUnit<N extends Exponent> = Partial<{
     [dimension: string]: SymbolAnd<MultiplesOf<N>>;
 }>;
 
-export type MultiplesOf<N extends Exponent> = Exclude<MultiplyExponents<Exponent, N>, ArithmeticError>;
+type MultiplesOf<N extends Exponent> = Exclude<MultiplyExponents<Exponent, N>, ArithmeticError>;
 
 // Error handling
 
 /** Handle errors in the result of an arithmetic operation. */
-export type HandleErrors<Result extends ArithmeticResult> = true extends ResultHasError<Result>
+type HandleErrors<Result extends ArithmeticResult> = true extends ResultHasError<Result>
     ? ArithmeticError
-    : StripZeroes<RemoveErrors<Result>>;
+    : StripZeroes<{ [Dim in keyof Result]: SymbolAnd<Result[Dim] extends ArithmeticError ? 0 : Result[Dim]> }>;
 
-export type ResultHasError<Result> = { [Dim in keyof Result]: IsArithmeticError<Result[Dim]> }[keyof Result];
+type ResultHasError<Result> = { [Dim in keyof Result]: IsArithmeticError<Result[Dim]> }[keyof Result];
 
-export type RemoveErrors<Result extends ArithmeticResult> = {
-    [Dim in keyof Result]: SymbolAnd<Result[Dim] extends ArithmeticError ? 0 : Result[Dim]>
-};
-
-export type ArithmeticResult = { [dimension: string]: Exponent | ArithmeticError };
+type ArithmeticResult = { [dimension: string]: Exponent | ArithmeticError };
 
 // Utility types
 
 /** Removes all zero exponent dimensions from a dimension vector */
-export type StripZeroes<U extends Unit> = Pick<U, NonZeroKeys<U>>;
+type StripZeroes<U extends Unit> = Pick<U, NonZeroKeys<U>>;
 
-export type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]>[1] extends 0 ? never : Dim }[keyof U];
+type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]>[1] extends 0 ? never : Dim }[keyof U];
 
-export type GetExponent<U extends Unit, K> = K extends keyof Unit
-    ? (undefined extends U[K] ? 0 : NonNullable<U[K]>[1])
-    : 0;
+type GetExponent<U extends Unit, K> = K extends keyof Unit ? (undefined extends U[K] ? 0 : NonNullable<U[K]>[1]) : 0;
