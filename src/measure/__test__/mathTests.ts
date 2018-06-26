@@ -1,4 +1,4 @@
-import { degrees, pi } from "../../unit/angle";
+import { degrees, piRadians } from "../../unit/angle";
 import { meters, radians, seconds } from "../../unit/base";
 import * as SafeMath from "../math";
 import { Measure } from "../measure";
@@ -19,7 +19,7 @@ describe("Math", () => {
         expect(SafeMath.cos(zeroRadians)).toEqual(Measure.dimensionless(1));
         expect(SafeMath.sin(zeroRadians)).toEqual(zero);
         expect(SafeMath.tan(zeroRadians)).toEqual(zero);
-        expect(SafeMath.acos(zero)).toEqual(Measure.of(0.5, pi));
+        expect(SafeMath.acos(zero)).toEqual(Measure.of(0.5, piRadians));
         expect(SafeMath.asin(zero)).toEqual(zeroRadians);
         expect(SafeMath.atan(zero)).toEqual(zeroRadians);
         expect(SafeMath.atan2(Measure.of(5, meters), Measure.of(5, meters))).toEqual(Measure.of(45, degrees));
