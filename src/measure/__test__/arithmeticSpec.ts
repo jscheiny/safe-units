@@ -1,26 +1,6 @@
 import { IsArithmeticError } from "../../exponent";
-import {
-    DivideUnits,
-    ExponentiateUnit,
-    GetExponent,
-    MultiplyUnits,
-    NthRootableUnit,
-    NthRootUnit,
-    StripZeroes,
-} from "../types";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit } from "../types";
 import { AddSymbols } from "./testUtils";
-
-type GetPresentExponentWorks = 2 extends GetExponent<AddSymbols<{ a: 2; b: 3 }>, "a"> ? true : false;
-const GetPresentExponentWorks: GetPresentExponentWorks = true;
-
-type GetMissingExponentWorks = 0 extends GetExponent<AddSymbols<{ a: 2; b: 3 }>, "c"> ? true : never;
-const GetMissingExponentWorks: GetMissingExponentWorks = true;
-
-type GetUndefinedExponentWorks = 0 extends GetExponent<AddSymbols<{ a: 2; b: undefined }>, "b"> ? true : never;
-const GetUndefinedExponentWorks: GetUndefinedExponentWorks = true;
-
-type StripZeroesWorks = AddSymbols<{ b: 1 }> extends StripZeroes<AddSymbols<{ a: 0; b: 1; c: 0 }>> ? true : never;
-const StripZeroesWorks: StripZeroesWorks = true;
 
 type SelfMultiplicationWorks = AddSymbols<{ a: 4 }> extends MultiplyUnits<AddSymbols<{ a: 2 }>, AddSymbols<{ a: 2 }>>
     ? true
