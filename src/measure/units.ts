@@ -28,10 +28,11 @@ export function multiplyUnits<L extends Unit, R extends Unit>(left: L, right: R)
             continue;
         }
         const [, exponent] = symbolAndExponent;
-        if (dimension in result) {
-            const newExponent = result[dimension]![1] + exponent;
+        const resultValue: SymbolAndExponent | undefined = result[dimension];
+        if (resultValue !== undefined) {
+            const newExponent = resultValue[1] + exponent;
             if (isExponent(newExponent)) {
-                result[dimension]![1] = newExponent;
+                resultValue[1] = newExponent;
             } else {
                 throw new Error(ArithmeticError);
             }
@@ -40,7 +41,8 @@ export function multiplyUnits<L extends Unit, R extends Unit>(left: L, right: R)
         }
     }
     for (const dimension in result) {
-        if (result[dimension]![1] === 0) {
+        const value = result[dimension];
+        if (value !== undefined && value[1] === 0) {
             delete result[dimension];
         }
     }
