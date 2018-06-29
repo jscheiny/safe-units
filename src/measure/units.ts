@@ -28,7 +28,7 @@ export function multiplyUnits<L extends Unit, R extends Unit>(left: L, right: R)
             continue;
         }
         const [, exponent] = symbolAndExponent;
-        const resultValue = result[dimension];
+        const resultValue: SymbolAndExponent | undefined = result[dimension];
         if (resultValue !== undefined) {
             const newExponent = resultValue[1] + exponent;
             if (isExponent(newExponent)) {
