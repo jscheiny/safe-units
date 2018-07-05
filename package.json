@@ -1,14 +1,14 @@
 {
-    "name": "uni-ts",
+    "name": "safe-units",
     "description": "Type-safe TypeScript units of measure",
     "keywords": ["units", "measure", "dimension", "metric", "typescript", "typesafe"],
     "version": "0.0.1",
     "license": "MIT",
-    "homepage": "https://github.com/jscheiny/uni-ts",
-    "bugs": "https://github.com/jscheiny/uni-ts/issues",
+    "homepage": "https://github.com/jscheiny/safe-units",
+    "bugs": "https://github.com/jscheiny/safe-units/issues",
     "repository": {
         "type": "git",
-        "url": "https://github.com/jscheiny/uni-ts.git"
+        "url": "https://github.com/jscheiny/safe-units.git"
     },
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",

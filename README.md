@@ -1,11 +1,11 @@
-# Uni-TS
+# Safe Units
 
-[![Build Status](https://travis-ci.org/jscheiny/uni-ts.svg?branch=develop)](https://travis-ci.org/jscheiny/uni-ts)
+[![Build Status](https://travis-ci.org/jscheiny/safe-units.svg?branch=develop)](https://travis-ci.org/jscheiny/safe-units)
 
-Uni-TS is a type-safe units of measurement framework for performing dimensional analysis in TypeScript at compile time. Uni-TS provides an implementation of an SI based unit system but is flexible enough to allow users to create their own unit systems which can be independent or can interoperate with the built-in units. This library makes heavy use of conditional and thus requires 2.8.3+.
+Safe Units is a type-safe units of measurement framework for performing dimensional analysis in TypeScript at compile time. Safe Units provides an implementation of an SI based unit system but is flexible enough to allow users to create their own unit systems which can be independent or can interoperate with the built-in units. This library makes heavy use of conditional and thus requires 2.8.3+.
 
 ```typescript
-import { Length, Measure, Time, Unit, Velocity } from "uni-ts";
+import { Length, Measure, Time, Unit, Velocity } from "safe-units";
 
 const length: Length = Measure.of(30, Unit.meters);
 const time: Time = Measure.of(15, Unit.seconds);
@@ -33,7 +33,7 @@ const error: Velocity = length.times(time); // Error: A measure of m*s isn't ass
 ### Measure arithmetic
 
 ```typescript
-import { Area, Force, Length, Mass, Measure, Pressure, Quantity, SafeMath, Unit, Volume } from "uni-ts";
+import { Area, Force, Length, Mass, Measure, Pressure, Quantity, SafeMath, Unit, Volume } from "safe-units";
 
 const length: Length = Measure.of(30, Unit.feet);
 const width: Length = Measure.of(20, Unit.miles);
@@ -51,7 +51,7 @@ const pressure: Pressure = force.over(area);
 ### Type errors
 
 ```typescript
-import { Length, Force, Measure, SafeMath } from "uni-ts";
+import { Length, Force, Measure, SafeMath } from "safe-units";
 
 const length: Length = Measure.of(10, Unit.meters);
 const time: Time = Measure.of(10, Unit.seconds);
@@ -65,7 +65,7 @@ const root = SafeMath.sqrt(length) // Error: Can't take sqrt of measure of m sin
 ### Naming units
 
 ```typescript
-import { days, Measure, miles, speedOfLight, yards } from "uni-ts";
+import { days, Measure, miles, speedOfLight, yards } from "safe-units";
 
 const furlongs = Measure.of(220, yards, "fur");
 
@@ -81,7 +81,7 @@ console.log(speedOfLight.in(furlongsPerFornight)); // 1802617499785.2544 fur/ftn
 ### Deriving quantities
 
 ```typescript
-import { Acceleration, Measure, meters, seconds, Time } from "uni-ts";
+import { Acceleration, Measure, meters, seconds, Time } from "safe-units";
 
 const Jerk = Acceleration.over(Time);
 type Jerk = typeof Jerk;
@@ -96,7 +96,7 @@ console.log(jerk.toString()); // 4.9 m * s^-3
 ### Defining dimensions
 
 ```typescript
-import { Area, Measure, seconds, Time } from "uni-ts";
+import { Area, Measure, seconds, Time } from "safe-units";
 
 const bits = Measure.dimension("data", "b");
 
