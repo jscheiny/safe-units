@@ -7,15 +7,19 @@ import {
     NthRootUnit,
     SymbolAndExponent,
     Unit,
+    UnitWithSymbols,
 } from "./types";
 
-export function dimension<D extends string>(dim: D, symbol?: string): { [K in D]: [string, 1] } {
+export function dimension<D extends string>(dim: D, symbol?: string): UnitWithSymbols<{ [K in D]: 1 }> {
     // TODO Remove cast to any somehow
     return { [dim]: [symbol || dim, 1] } as any;
 }
 
-export function multiplyUnits<L extends Unit, R extends Unit>(left: L, right: R): MultiplyUnits<L, R> {
-    const result: Unit = {};
+export function multiplyUnits<L extends Unit, R extends Unit>(
+    left: UnitWithSymbols<L>,
+    right: UnitWithSymbols<R>,
+): UnitWithSymbols<MultiplyUnits<L, R>> {
+    const result: UnitWithSymbols = {};
     for (const dimension in left) {
         const symbolAndExponent = copySymbolAndExponent(left, dimension);
         if (symbolAndExponent !== undefined) {
@@ -49,7 +53,7 @@ export function multiplyUnits<L extends Unit, R extends Unit>(left: L, right: R)
     return result as any;
 }
 
-function copySymbolAndExponent(unit: Unit, dimension: string): SymbolAndExponent | undefined {
+function copySymbolAndExponent(unit: UnitWithSymbols, dimension: string): SymbolAndExponent | undefined {
     const result = unit[dimension];
     if (result === undefined) {
         return undefined;
@@ -58,21 +62,30 @@ function copySymbolAndExponent(unit: Unit, dimension: string): SymbolAndExponent
     return [symbol, exponent];
 }
 
-export function divideUnits<L extends Unit, R extends Unit>(left: L, right: R): DivideUnits<L, R> {
+export function divideUnits<L extends Unit, R extends Unit>(
+    left: UnitWithSymbols<L>,
+    right: UnitWithSymbols<R>,
+): UnitWithSymbols<DivideUnits<L, R>> {
     // TODO Remove cast to any somehow
     return multiplyUnits(left, exponentiateUnit(right, -1)) as any;
 }
 
-export function exponentiateUnit<U extends Unit, N extends Exponent>(unit: U, power: N): ExponentiateUnit<U, N> {
+export function exponentiateUnit<U extends Unit, N extends Exponent>(
+    unit: UnitWithSymbols<U>,
+    power: N,
+): UnitWithSymbols<ExponentiateUnit<U, N>> {
     return expAndRootImpl(unit, exponent => exponent * power);
 }
 
-export function nthRootUnit<U extends NthRootableUnit<N>, N extends Exponent>(unit: U, root: N): NthRootUnit<U, N> {
+export function nthRootUnit<U extends NthRootableUnit<N>, N extends Exponent>(
+    unit: UnitWithSymbols<U>,
+    root: N,
+): UnitWithSymbols<NthRootUnit<U, N>> {
     return expAndRootImpl(unit, exponent => exponent / root);
 }
 
-function expAndRootImpl(unit: Unit, updateExponent: (exp: Exponent) => number): any {
-    const result: Unit = {};
+function expAndRootImpl(unit: UnitWithSymbols, updateExponent: (exp: Exponent) => number): any {
+    const result: UnitWithSymbols = {};
     for (const dimension in unit) {
         const symbolAndExponent = unit[dimension];
         if (symbolAndExponent === undefined) {

@@ -7,10 +7,10 @@ import {
     MultiplyExponents,
 } from "../exponent";
 
-type SymbolAnd<E extends Exponent> = [string, E];
-export type SymbolAndExponent = SymbolAnd<Exponent>;
+export type UnitWithSymbols<U extends Unit = Unit> = { [D in keyof U]+?: [string, NonNullable<U[D]>] };
+export type SymbolAndExponent = [string, Exponent];
 
-export type Unit = Partial<{ [dimension: string]: SymbolAndExponent }>;
+export type Unit = Partial<{ [dimension: string]: Exponent }>;
 
 // Arithmetic
 
@@ -35,7 +35,7 @@ export type NthRootUnit<U extends NthRootableUnit<N>, N extends Exponent> = Hand
 >;
 
 export type NthRootableUnit<N extends Exponent> = Partial<{
-    [dimension: string]: SymbolAnd<MultiplesOf<N>>;
+    [dimension: string]: MultiplesOf<N>;
 }>;
 
 type MultiplesOf<N extends Exponent> = Exclude<MultiplyExponents<Exponent, N>, ArithmeticError>;
@@ -45,7 +45,7 @@ type MultiplesOf<N extends Exponent> = Exclude<MultiplyExponents<Exponent, N>, A
 /** Handle errors in the result of an arithmetic operation. */
 type HandleErrors<Result extends ArithmeticResult> = true extends ResultHasError<Result>
     ? ArithmeticError
-    : StripZeroes<{ [Dim in keyof Result]: SymbolAnd<Result[Dim] extends ArithmeticError ? 0 : Result[Dim]> }>;
+    : StripZeroes<{ [Dim in keyof Result]: Result[Dim] extends ArithmeticError ? 0 : Result[Dim] }>;
 
 type ResultHasError<Result> = { [Dim in keyof Result]: IsArithmeticError<Result[Dim]> }[keyof Result];
 
@@ -56,6 +56,6 @@ type ArithmeticResult = { [dimension: string]: Exponent | ArithmeticError };
 /** Removes all zero exponent dimensions from a dimension vector */
 type StripZeroes<U extends Unit> = Pick<U, NonZeroKeys<U>>;
 
-type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]>[1] extends 0 ? never : Dim }[keyof U];
+type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]> extends 0 ? never : Dim }[keyof U];
 
-type GetExponent<U extends Unit, K> = K extends keyof Unit ? (undefined extends U[K] ? 0 : NonNullable<U[K]>[1]) : 0;
+type GetExponent<U extends Unit, K> = K extends keyof Unit ? (undefined extends U[K] ? 0 : NonNullable<U[K]>) : 0;

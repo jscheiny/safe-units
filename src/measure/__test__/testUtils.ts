@@ -1,13 +1,8 @@
 import { Exponent } from "../../exponent";
-import { Unit } from "../types";
+import { Unit, UnitWithSymbols } from "../types";
 
-type UnitWithoutSymbols = { [dimension: string]: Exponent | undefined };
-export type AddSymbols<U extends UnitWithoutSymbols> = {
-    [D in keyof U]: undefined extends U[D] ? undefined : [string, U[D]]
-};
-
-export function addSymbols<U extends UnitWithoutSymbols>(unit: U): AddSymbols<U> {
-    const result: Unit = {};
+export function addSymbols<U extends Unit>(unit: U): UnitWithSymbols<U> {
+    const result: UnitWithSymbols = {};
     for (const dimension in unit) {
         const exponent: Exponent | undefined = unit[dimension];
         if (exponent === undefined) {
