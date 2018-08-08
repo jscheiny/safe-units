@@ -1,7 +1,14 @@
 {
     "name": "safe-units",
     "description": "Type-safe TypeScript units of measure",
-    "keywords": ["units", "measure", "dimension", "metric", "typescript", "typesafe"],
+    "keywords": [
+        "units",
+        "measure",
+        "dimension",
+        "metric",
+        "typescript",
+        "typesafe"
+    ],
     "version": "0.0.1",
     "license": "MIT",
     "homepage": "https://github.com/jscheiny/safe-units",
