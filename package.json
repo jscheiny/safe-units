@@ -28,6 +28,7 @@
         "lint:fix": "yarn lint --fix",
         "node:codegen": "node codegen/dist/emit",
         "test": "jest --config jest.config.json",
+        "prepack": "yarn build",
         "verify": "npm-run-all -s build lint test"
     },
     "devDependencies": {
