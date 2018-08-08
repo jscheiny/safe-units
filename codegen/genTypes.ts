@@ -43,7 +43,7 @@ function genUncurriedType(spec: OperatorSpec, exponents: number[]): string[] {
 }
 
 function genCurriedType(spec: OperatorSpec, exponents: number[], left: number): string[] {
-    const lines = [`export type ${genCurriedTypeName(spec, left)}<N extends Exponent>`];
+    const lines = [`type ${genCurriedTypeName(spec, left)}<N extends Exponent>`];
     let first = true;
     for (const right of exponents) {
         const result = spec.compute(left, right);
