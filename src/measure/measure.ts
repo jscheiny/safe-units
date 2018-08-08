@@ -1,6 +1,6 @@
 import { Exponent } from "../exponent";
 import { formatUnit } from "./format";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits, Unit } from "./types";
+import { DivideUnits, ExponentiateUnit, MultiplyUnits, Unit, UnitWithSymbols } from "./types";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./units";
 
 export class Measure<U extends Unit> {
@@ -18,7 +18,11 @@ export class Measure<U extends Unit> {
         return new Measure(value * quantity.value, quantity.unit, symbol);
     }
 
-    public static unsafeConstruct<U extends Unit>(value: number, unit: U, symbol?: string): Measure<U> {
+    public static unsafeConstruct<U extends Unit>(
+        value: number,
+        unit: UnitWithSymbols<U>,
+        symbol?: string,
+    ): Measure<U> {
         return new Measure(value, unit, symbol);
     }
 
@@ -26,7 +30,7 @@ export class Measure<U extends Unit> {
 
     private constructor(
         public readonly value: number,
-        private readonly unit: U,
+        private readonly unit: UnitWithSymbols<U>,
         private readonly symbol?: string | undefined,
     ) {}
 
@@ -38,7 +42,7 @@ export class Measure<U extends Unit> {
         return this.symbol;
     }
 
-    public getUnit(): U {
+    public getUnit(): UnitWithSymbols<U> {
         return this.unit;
     }
 
