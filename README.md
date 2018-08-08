@@ -1,6 +1,6 @@
 # Safe Units
 
-[![Build Status](https://travis-ci.org/jscheiny/safe-units.svg?branch=develop)](https://travis-ci.org/jscheiny/safe-units)
+[![Build Status](https://travis-ci.org/jscheiny/safe-units.svg?branch=master)](https://travis-ci.org/jscheiny/safe-units)
 
 Safe Units is a type-safe units of measurement framework for performing dimensional analysis in TypeScript at compile time. Safe Units provides an implementation of an SI based unit system but is flexible enough to allow users to create their own unit systems which can be independent or can interoperate with the built-in units. This library makes heavy use of conditional and thus requires 2.8.3+.
 
