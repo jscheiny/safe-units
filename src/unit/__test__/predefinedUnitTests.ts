@@ -3,10 +3,10 @@ import * as Units from "../../unit";
 import { meters } from "../base";
 import { kilo, micro } from "../metric";
 
-describe("Units", () => {
+describe("Predefined Units", () => {
     const UnitNames = Object.keys(Units);
 
-    function forEachUnit(fn: (unit: Measure<any>, name: string) => void) {
+    function forEachUnit(fn: (unit: Measure<any>, name: string) => void): void {
         UnitNames.forEach(name => {
             const value = (Units as any)[name];
             if (value instanceof Measure) {

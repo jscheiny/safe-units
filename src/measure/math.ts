@@ -67,28 +67,22 @@ export function sum<U extends Unit>(first: Measure<U>, ...rest: Array<Measure<U>
     return result;
 }
 
-function wrapUnary(f: (x: number) => number) {
-    return <U extends Unit>(x: Measure<U>): Measure<U> => {
-        return Measure.of(f(x.value), x.normalized());
-    };
+function wrapUnary(f: (x: number) => number): <U extends Unit>(x: Measure<U>) => Measure<U> {
+    return x => Measure.of(f(x.value), x.normalized());
 }
 
-function wrapTrig(f: (x: number) => number) {
-    return (angle: PlaneAngle): Dimensionless => {
-        return Measure.dimensionless(f(angle.value));
-    };
+function wrapTrig(f: (x: number) => number): (angle: PlaneAngle) => Dimensionless {
+    return angle => Measure.dimensionless(f(angle.value));
 }
 
-function wrapInverseTrig(f: (x: number) => number) {
-    return (angle: Dimensionless): PlaneAngle => {
-        return Measure.of(f(angle.value), radians);
-    };
+function wrapInverseTrig(f: (x: number) => number): (angle: Dimensionless) => PlaneAngle {
+    return angle => Measure.of(f(angle.value), radians);
 }
 
-function warpNary(f: (...x: number[]) => number) {
-    return <U extends Unit>(first: Measure<U>, ...rest: Array<Measure<U>>): Measure<U> => {
-        return Measure.of(f(...values(first, ...rest)), first.normalized());
-    };
+function warpNary(
+    f: (...x: number[]) => number,
+): <U extends Unit>(first: Measure<U>, ...rest: Array<Measure<U>>) => Measure<U> {
+    return (first, ...rest) => Measure.of(f(...values(first, ...rest)), first.normalized());
 }
 
 function values<U extends Unit>(...measures: Array<Measure<U>>): number[] {
