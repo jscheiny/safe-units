@@ -1,6 +1,5 @@
-import { IsArithmeticError } from "../../exponent";
+import { IsArithmeticError, IsSame } from "../../exponent";
 import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit } from "../types";
-import { IsSame } from "./testUtils";
 
 // MultiplyUnits
 
