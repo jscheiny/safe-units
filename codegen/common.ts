@@ -68,14 +68,6 @@ export function genUncurriedTypeName(spec: OperatorSpec, left?: string | number,
     return `${spec.uncurriedTypeNamePrefix}Exponents${args}`;
 }
 
-export function genValueName(value: number): string {
-    if (value === 0) {
-        return "0";
-    }
-    const sign = value < 0 ? "Negative" : "Positive";
-    return `${sign}${Math.abs(value)}`;
-}
-
 export function indent(line: string): string {
     return "    " + line;
 }

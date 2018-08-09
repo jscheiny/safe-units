@@ -1,12 +1,4 @@
-import {
-    genFileHeader,
-    genImports,
-    genUncurriedTypeName,
-    genValueName,
-    getExponents,
-    isExponent,
-    OperatorSpec,
-} from "./common";
+import { genFileHeader, genImports, genUncurriedTypeName, getExponents, isExponent, OperatorSpec } from "./common";
 
 export function genOperatorTests(spec: OperatorSpec): string {
     const lines: string[] = [...genFileHeader(false), ...genTestsImports(spec)];
@@ -57,4 +49,12 @@ function genErrorTest(spec: OperatorSpec, left: number, right: number): string[]
 
 function genTestBaseName(spec: OperatorSpec, left: number, right: number): string {
     return `${spec.testTypeNamePrefix}Of${genValueName(left)}And${genValueName(right)}`;
+}
+
+function genValueName(value: number): string {
+    if (value === 0) {
+        return "0";
+    }
+    const sign = value < 0 ? "Negative" : "Positive";
+    return `${sign}${Math.abs(value)}`;
 }
