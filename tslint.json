@@ -20,6 +20,11 @@
                 "order": "statics-first"
             }
         ],
-        "ordered-imports": true
+        "ordered-imports": true,
+        "typedef": [
+            true,
+            "call-signature",
+            "parameter"
+        ]
     }
 }
