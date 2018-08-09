@@ -15,7 +15,7 @@ export function genOperatorTests(spec: OperatorSpec): string {
 function genTestsImports(spec: OperatorSpec): string[] {
     return [
         ...genImports(
-            { symbols: ["IsArithmeticError"], source: "../common" },
+            { symbols: ["IsArithmeticError", "IsSame"], source: "../common" },
             { symbols: [genUncurriedTypeName(spec)], source: `../${spec.fileNamePrefix}` },
         ),
         "",
@@ -24,27 +24,32 @@ function genTestsImports(spec: OperatorSpec): string[] {
 
 function genTest(spec: OperatorSpec, left: number, right: number): string[] {
     const result = spec.compute(left, right);
-    if (isExponent(result, spec)) {
-        return genValueTest(spec, left, right, result);
-    } else {
-        return genErrorTest(spec, left, right);
-    }
+    const { nameSuffix, testType } = isExponent(result, spec)
+        ? genValueTest(spec, left, right, result)
+        : genErrorTest(spec, left, right);
+    const typeName = `${genTestBaseName(spec, left, right)}${nameSuffix}`;
+    const definition = `type ${typeName} = ${testType};`;
+    const assertion = `const ${typeName}: ${typeName} = true;`;
+    return [definition, assertion];
 }
 
-function genValueTest(spec: OperatorSpec, left: number, right: number, result: number): string[] {
-    const typeName = genTestBaseName(spec, left, right);
-    return [
-        `type ${typeName} = ${genUncurriedTypeName(spec, left, right)};`,
-        `const ${typeName}: ${typeName} = ${result};`,
-    ];
+interface TypeTestInfo {
+    nameSuffix: string;
+    testType: string;
 }
 
-function genErrorTest(spec: OperatorSpec, left: number, right: number): string[] {
-    const typeName = `${genTestBaseName(spec, left, right)}IsError`;
-    return [
-        `type ${typeName} = IsArithmeticError<${genUncurriedTypeName(spec, left, right)}>;`,
-        `const ${typeName}: ${typeName} = true;`,
-    ];
+function genValueTest(spec: OperatorSpec, left: number, right: number, result: number): TypeTestInfo {
+    return {
+        nameSuffix: `Is${genValueName(result)}`,
+        testType: `IsSame<${genUncurriedTypeName(spec, left, right)}, ${result}>`,
+    };
+}
+
+function genErrorTest(spec: OperatorSpec, left: number, right: number): TypeTestInfo {
+    return {
+        nameSuffix: "IsError",
+        testType: `IsArithmeticError<${genUncurriedTypeName(spec, left, right)}>`,
+    };
 }
 
 function genTestBaseName(spec: OperatorSpec, left: number, right: number): string {
