@@ -55,6 +55,6 @@ function genErrorTest(spec: OperatorSpec, left: number, right: number): string[]
     ];
 }
 
-function genTestBaseName(spec: OperatorSpec, left: number, right: number) {
+function genTestBaseName(spec: OperatorSpec, left: number, right: number): string {
     return `${spec.testTypeNamePrefix}Of${genValueName(left)}And${genValueName(right)}`;
 }

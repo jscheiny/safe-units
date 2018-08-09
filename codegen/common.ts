@@ -1,10 +1,10 @@
-export interface CodeGenSpec extends CommonSpec {
-    operators: PartialOperatorSpec[];
-}
-
 export interface CommonSpec {
     minExponent: number;
     maxExponent: number;
+}
+
+export interface CodeGenSpec extends CommonSpec {
+    operators: PartialOperatorSpec[];
 }
 
 export interface PartialOperatorSpec {
@@ -53,7 +53,7 @@ function genImport({ symbols, source }: ImportSpec): string {
     return `import { ${symbols.join(", ")} } from "${source}";`;
 }
 
-function order(first: string, second: string) {
+function order(first: string, second: string): number {
     if (first < second) {
         return -1;
     }
@@ -63,7 +63,7 @@ function order(first: string, second: string) {
     return 0;
 }
 
-export function genUncurriedTypeName(spec: OperatorSpec, left?: string | number, right?: string | number) {
+export function genUncurriedTypeName(spec: OperatorSpec, left?: string | number, right?: string | number): string {
     const args = left !== undefined && right !== undefined ? `<${left}, ${right}>` : "";
     return `${spec.uncurriedTypeNamePrefix}Exponents${args}`;
 }
@@ -76,6 +76,6 @@ export function genValueName(value: number): string {
     return `${sign}${Math.abs(value)}`;
 }
 
-export function indent(line: string) {
+export function indent(line: string): string {
     return "    " + line;
 }

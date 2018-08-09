@@ -62,6 +62,6 @@ function genCurriedTypeName({ curriedTypeNamePrefix }: OperatorSpec, value: numb
     return `${curriedTypeNamePrefix}${genValueName(value)}`;
 }
 
-function genErrorCase() {
+function genErrorCase(): string {
     return indent(": ArithmeticError;");
 }
