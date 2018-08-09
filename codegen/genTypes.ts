@@ -2,22 +2,17 @@ import {
     genFileHeader,
     genImports,
     genUncurriedTypeName,
-    genValueName,
     getExponents,
     indent,
     isExponent,
     OperatorSpec,
 } from "./common";
 
+const ARITHMETIC_ERROR = "ArithmeticError";
+
 export function genOperatorTypes(spec: OperatorSpec): string {
     const exponents = getExponents(spec);
-    let lines: string[] = [...genFileHeader(), ...genTypesImports(), ...genUncurriedType(spec, exponents)];
-    for (const left of exponents) {
-        if (!(left in spec.specialCases)) {
-            lines.push(...genCurriedType(spec, exponents, left));
-        }
-    }
-    return lines.join("\n");
+    return [...genFileHeader(), ...genTypesImports(), ...genUncurriedType(spec, exponents)].join("\n");
 }
 
 function genTypesImports(): string[] {
@@ -34,34 +29,24 @@ function genUncurriedType(spec: OperatorSpec, exponents: number[]): string[] {
         if (left in spec.specialCases) {
             lines.push(`${prefix} ${spec.specialCases[left]}`);
         } else {
-            lines.push(`${prefix} ${genCurriedTypeName(spec, left)}<R>`);
+            lines.push(`${prefix}`);
+            lines.push(...genCurriedType(spec, exponents, left));
         }
     }
-    lines.push(genErrorCase());
+    lines.push(indent(`: ${ARITHMETIC_ERROR};`));
     lines.push("");
     return lines;
 }
 
 function genCurriedType(spec: OperatorSpec, exponents: number[], left: number): string[] {
-    const lines = [`type ${genCurriedTypeName(spec, left)}<N extends Exponent>`];
-    let first = true;
+    const lines = ["("];
     for (const right of exponents) {
         const result = spec.compute(left, right);
         if (isExponent(result, spec)) {
-            const operator = first ? "=" : ":";
-            first = false;
-            lines.push(indent(`${operator} N extends ${right} ? ${result}`));
+            lines.push(indent(`R extends ${right} ? ${result} :`));
         }
     }
-    lines.push(genErrorCase());
-    lines.push("");
-    return lines;
-}
-
-function genCurriedTypeName({ curriedTypeNamePrefix }: OperatorSpec, value: number): string {
-    return `${curriedTypeNamePrefix}${genValueName(value)}`;
-}
-
-function genErrorCase(): string {
-    return indent(": ArithmeticError;");
+    lines.push(indent(ARITHMETIC_ERROR));
+    lines.push(")");
+    return lines.map(indent).map(indent);
 }
