@@ -12,7 +12,7 @@ export interface EmitPlan {
     source: string;
 }
 
-export function emit(callback?: () => void) {
+export function emit(callback?: () => void): void {
     const emits: EmitPlan[] = getEmitPlans();
     prepForEmit(() => {
         let index = -1;
@@ -39,11 +39,11 @@ export function getEmitPlans(): EmitPlan[] {
     return emits;
 }
 
-function prepForEmit(callback: () => void) {
+function prepForEmit(callback: () => void): void {
     makeDirectory(PATH_PREFIX, () => makeDirectory(TEST_PREFIX, callback));
 }
 
-function makeDirectory(path: string, callback: () => void) {
+function makeDirectory(path: string, callback: () => void): void {
     exists(path, doesExist => {
         if (doesExist) {
             return callback();
@@ -58,7 +58,7 @@ function makeDirectory(path: string, callback: () => void) {
     });
 }
 
-function emitFile({ path, source }: EmitPlan, callback?: () => void) {
+function emitFile({ path, source }: EmitPlan, callback?: () => void): void {
     writeFile(path, source, error => {
         if (error) {
             console.error(`There was an error writing to ${path}`);
