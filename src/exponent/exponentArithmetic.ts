@@ -14,7 +14,7 @@ export type AddendOf<N extends Exponent> = SubtractExponents<RemoveErrors<AddExp
 export type SubtrahendOf<N extends Exponent> = AddendOf<Negative<N>>;
 
 /** Exponents that can be multiplied with N without producing an error. */
-export type MultiplicandOf<N extends Exponent> = 0 extends N ? Exponent : DivideExponents<ProductOf<N>, Exponent>;
+export type MultiplicandOf<N extends Exponent> = 0 extends N ? Exponent : DivideExponents<Exponent, ProductOf<N>>;
 
 /** Exponents that N can be divided by without producing an error. */
 export type DivisorOf<N extends Exponent> = 0 extends N ? NonZeroExponent : MultiplyExponents<FactorOf<N>, Exponent>;

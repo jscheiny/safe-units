@@ -15,7 +15,7 @@ const AddendOfWorks: AddendOfWorks = true;
 type SubtrahendWorks = IsSame<-3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5, SubtrahendOf<3>>;
 const SubtrahendWorks: SubtrahendWorks = true;
 
-type MultiplicandWorks = IsSame<-2 | -1 | 0 | 1 | 2, MultiplicandOf<2>>;
+type MultiplicandWorks = IsSame<-1 | 0 | 1, MultiplicandOf<3>>;
 const MultiplicandWorks: MultiplicandWorks = true;
 
 type MultiplicandOf0Works = IsSame<Exponent, MultiplicandOf<0>>;
