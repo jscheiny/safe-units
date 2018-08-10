@@ -29,11 +29,21 @@ export type ExponentiateUnit<U extends Unit, N extends Exponent> = HandleErrors<
     { [Dim in keyof U]: MultiplyExponents<GetExponent<U, Dim>, N> }
 >;
 
+/** A type that is assignable from all units that can be raised to the N. */
+export type ExponentiableUnit<N extends Exponent> = Partial<{
+    [dimension: string]: MultipliersOf<N>;
+}>;
+
+type MultipliersOf<N extends Exponent> = 0 extends N
+    ? Exponent
+    : Exclude<DivideExponents<Exponent, N>, ArithmeticError>;
+
 /** Returns the nth root of a unit. This is the inverse scalar multiple of the dimension vector. */
-export type NthRootUnit<U extends NthRootableUnit<N>, N extends Exponent> = HandleErrors<
+export type NthRootUnit<U extends Unit, N extends Exponent> = HandleErrors<
     { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> }
 >;
 
+/** A type that is assignable from all units whose Nth root is valid. */
 export type NthRootableUnit<N extends Exponent> = Partial<{
     [dimension: string]: MultiplesOf<N>;
 }>;
