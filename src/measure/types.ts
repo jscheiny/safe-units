@@ -1,10 +1,13 @@
 import {
+    AddendOf,
     AddExponents,
     ArithmeticError,
     DivideExponents,
     Exponent,
     IsArithmeticError,
+    MultiplicandOf,
     MultiplyExponents,
+    ProductOf,
 } from "../exponent";
 
 export type UnitWithSymbols<U extends Unit = Unit> = { [D in keyof U]+?: [string, NonNullable<U[D]>] };
@@ -12,43 +15,49 @@ export type SymbolAndExponent = [string, Exponent];
 
 export type Unit = Partial<{ [dimension: string]: Exponent }>;
 
-// Arithmetic
+// Multiplication
 
 /** Returns the product of two units. This is the sum of two dimension vectors. */
 export type MultiplyUnits<L extends Unit, R extends Unit> = HandleErrors<
     { [Dim in keyof L | keyof R]: AddExponents<GetExponent<L, Dim>, GetExponent<R, Dim>> }
 >;
 
+/** A type that is assignable from all units that can be multiplied by U without producing an error. */
+export type MultiplicandUnit<U extends Unit> = Partial<{ [D in keyof U]: AddendOf<NonNullable<U[D]>> }> & Unit;
+
+// Division
+
 /** Returns the quotient of two units. This is the difference of two dimension vectors. */
 export type DivideUnits<L extends Unit, R extends Unit> = HandleErrors<
     { [Dim in keyof L | keyof R]: AddExponents<GetExponent<L, Dim>, MultiplyExponents<GetExponent<R, Dim>, -1>> }
 >;
+
+/** A type that is assignable from all units that U can be divided by without producing an error. */
+export type DivisorUnit<U extends Unit> = MultiplicandUnit<ExponentiateUnit<U, -1>>;
+
+// Exponentiation
 
 /** Returns the unit raised to a power. This is the scalar multiple of the dimension vector. */
 export type ExponentiateUnit<U extends Unit, N extends Exponent> = HandleErrors<
     { [Dim in keyof U]: MultiplyExponents<GetExponent<U, Dim>, N> }
 >;
 
-/** A type that is assignable from all units that can be raised to the N. */
-export type ExponentiableUnit<N extends Exponent> = Partial<{
-    [dimension: string]: MultipliersOf<N>;
+/** A type that is assignable from all units that can be raised to the N without producing an error. */
+export type BaseUnit<N extends Exponent> = Partial<{
+    [dimension: string]: MultiplicandOf<N>;
 }>;
 
-type MultipliersOf<N extends Exponent> = 0 extends N
-    ? Exponent
-    : Exclude<DivideExponents<Exponent, N>, ArithmeticError>;
+// Roots
 
 /** Returns the nth root of a unit. This is the inverse scalar multiple of the dimension vector. */
 export type NthRootUnit<U extends Unit, N extends Exponent> = HandleErrors<
     { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> }
 >;
 
-/** A type that is assignable from all units whose Nth root is valid. */
-export type NthRootableUnit<N extends Exponent> = Partial<{
-    [dimension: string]: MultiplesOf<N>;
+/** A type that is assignable from all units whose Nth root does not produce an error. */
+export type RadicandUnit<D extends Exponent> = Partial<{
+    [dimension: string]: ProductOf<D>;
 }>;
-
-type MultiplesOf<N extends Exponent> = Exclude<MultiplyExponents<Exponent, N>, ArithmeticError>;
 
 // Error handling
 

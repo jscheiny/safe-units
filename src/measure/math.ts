@@ -1,7 +1,7 @@
 import { Dimensionless, Length, PlaneAngle } from "../quantity/quantities";
 import { radians } from "../unit/base";
 import { Measure, pow } from "./measure";
-import { DivideUnits, MultiplyUnits, NthRootableUnit, NthRootUnit, Unit } from "./types";
+import { DivideUnits, DivisorUnit, MultiplicandUnit, MultiplyUnits, NthRootUnit, RadicandUnit, Unit } from "./types";
 import { nthRootUnit } from "./units";
 
 export { pow };
@@ -26,11 +26,11 @@ export function atan2(y: Length, x: Length): PlaneAngle {
     return Measure.of(Math.atan2(y.value, x.value), radians);
 }
 
-export function sqrt<U extends NthRootableUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>> {
+export function sqrt<U extends RadicandUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>> {
     return Measure.unsafeConstruct(Math.sqrt(x.value), nthRootUnit(x.getUnit(), 2));
 }
 
-export function cbrt<U extends NthRootableUnit<3>>(x: Measure<U>): Measure<NthRootUnit<U, 3>> {
+export function cbrt<U extends RadicandUnit<3>>(x: Measure<U>): Measure<NthRootUnit<U, 3>> {
     return Measure.unsafeConstruct(Math.cbrt(x.value), nthRootUnit(x.getUnit(), 3));
 }
 
@@ -42,14 +42,14 @@ export function subtract<U extends Unit>(left: Measure<U>, right: Measure<U>): M
     return left.minus(right);
 }
 
-export function multiply<L extends Unit, R extends Unit>(
+export function multiply<L extends Unit, R extends MultiplicandUnit<L>>(
     left: Measure<L>,
     right: Measure<R>,
 ): Measure<MultiplyUnits<L, R>> {
     return left.times(right);
 }
 
-export function divide<L extends Unit, R extends Unit>(
+export function divide<L extends Unit, R extends DivisorUnit<L>>(
     left: Measure<L>,
     right: Measure<R>,
 ): Measure<DivideUnits<L, R>> {

@@ -1,6 +1,15 @@
 import { Exponent } from "../exponent/generated/common";
 import { formatUnit } from "./format";
-import { DivideUnits, ExponentiableUnit, ExponentiateUnit, MultiplyUnits, Unit, UnitWithSymbols } from "./types";
+import {
+    BaseUnit,
+    DivideUnits,
+    DivisorUnit,
+    ExponentiateUnit,
+    MultiplicandUnit,
+    MultiplyUnits,
+    Unit,
+    UnitWithSymbols,
+} from "./types";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./units";
 
 export class Measure<U extends Unit> {
@@ -69,15 +78,15 @@ export class Measure<U extends Unit> {
         return new Measure(numericValue * this.value, this.unit);
     }
 
-    public times<V extends Unit>(other: Measure<V>): Measure<MultiplyUnits<U, V>> {
+    public times<V extends MultiplicandUnit<U>>(other: Measure<V>): Measure<MultiplyUnits<U, V>> {
         return new Measure(this.value * other.value, multiplyUnits(this.unit, other.unit));
     }
 
-    public over<V extends Unit>(other: Measure<V>): Measure<DivideUnits<U, V>> {
+    public over<V extends DivisorUnit<U>>(other: Measure<V>): Measure<DivideUnits<U, V>> {
         return new Measure(this.value / other.value, divideUnits(this.unit, other.unit));
     }
 
-    public per<V extends Unit>(other: Measure<V>): Measure<DivideUnits<U, V>> {
+    public per<V extends DivisorUnit<U>>(other: Measure<V>): Measure<DivideUnits<U, V>> {
         return this.over(other);
     }
 
@@ -136,8 +145,8 @@ export class Measure<U extends Unit> {
 
 // Measure methods that may or may not be available based on the type parameter.
 export interface Measure<U extends Unit> {
-    squared: U extends ExponentiableUnit<2> ? () => Measure<ExponentiateUnit<U, 2>> : never;
-    cubed: U extends ExponentiableUnit<3> ? () => Measure<ExponentiateUnit<U, 3>> : never;
+    squared: U extends BaseUnit<2> ? () => Measure<ExponentiateUnit<U, 2>> : never;
+    cubed: U extends BaseUnit<3> ? () => Measure<ExponentiateUnit<U, 3>> : never;
 }
 
 Measure.prototype.squared = function(): any {
@@ -148,15 +157,15 @@ Measure.prototype.cubed = function(): any {
     return pow(this, 3);
 };
 
-export function square<U extends ExponentiableUnit<2>>(measure: Measure<U>): Measure<ExponentiateUnit<U, 2>> {
+export function square<U extends BaseUnit<2>>(measure: Measure<U>): Measure<ExponentiateUnit<U, 2>> {
     return pow(measure, 2);
 }
 
-export function cubic<U extends ExponentiableUnit<3>>(measure: Measure<U>): Measure<ExponentiateUnit<U, 3>> {
+export function cubic<U extends BaseUnit<3>>(measure: Measure<U>): Measure<ExponentiateUnit<U, 3>> {
     return pow(measure, 3);
 }
 
-export function pow<U extends ExponentiableUnit<N>, N extends Exponent>(
+export function pow<U extends BaseUnit<N>, N extends Exponent>(
     measure: Measure<U>,
     power: N,
 ): Measure<ExponentiateUnit<U, N>> {
