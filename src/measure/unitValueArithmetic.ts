@@ -9,7 +9,7 @@ import {
     SymbolAndExponent,
     Unit,
     UnitWithSymbols,
-} from "./types";
+} from "./unitTypeArithmetic";
 
 export function dimension<D extends string>(dim: D, symbol?: string): UnitWithSymbols<{ [K in D]: 1 }> {
     // TODO Remove cast to any somehow

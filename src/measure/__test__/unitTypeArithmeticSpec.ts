@@ -8,7 +8,7 @@ import {
     NthRootUnit,
     RadicandUnit,
     Unit,
-} from "../types";
+} from "../unitTypeArithmetic";
 
 // MultiplyUnits
 
