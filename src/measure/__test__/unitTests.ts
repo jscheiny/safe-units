@@ -81,11 +81,6 @@ describe("Units", () => {
             expect(exponentiateUnit(addSymbols({ x: -1, y: 2, z: -3 }), 0)).toEqual({});
         });
 
-        it("should throw an error when an exponent is out of bounds", () => {
-            expect(() => exponentiateUnit(addSymbols({ x: 3 }), 2)).toThrow();
-            expect(() => exponentiateUnit(addSymbols({ x: 2 }), -3)).toThrow();
-        });
-
         it("should handle explicitly undefined and 0 exponents", () => {
             expect(exponentiateUnit(addSymbols({ x: 2, y: undefined, z: 0 }), 2)).toEqual(addSymbols({ x: 4 }));
         });
@@ -98,12 +93,6 @@ describe("Units", () => {
 
         it("should cube root the unit", () => {
             expect(nthRootUnit(addSymbols({ x: 3, y: -3 }), 3)).toEqual(addSymbols({ x: 1, y: -1 }));
-        });
-
-        it("should throw an error when an exponent can't be divided", () => {
-            const u = addSymbols({ x: 4, y: -3 });
-            expect(() => nthRootUnit(u as any, 2)).toThrow();
-            expect(() => nthRootUnit(u as any, 3)).toThrow();
         });
 
         it("should handle explicitly undefined and 0 exponents", () => {

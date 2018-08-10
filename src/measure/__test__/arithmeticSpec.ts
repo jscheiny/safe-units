@@ -1,11 +1,12 @@
-import { IsArithmeticError, IsSame } from "../../exponent";
+import { Exponent, IsArithmeticError, IsSame } from "../../exponent";
 import {
+    BaseUnit,
     DivideUnits,
-    ExponentiableUnit,
     ExponentiateUnit,
+    MultiplicandUnit,
     MultiplyUnits,
-    NthRootableUnit,
     NthRootUnit,
+    RadicandUnit,
     Unit,
 } from "../types";
 
@@ -17,16 +18,27 @@ const SelfMultiplicationWorks: SelfMultiplicationWorks = true;
 type MultiplySeveralDimensionsWorks = IsSame<{ b: 1; c: 1 }, MultiplyUnits<{ a: 2; b: -1 }, { a: -2; b: 2; c: 1 }>>;
 const MultiplySeveralDimensionsWorks: MultiplySeveralDimensionsWorks = true;
 
-type MultiplicationPropagatesErrors = IsArithmeticError<MultiplyUnits<{ a: -5; b: 2 }, { a: -5; b: 1 }>>;
-const MultiplicationPropagatesErrors: MultiplicationPropagatesErrors = true;
+// MultiplicandUnit
+
+type MultiplicandAllowsOtherDimsWithAnyExponent = { b: Exponent } extends MultiplicandUnit<{ a: 2 }> ? true : never;
+const MultiplicandAllowsOtherDimsWithAnyExponent: MultiplicandAllowsOtherDimsWithAnyExponent = true;
+
+type MultiplicandRejectsSameDimWithBadExponent = { a: -4 } extends MultiplicandUnit<{ a: -2 }> ? never : true;
+const MultiplicandRejectsSameDimWithBadExponent: MultiplicandRejectsSameDimWithBadExponent = true;
+
+type MultiplicandAcceptsSameDimWithGoodExponent = { a: 2 } extends MultiplicandUnit<{ a: 3 }> ? true : never;
+const MultiplicandAcceptsSameDimWithGoodExponent: MultiplicandAcceptsSameDimWithGoodExponent = true;
+
+type MultiplicandAllowsMultiDims = { a: 3; c: -4; d: 5 } extends MultiplicandUnit<{ a: 1; c: 2 }> ? true : never;
+const MultiplicandAllowsMultiDims: MultiplicandAllowsMultiDims = true;
+
+type MultiplicandRejectsMultiDims = { a: 1; c: 0 } extends MultiplicandUnit<{ a: 5; b: -5 }> ? never : true;
+const MultiplicandRejectsMultiDims: MultiplicandRejectsMultiDims = true;
 
 // DivideUnits
 
 type DivisionWorks = IsSame<{ b: 1; c: 1 }, DivideUnits<{ a: 2; b: -1 }, { a: 2; b: -2; c: -1 }>>;
 const DivisionWorks: DivisionWorks = true;
-
-type DivisionPropagatesErrors = IsArithmeticError<DivideUnits<{ a: -5; b: 1 }, { a: 5; b: 2 }>>;
-const DivisionPropagatesErrors: DivisionPropagatesErrors = true;
 
 // ExponentiateUnit
 
@@ -45,22 +57,25 @@ const CubingWorks: CubingWorks = true;
 type ExponentiationPropagatesErrors = IsArithmeticError<ExponentiateUnit<{ a: -5; b: 1 }, -2>>;
 const ExponentiationPropagatesErrors: ExponentiationPropagatesErrors = true;
 
-// ExponentiableUnit
+// BaseUnit
 
-type ExponentiableUnitAcceptsSquareRoots = { a: 2; b: 1 } extends ExponentiableUnit<2> ? true : never;
-const ExponentiableUnitAcceptsSquareRoots: ExponentiableUnitAcceptsSquareRoots = true;
+type BaseUnitAcceptsSquareRoots = { a: 2; b: 1 } extends BaseUnit<2> ? true : never;
+const BaseUnitAcceptsSquareRoots: BaseUnitAcceptsSquareRoots = true;
 
-type ExponentiableUnitRejectsLargeExponents = { a: 2; b: -3 } extends ExponentiableUnit<2> ? never : true;
-const ExponentiableUnitRejectsLargeExponents: ExponentiableUnitRejectsLargeExponents = true;
+type BaseUnitRejectsLargeExponents = { a: 2; b: -4 } extends BaseUnit<2> ? never : true;
+const BaseUnitRejectsLargeExponents: BaseUnitRejectsLargeExponents = true;
 
-type ExponentiableUnitAcceptsCubeRoots = { a: 1; b: 0 } extends ExponentiableUnit<3> ? true : never;
-const ExponentiableUnitAcceptsCubeRoots: ExponentiableUnitAcceptsCubeRoots = true;
+type BaseUnitAcceptsCubeRoots = { a: 1; b: 0 } extends BaseUnit<3> ? true : never;
+const BaseUnitAcceptsCubeRoots: BaseUnitAcceptsCubeRoots = true;
 
-type ExponentiableUnitAllowsAllUnitsFor1 = Unit extends ExponentiableUnit<1> ? true : never;
-const ExponentiableUnitAllowsAllUnitsFor1: ExponentiableUnitAllowsAllUnitsFor1 = true;
+type BaseUnit3RejectsLargeExponents = { a: 3 } extends BaseUnit<3> ? never : true;
+const BaseUnit3RejectsLargeExponents: BaseUnit3RejectsLargeExponents = true;
 
-type ExponentiableUnitAllowsAllUnitsFor0 = Unit extends ExponentiableUnit<0> ? true : never;
-const ExponentiableUnitAllowsAllUnitsFor0: ExponentiableUnitAllowsAllUnitsFor0 = true;
+type BaseUnitAllowsAllUnitsFor1 = Unit extends BaseUnit<1> ? true : never;
+const BaseUnitAllowsAllUnitsFor1: BaseUnitAllowsAllUnitsFor1 = true;
+
+type BaseUnitAllowsAllUnitsFor0 = Unit extends BaseUnit<0> ? true : never;
+const BaseUnitAllowsAllUnitsFor0: BaseUnitAllowsAllUnitsFor0 = true;
 
 // NthRootUnit
 
@@ -70,16 +85,16 @@ const SquareRootingWorks: SquareRootingWorks = true;
 type CubeRootingWorks = IsSame<{ a: 1; b: -1 }, NthRootUnit<{ a: 3; b: -3 }, 3>>;
 const CubeRootingWorks: CubeRootingWorks = true;
 
-// NthRootableUnit
+// RadicandUnit
 
-type NthRootableUnitAcceptsPerfectSquares = { a: 2; b: -4; c: 0 } extends NthRootableUnit<2> ? true : never;
-const NthRootableUnitAcceptsPerfectSquares: NthRootableUnitAcceptsPerfectSquares = true;
+type RadicandUnitAcceptsPerfectSquares = { a: 2; b: -4; c: 0 } extends RadicandUnit<2> ? true : never;
+const RadicandUnitAcceptsPerfectSquares: RadicandUnitAcceptsPerfectSquares = true;
 
-type NthRootableUnitRejectsNonPerfectSquares = { a: 2; b: 1 } extends NthRootableUnit<2> ? never : true;
-const NthRootableUnitRejectsNonPerfectSquares: NthRootableUnitRejectsNonPerfectSquares = true;
+type RadicandUnitRejectsNonPerfectSquares = { a: 2; b: 1 } extends RadicandUnit<2> ? never : true;
+const RadicandUnitRejectsNonPerfectSquares: RadicandUnitRejectsNonPerfectSquares = true;
 
-type NthRootableUnitAcceptsPerfectCubes = { a: 3; b: -3 } extends NthRootableUnit<3> ? true : never;
-const NthRootableUnitAcceptsPerfectCubes: NthRootableUnitAcceptsPerfectCubes = true;
+type RadicandUnitAcceptsPerfectCubes = { a: 3; b: -3 } extends RadicandUnit<3> ? true : never;
+const RadicandUnitAcceptsPerfectCubes: RadicandUnitAcceptsPerfectCubes = true;
 
-type NthRootableUnitRejectsNonPerfectCubes = { a: 3; b: 2 } extends NthRootableUnit<3> ? never : true;
-const NthRootableUnitRejectsNonPerfectCubes: NthRootableUnitRejectsNonPerfectCubes = true;
+type RadicandUnitRejectsNonPerfectCubes = { a: 3; b: 2 } extends RadicandUnit<3> ? never : true;
+const RadicandUnitRejectsNonPerfectCubes: RadicandUnitRejectsNonPerfectCubes = true;

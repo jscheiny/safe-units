@@ -1,10 +1,11 @@
 import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponent";
 import {
+    BaseUnit,
     DivideUnits,
     ExponentiateUnit,
     MultiplyUnits,
-    NthRootableUnit,
     NthRootUnit,
+    RadicandUnit,
     SymbolAndExponent,
     Unit,
     UnitWithSymbols,
@@ -70,14 +71,14 @@ export function divideUnits<L extends Unit, R extends Unit>(
     return multiplyUnits(left, exponentiateUnit(right, -1)) as any;
 }
 
-export function exponentiateUnit<U extends Unit, N extends Exponent>(
+export function exponentiateUnit<U extends BaseUnit<N>, N extends Exponent>(
     unit: UnitWithSymbols<U>,
     power: N,
 ): UnitWithSymbols<ExponentiateUnit<U, N>> {
     return expAndRootImpl(unit, exponent => exponent * power);
 }
 
-export function nthRootUnit<U extends NthRootableUnit<N>, N extends Exponent>(
+export function nthRootUnit<U extends RadicandUnit<N>, N extends Exponent>(
     unit: UnitWithSymbols<U>,
     root: N,
 ): UnitWithSymbols<NthRootUnit<U, N>> {
@@ -92,13 +93,9 @@ function expAndRootImpl(unit: UnitWithSymbols, updateExponent: (exp: Exponent) =
             continue;
         }
         const [symbol, exponent] = symbolAndExponent;
-        const newExponent = updateExponent(exponent);
-        if (isExponent(newExponent)) {
-            if (newExponent !== 0) {
-                result[dimension] = [symbol, newExponent];
-            }
-        } else {
-            throw new Error(ArithmeticError);
+        const newExponent = updateExponent(exponent) as Exponent;
+        if (newExponent !== 0) {
+            result[dimension] = [symbol, newExponent];
         }
     }
     return result;
