@@ -42,10 +42,10 @@ export const SolidAngle: SolidAngle = Base.steradians;
 export const Frequency = Time.inverse();
 export type Frequency = typeof Frequency;
 
-export const FrequencyDrift = Time.toThe(-2);
+export const FrequencyDrift = Time.inverse().squared();
 export type FrequencyDrift = typeof FrequencyDrift;
 
-export const FuelEfficiency = Length.toThe(-2);
+export const FuelEfficiency = Length.inverse().squared();
 export type FuelEfficiency = typeof FuelEfficiency;
 
 export const Wavenumber = Length.inverse();

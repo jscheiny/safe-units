@@ -1,5 +1,13 @@
 import { IsArithmeticError, IsSame } from "../../exponent";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit } from "../types";
+import {
+    DivideUnits,
+    ExponentiableUnit,
+    ExponentiateUnit,
+    MultiplyUnits,
+    NthRootableUnit,
+    NthRootUnit,
+    Unit,
+} from "../types";
 
 // MultiplyUnits
 
@@ -36,6 +44,23 @@ const CubingWorks: CubingWorks = true;
 
 type ExponentiationPropagatesErrors = IsArithmeticError<ExponentiateUnit<{ a: -5; b: 1 }, -2>>;
 const ExponentiationPropagatesErrors: ExponentiationPropagatesErrors = true;
+
+// ExponentiableUnit
+
+type ExponentiableUnitAcceptsSquareRoots = { a: 2; b: 1 } extends ExponentiableUnit<2> ? true : never;
+const ExponentiableUnitAcceptsSquareRoots: ExponentiableUnitAcceptsSquareRoots = true;
+
+type ExponentiableUnitRejectsLargeExponents = { a: 2; b: -3 } extends ExponentiableUnit<2> ? never : true;
+const ExponentiableUnitRejectsLargeExponents: ExponentiableUnitRejectsLargeExponents = true;
+
+type ExponentiableUnitAcceptsCubeRoots = { a: 1; b: 0 } extends ExponentiableUnit<3> ? true : never;
+const ExponentiableUnitAcceptsCubeRoots: ExponentiableUnitAcceptsCubeRoots = true;
+
+type ExponentiableUnitAllowsAllUnitsFor1 = Unit extends ExponentiableUnit<1> ? true : never;
+const ExponentiableUnitAllowsAllUnitsFor1: ExponentiableUnitAllowsAllUnitsFor1 = true;
+
+type ExponentiableUnitAllowsAllUnitsFor0 = Unit extends ExponentiableUnit<0> ? true : never;
+const ExponentiableUnitAllowsAllUnitsFor0: ExponentiableUnitAllowsAllUnitsFor0 = true;
 
 // NthRootUnit
 

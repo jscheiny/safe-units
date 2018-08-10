@@ -1,6 +1,6 @@
-import { Exponent } from "../exponent";
+import { Exponent } from "../exponent/generated/common";
 import { formatUnit } from "./format";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits, Unit, UnitWithSymbols } from "./types";
+import { DivideUnits, ExponentiableUnit, ExponentiateUnit, MultiplyUnits, Unit, UnitWithSymbols } from "./types";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./units";
 
 export class Measure<U extends Unit> {
@@ -81,18 +81,6 @@ export class Measure<U extends Unit> {
         return this.over(other);
     }
 
-    public toThe<N extends Exponent>(power: N): Measure<ExponentiateUnit<U, N>> {
-        return new Measure(Math.pow(this.value, power), exponentiateUnit(this.unit, power));
-    }
-
-    public squared(): Measure<ExponentiateUnit<U, 2>> {
-        return this.toThe(2);
-    }
-
-    public cubed(): Measure<ExponentiateUnit<U, 3>> {
-        return this.toThe(3);
-    }
-
     public inverse(): Measure<ExponentiateUnit<U, -1>> {
         return new Measure(1 / this.value, exponentiateUnit(this.unit, -1));
     }
@@ -146,10 +134,31 @@ export class Measure<U extends Unit> {
     }
 }
 
-export function square<U extends Unit>(measure: Measure<U>): Measure<ExponentiateUnit<U, 2>> {
-    return measure.squared();
+// Measure methods that may or may not be available based on the type parameter.
+export interface Measure<U extends Unit> {
+    squared: U extends ExponentiableUnit<2> ? () => Measure<ExponentiateUnit<U, 2>> : never;
+    cubed: U extends ExponentiableUnit<3> ? () => Measure<ExponentiateUnit<U, 3>> : never;
 }
 
-export function cubic<U extends Unit>(measure: Measure<U>): Measure<ExponentiateUnit<U, 3>> {
-    return measure.cubed();
+Measure.prototype.squared = function(): any {
+    return pow(this, 2);
+};
+
+Measure.prototype.cubed = function(): any {
+    return pow(this, 3);
+};
+
+export function square<U extends ExponentiableUnit<2>>(measure: Measure<U>): Measure<ExponentiateUnit<U, 2>> {
+    return pow(measure, 2);
+}
+
+export function cubic<U extends ExponentiableUnit<3>>(measure: Measure<U>): Measure<ExponentiateUnit<U, 3>> {
+    return pow(measure, 3);
+}
+
+export function pow<U extends ExponentiableUnit<N>, N extends Exponent>(
+    measure: Measure<U>,
+    power: N,
+): Measure<ExponentiateUnit<U, N>> {
+    return Measure.unsafeConstruct(Math.pow(measure.value, power), exponentiateUnit(measure.getUnit(), power));
 }

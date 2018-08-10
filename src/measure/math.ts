@@ -1,9 +1,10 @@
-import { Exponent } from "../exponent";
 import { Dimensionless, Length, PlaneAngle } from "../quantity/quantities";
 import { radians } from "../unit/base";
-import { Measure } from "./measure";
-import { DivideUnits, ExponentiateUnit, MultiplyUnits, NthRootableUnit, NthRootUnit, Unit } from "./types";
+import { Measure, pow } from "./measure";
+import { DivideUnits, MultiplyUnits, NthRootableUnit, NthRootUnit, Unit } from "./types";
 import { nthRootUnit } from "./units";
+
+export { pow };
 
 export const abs = wrapUnary(Math.abs);
 export const acos = wrapInverseTrig(Math.acos);
@@ -23,10 +24,6 @@ export const trunc = wrapUnary(Math.trunc);
 
 export function atan2(y: Length, x: Length): PlaneAngle {
     return Measure.of(Math.atan2(y.value, x.value), radians);
-}
-
-export function pow<U extends Unit, Y extends Exponent>(x: Measure<U>, y: Y): Measure<ExponentiateUnit<U, Y>> {
-    return x.toThe(y);
 }
 
 export function sqrt<U extends NthRootableUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>> {
