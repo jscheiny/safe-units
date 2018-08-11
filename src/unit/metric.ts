@@ -1,5 +1,5 @@
 import { Measure } from "../measure/measure";
-import { Unit } from "../measure/types";
+import { Unit } from "../measure/unitTypeArithmetic";
 import * as Quantity from "../quantity/quantities";
 import { amperes, candela, kilograms, meters, moles, seconds, steradians } from "./base";
 

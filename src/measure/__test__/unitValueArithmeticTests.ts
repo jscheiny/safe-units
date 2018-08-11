@@ -1,7 +1,7 @@
-import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "../units";
+import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "../unitValueArithmetic";
 import { addSymbols } from "./testUtils";
 
-describe("Units", () => {
+describe("Unit value arithmetic", () => {
     const x = dimension("x");
     const y = dimension("y");
 

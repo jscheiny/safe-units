@@ -1,8 +1,16 @@
 import { Dimensionless, Length, PlaneAngle } from "../quantity/quantities";
 import { radians } from "../unit/base";
 import { Measure, pow } from "./measure";
-import { DivideUnits, DivisorUnit, MultiplicandUnit, MultiplyUnits, NthRootUnit, RadicandUnit, Unit } from "./types";
-import { nthRootUnit } from "./units";
+import {
+    DivideUnits,
+    DivisorUnit,
+    MultiplicandUnit,
+    MultiplyUnits,
+    NthRootUnit,
+    RadicandUnit,
+    Unit,
+} from "./unitTypeArithmetic";
+import { nthRootUnit } from "./unitValueArithmetic";
 
 export { pow };
 

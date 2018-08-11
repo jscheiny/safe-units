@@ -1,4 +1,4 @@
-import { SymbolAndExponent, Unit, UnitWithSymbols } from "./types";
+import { SymbolAndExponent, Unit, UnitWithSymbols } from "./unitTypeArithmetic";
 
 export function formatUnit(unit: UnitWithSymbols<Unit>): string {
     const sorted = sortDimensions(unit);

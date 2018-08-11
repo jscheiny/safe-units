@@ -1,5 +1,5 @@
 import { Exponent } from "../../exponent";
-import { Unit, UnitWithSymbols } from "../types";
+import { Unit, UnitWithSymbols } from "../unitTypeArithmetic";
 
 export function addSymbols<U extends Unit>(unit: U): UnitWithSymbols<U> {
     const result: UnitWithSymbols = {};

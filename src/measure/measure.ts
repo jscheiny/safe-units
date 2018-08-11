@@ -1,4 +1,4 @@
-import { Exponent } from "../exponent/generated/common";
+import { Exponent } from "../exponent";
 import { formatUnit } from "./format";
 import {
     BaseUnit,
@@ -9,8 +9,8 @@ import {
     MultiplyUnits,
     Unit,
     UnitWithSymbols,
-} from "./types";
-import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./units";
+} from "./unitTypeArithmetic";
+import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./unitValueArithmetic";
 
 export class Measure<U extends Unit> {
     // Construction functions
