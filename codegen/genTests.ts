@@ -15,7 +15,7 @@ export function genOperatorTests(spec: OperatorSpec): string {
 function genTestsImports(spec: OperatorSpec): string[] {
     return [
         ...genImports(
-            { symbols: ["IsArithmeticError", "IsSame"], source: "../common" },
+            { symbols: ["IsArithmeticError", "IsSame"], source: "../../common" },
             { symbols: [genUncurriedTypeName(spec)], source: `../${spec.fileNamePrefix}` },
         ),
         "",
