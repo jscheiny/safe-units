@@ -1,6 +1,7 @@
-import { Measure, seconds, liters, speedOfLight } from "safe-units";
+import { Measure, seconds, liters, speedOfLight, square } from "safe-units";
 import { acres } from "../../src/unit/common";
 import { newtons } from "../../src/unit/metric";
+import { cubic } from "../../src/measure/measure";
 
 // ExpectType Measure<{ data: 1; }>
 Measure.dimension("data");
@@ -20,6 +21,12 @@ Measure.of(1000, newtons).over(Measure.of(0.3, speedOfLight));
 // $ExpectType Measure<Pick<{ time: 1; length: 3; }, "time" | "length">>
 volume.times(time);
 
+// $ExpectError
+volume.times(volume);
+
+// $ExpectError
+volume.over(volume.inverse());
+
 // $ExpectType Measure<Pick<{ time: -1; length: 3; }, "time" | "length">>
 volume.over(time);
 
@@ -32,17 +39,32 @@ volume.inverse();
 // $ExpectType never
 volume.squared;
 
+// $ExpectError
+square(volume);
+
 // $ExpectType never
 volume.cubed;
+
+// $ExpectError
+cubic(volume);
 
 // $ExpectType () => Measure<Pick<{ time: 2; }, "time">>
 time.squared;
 
+square(time);
+
 // $ExpectType () => Measure<Pick<{ time: 3; }, "time">>
 time.cubed;
+
+cubic(time);
 
 // $ExpectType () => Measure<Pick<{ length: 4; }, "length">>
 area.squared;
 
+square(area);
+
 // $ExpectType never
 area.cubed;
+
+// $ExpectError
+cubic(area);
