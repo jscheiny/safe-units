@@ -1,6 +1,7 @@
+import { ArithmeticError } from "./common";
 import { AddExponents } from "./generated/addition";
-import { ArithmeticError, Exponent } from "./generated/common";
 import { DivideExponents } from "./generated/division";
+import { Exponent } from "./generated/exponent";
 import { MultiplyExponents } from "./generated/multiplication";
 
 export type SubtractExponents<L extends Exponent, R extends Exponent> = AddExponents<L, Negative<R>>;

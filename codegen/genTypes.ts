@@ -16,7 +16,13 @@ export function genOperatorTypes(spec: OperatorSpec): string {
 }
 
 function genTypesImports(): string[] {
-    return [...genImports({ symbols: ["ArithmeticError", "Exponent"], source: "./common" }), ""];
+    return [
+        ...genImports(
+            { symbols: ["ArithmeticError"], source: "../common" },
+            { symbols: ["Exponent"], source: "./exponent" },
+        ),
+        "",
+    ];
 }
 
 function genUncurriedType(spec: OperatorSpec, exponents: number[]): string[] {

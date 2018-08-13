@@ -1,5 +1,6 @@
+import { IsSame } from "../common";
 import { AddendOf, MultiplicandOf, ProductOf } from "../exponentArithmetic";
-import { Exponent, IsSame } from "../generated/common";
+import { Exponent } from "../generated/exponent";
 
 type AddendOf3Works = IsSame<-5 | -4 | -3 | -2 | -1 | 0 | 1 | 2, AddendOf<3>>;
 const AddendOf3Works: AddendOf3Works = true;
