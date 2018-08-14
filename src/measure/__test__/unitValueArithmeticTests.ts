@@ -32,14 +32,6 @@ describe("Unit value arithmetic", () => {
             expect(multiplyUnits(left, right)).toEqual({});
         });
 
-        it("should throw an error when an exponent is out of bounds", () => {
-            const positive = addSymbols({ x: 3 });
-            expect(() => multiplyUnits(positive, positive)).toThrow();
-
-            const negative = addSymbols({ x: -3 });
-            expect(() => multiplyUnits(negative, negative)).toThrow();
-        });
-
         it("should handle explicitly undefined and 0 exponents", () => {
             const left = addSymbols({ x: 2, y: undefined });
             const right = addSymbols({ x: undefined, y: 0, z: undefined });

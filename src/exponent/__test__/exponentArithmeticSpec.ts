@@ -8,6 +8,9 @@ const AddendOf3Works: AddendOf3Works = true;
 type AddendOf0Works = IsSame<Exponent, AddendOf<0>>;
 const AddendOf0Works: AddendOf0Works = true;
 
+type MultiplicandOf2Works = IsSame<-2 | -1 | 0 | 1 | 2, MultiplicandOf<2>>;
+const MultiplicandOf2Works: MultiplicandOf2Works = true;
+
 type MultiplicandOf3Works = IsSame<-1 | 0 | 1, MultiplicandOf<3>>;
 const MultiplicandOf3Works: MultiplicandOf3Works = true;
 

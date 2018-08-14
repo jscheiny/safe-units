@@ -17,10 +17,9 @@ function sortDimensions(unit: UnitWithSymbols<Unit>): SymbolAndExponent[] {
             continue;
         }
         const [, exponent] = symbolAndExponent;
-        if (exponent === 0) {
-            continue;
+        if (exponent !== 0) {
+            dimensions.push(symbolAndExponent);
         }
-        dimensions.push(symbolAndExponent);
     }
 
     dimensions.sort(([leftSymbol], [rightSymbol]) => {
