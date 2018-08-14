@@ -33,7 +33,7 @@ describe("Unit value arithmetic", () => {
         });
 
         it("should handle explicitly undefined and 0 exponents", () => {
-            const left = addSymbols({ x: 2, y: undefined });
+            const left = addSymbols({ w: 0, x: 2, y: undefined });
             const right = addSymbols({ x: undefined, y: 0, z: undefined });
             expect(multiplyUnits(left, right)).toEqual(addSymbols({ x: 2 }));
         });

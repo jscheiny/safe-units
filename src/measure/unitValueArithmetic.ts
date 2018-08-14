@@ -23,7 +23,7 @@ export function multiplyUnits<L extends Unit, R extends Unit>(
     const result: UnitWithSymbols = {};
     for (const dimension in left) {
         const symbolAndExponent = copySymbolAndExponent(left, dimension);
-        if (symbolAndExponent !== undefined) {
+        if (symbolAndExponent !== undefined && symbolAndExponent[1] !== 0) {
             result[dimension] = symbolAndExponent;
         }
     }
@@ -36,15 +36,13 @@ export function multiplyUnits<L extends Unit, R extends Unit>(
         const resultValue: SymbolAndExponent | undefined = result[dimension];
         if (resultValue !== undefined) {
             const newExponent = (resultValue[1] + exponent) as Exponent;
-            resultValue[1] = newExponent;
-        } else {
+            if (newExponent === 0) {
+                delete result[dimension];
+            } else {
+                resultValue[1] = newExponent;
+            }
+        } else if (exponent !== 0) {
             result[dimension] = symbolAndExponent;
-        }
-    }
-    for (const dimension in result) {
-        const value = result[dimension];
-        if (value !== undefined && value[1] === 0) {
-            delete result[dimension];
         }
     }
     return result as any;
