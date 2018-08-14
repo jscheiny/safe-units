@@ -1,4 +1,4 @@
-import { ArithmeticError, Exponent, MaxExponent, MinExponent } from "../exponent";
+import { Exponent } from "../exponent";
 import {
     BaseUnit,
     DivideUnits,
@@ -35,12 +35,8 @@ export function multiplyUnits<L extends Unit, R extends Unit>(
         const [, exponent] = symbolAndExponent;
         const resultValue: SymbolAndExponent | undefined = result[dimension];
         if (resultValue !== undefined) {
-            const newExponent = resultValue[1] + exponent;
-            if (isExponent(newExponent)) {
-                resultValue[1] = newExponent;
-            } else {
-                throw new Error(ArithmeticError);
-            }
+            const newExponent = (resultValue[1] + exponent) as Exponent;
+            resultValue[1] = newExponent;
         } else {
             result[dimension] = symbolAndExponent;
         }
@@ -67,7 +63,6 @@ export function divideUnits<L extends Unit, R extends Unit>(
     left: UnitWithSymbols<L>,
     right: UnitWithSymbols<R>,
 ): UnitWithSymbols<DivideUnits<L, R>> {
-    // TODO Remove cast to any somehow
     return multiplyUnits(left, exponentiateUnit(right, -1)) as any;
 }
 
@@ -99,8 +94,4 @@ function expAndRootImpl(unit: UnitWithSymbols, updateExponent: (exp: Exponent) =
         }
     }
     return result;
-}
-
-function isExponent(exp: number): exp is Exponent {
-    return exp >= MinExponent && exp <= MaxExponent && Math.floor(exp) === exp;
 }

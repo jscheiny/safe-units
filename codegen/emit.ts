@@ -1,5 +1,5 @@
 import { exists, mkdir, writeFile } from "fs";
-import { genCommonTypes } from "./genCommon";
+import { genExponentType } from "./genExponent";
 import { genOperatorTests } from "./genTests";
 import { genOperatorTypes } from "./genTypes";
 import { codeGenSpec } from "./spec";
@@ -27,7 +27,7 @@ export function emit(callback?: () => void): void {
 
 export function getEmitPlans(): EmitPlan[] {
     const { operators, ...common } = codeGenSpec;
-    const emits: EmitPlan[] = [{ path: `${PATH_PREFIX}/exponent.ts`, source: genCommonTypes(codeGenSpec) }];
+    const emits: EmitPlan[] = [{ path: `${PATH_PREFIX}/exponent.ts`, source: genExponentType(codeGenSpec) }];
     operators.forEach(operator => {
         const operatorSpec = { ...operator, ...common };
         const { fileNamePrefix } = operator;

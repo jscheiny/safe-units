@@ -1,5 +1,4 @@
 export type ArithmeticError = "UnitError" & "Arithmetic out of bounds";
-export const ArithmeticError = "Arithmetic out of bounds";
 
 export type IsArithmeticError<T> = T extends ArithmeticError ? true : false;
 

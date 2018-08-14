@@ -1,4 +1,4 @@
-import { Exponent, IsArithmeticError, IsSame } from "../../exponent";
+import { Exponent, IsSame } from "../../exponent";
 import {
     BaseUnit,
     DivideUnits,
@@ -53,9 +53,6 @@ const SquaringWorks: SquaringWorks = true;
 
 type CubingWorks = IsSame<{ a: 3 }, ExponentiateUnit<{ a: 1 }, 3>>;
 const CubingWorks: CubingWorks = true;
-
-type ExponentiationPropagatesErrors = IsArithmeticError<ExponentiateUnit<{ a: -5; b: 1 }, -2>>;
-const ExponentiationPropagatesErrors: ExponentiationPropagatesErrors = true;
 
 // BaseUnit
 
