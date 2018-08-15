@@ -1,6 +1,6 @@
-import { SymbolAndExponent, Unit, UnitWithSymbols } from "./unitTypeArithmetic";
+import { SymbolAndExponent, UnitWithSymbols } from "./unitTypeArithmetic";
 
-export function formatUnit(unit: UnitWithSymbols<Unit>): string {
+export function formatUnit(unit: UnitWithSymbols): string {
     const sorted = sortDimensions(unit);
     if (sorted.length === 0) {
         return "";
@@ -9,7 +9,7 @@ export function formatUnit(unit: UnitWithSymbols<Unit>): string {
     return " " + sorted.map(formatDimension).join(" * ");
 }
 
-function sortDimensions(unit: UnitWithSymbols<Unit>): SymbolAndExponent[] {
+function sortDimensions(unit: UnitWithSymbols): SymbolAndExponent[] {
     const dimensions: SymbolAndExponent[] = [];
     for (const dimension in unit) {
         const symbolAndExponent = unit[dimension];
