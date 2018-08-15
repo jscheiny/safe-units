@@ -53,8 +53,8 @@ export type NthRootUnit<U extends Unit, N extends Exponent> = StripZeroes<
 >;
 
 /** A type that is assignable from all units whose Nth root does not produce an error. */
-export type RadicandUnit<D extends Exponent> = Partial<{
-    [dimension: string]: ProductOf<D>;
+export type RadicandUnit<N extends Exponent> = Partial<{
+    [dimension: string]: ProductOf<N>;
 }>;
 
 // Utility types
@@ -65,4 +65,4 @@ type StripZeroes<U extends Unit> = Pick<U, NonZeroKeys<U>>;
 type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]> extends 0 ? never : Dim }[keyof U];
 
 /** Get the exponent at a given dimension of a unit, or 0 if that dimension is undefined */
-type GetExponent<U extends Unit, K> = K extends keyof Unit ? (undefined extends U[K] ? 0 : NonNullable<U[K]>) : 0;
+type GetExponent<U extends Unit, D> = D extends keyof Unit ? (undefined extends U[D] ? 0 : NonNullable<U[D]>) : 0;

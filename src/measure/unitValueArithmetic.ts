@@ -11,8 +11,7 @@ import {
     UnitWithSymbols,
 } from "./unitTypeArithmetic";
 
-export function dimension<D extends string>(dim: D, symbol?: string): UnitWithSymbols<{ [K in D]: 1 }> {
-    // TODO Remove cast to any somehow
+export function dimension<Dim extends string>(dim: Dim, symbol?: string): UnitWithSymbols<{ [D in Dim]: 1 }> {
     return { [dim]: [symbol || dim, 1] } as any;
 }
 
