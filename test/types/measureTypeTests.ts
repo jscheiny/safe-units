@@ -1,7 +1,4 @@
-import { Measure, seconds, liters, speedOfLight, square } from "safe-units";
-import { acres } from "../../src/unit/common";
-import { newtons } from "../../src/unit/metric";
-import { cubic } from "../../src/measure/measure";
+import { acres, cubic, liters, Measure, newtons, seconds, speedOfLight, square } from "safe-units";
 
 // ExpectType Measure<{ data: 1; }>
 Measure.dimension("data");
