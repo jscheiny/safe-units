@@ -14,21 +14,21 @@ import { nthRootUnit } from "./unitValueArithmetic";
 
 export { pow };
 
-export const abs = wrapUnary(Math.abs);
-export const acos = wrapInverseTrig(Math.acos);
-export const asin = wrapInverseTrig(Math.asin);
-export const atan = wrapInverseTrig(Math.atan);
-export const ceil = wrapUnary(Math.ceil);
-export const cos = wrapTrig(Math.cos);
-export const floor = wrapUnary(Math.floor);
-export const fround = wrapUnary(Math.fround);
+export const abs = wrapUnaryFn(Math.abs);
+export const acos = wrapInverseTrigFn(Math.acos);
+export const asin = wrapInverseTrigFn(Math.asin);
+export const atan = wrapInverseTrigFn(Math.atan);
+export const ceil = wrapUnaryFn(Math.ceil);
+export const cos = wrapTrigFn(Math.cos);
+export const floor = wrapUnaryFn(Math.floor);
+export const fround = wrapUnaryFn(Math.fround);
 export const hypot = warpNary(Math.hypot);
 export const max = warpNary(Math.max);
 export const min = warpNary(Math.min);
-export const round = wrapUnary(Math.round);
-export const sin = wrapTrig(Math.sin);
-export const tan = wrapTrig(Math.tan);
-export const trunc = wrapUnary(Math.trunc);
+export const round = wrapUnaryFn(Math.round);
+export const sin = wrapTrigFn(Math.sin);
+export const tan = wrapTrigFn(Math.tan);
+export const trunc = wrapUnaryFn(Math.trunc);
 
 export function atan2(y: Length, x: Length): PlaneAngle {
     return Measure.of(Math.atan2(y.value, x.value), radians);
@@ -72,15 +72,15 @@ export function sum<U extends Unit>(first: Measure<U>, ...rest: Array<Measure<U>
     return result;
 }
 
-function wrapUnary(f: (x: number) => number): <U extends Unit>(x: Measure<U>) => Measure<U> {
+function wrapUnaryFn(f: (x: number) => number): <U extends Unit>(x: Measure<U>) => Measure<U> {
     return x => Measure.of(f(x.value), x.normalized());
 }
 
-function wrapTrig(f: (x: number) => number): (angle: PlaneAngle) => Dimensionless {
+function wrapTrigFn(f: (x: number) => number): (angle: PlaneAngle) => Dimensionless {
     return angle => Measure.dimensionless(f(angle.value));
 }
 
-function wrapInverseTrig(f: (x: number) => number): (angle: Dimensionless) => PlaneAngle {
+function wrapInverseTrigFn(f: (x: number) => number): (angle: Dimensionless) => PlaneAngle {
     return angle => Measure.of(f(angle.value), radians);
 }
 
