@@ -17,20 +17,20 @@ describe("Measures", () => {
         it("should construct from a number of and a unit", () => {
             const measure = Measure.of(10, mps2);
             expect(measure.value).toBe(10);
-            expect(measure.getUnit()).toEqual(mps2.getUnit());
+            expect(measure.unit).toEqual(mps2.unit);
         });
 
         it("should construct from a number and another measure", () => {
             const kilometer = Measure.of(1000, meter);
             const measure = Measure.of(5.2, kilometer);
             expect(measure.value).toBe(5200);
-            expect(measure.getUnit()).toEqual(meter.getUnit());
+            expect(measure.unit).toEqual(meter.unit);
         });
 
         it("should construct dimensionless values", () => {
             const dimensionless = Measure.dimensionless(3);
             expect(dimensionless.value).toBe(3);
-            expect(dimensionless.getUnit()).toEqual({});
+            expect(dimensionless.unit).toEqual({});
         });
     });
 
@@ -129,28 +129,28 @@ describe("Measures", () => {
 
     describe("symbols", () => {
         it("should assign a symbol via .of()", () => {
-            expect(Measure.of(1000, meter, "km").getSymbol()).toBe("km");
+            expect(Measure.of(1000, meter, "km").symbol).toBe("km");
         });
 
         it("should copy assign a symbol via .withSymbol()", () => {
             const original = Measure.of(1000, meter);
             const result = original.withSymbol("km");
             expect(result).not.toBe(original);
-            expect(original.getSymbol()).toBeUndefined();
-            expect(result.getSymbol()).toBe("km");
+            expect(original.symbol).toBeUndefined();
+            expect(result.symbol).toBe("km");
         });
 
         it("should not pass along symbols through operations", () => {
             const km = Measure.of(1000, meter.squared()).withSymbol("km2");
             const dm = Measure.of(10, meter.squared()).withSymbol("dm2");
-            expect(km.normalized().getSymbol()).toBeUndefined();
-            expect(km.negate().getSymbol()).toBeUndefined();
-            expect(km.squared().getSymbol()).toBeUndefined();
-            expect(km.inverse().getSymbol()).toBeUndefined();
-            expect(km.plus(dm).getSymbol()).toBeUndefined();
-            expect(km.minus(dm).getSymbol()).toBeUndefined();
-            expect(km.times(dm).getSymbol()).toBeUndefined();
-            expect(km.over(dm).getSymbol()).toBeUndefined();
+            expect(km.normalized().symbol).toBeUndefined();
+            expect(km.negate().symbol).toBeUndefined();
+            expect(km.squared().symbol).toBeUndefined();
+            expect(km.inverse().symbol).toBeUndefined();
+            expect(km.plus(dm).symbol).toBeUndefined();
+            expect(km.minus(dm).symbol).toBeUndefined();
+            expect(km.times(dm).symbol).toBeUndefined();
+            expect(km.over(dm).symbol).toBeUndefined();
         });
     });
 
