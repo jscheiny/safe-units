@@ -35,11 +35,11 @@ export function atan2(y: Length, x: Length): PlaneAngle {
 }
 
 export function sqrt<U extends RadicandUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>> {
-    return Measure.unsafeConstruct(Math.sqrt(x.value), nthRootUnit(x.getUnit(), 2));
+    return Measure.unsafeConstruct(Math.sqrt(x.value), nthRootUnit(x.unit, 2));
 }
 
 export function cbrt<U extends RadicandUnit<3>>(x: Measure<U>): Measure<NthRootUnit<U, 3>> {
-    return Measure.unsafeConstruct(Math.cbrt(x.value), nthRootUnit(x.getUnit(), 3));
+    return Measure.unsafeConstruct(Math.cbrt(x.value), nthRootUnit(x.unit, 3));
 }
 
 export function add<U extends Unit>(left: Measure<U>, right: Measure<U>): Measure<U> {

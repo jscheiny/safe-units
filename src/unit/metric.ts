@@ -25,7 +25,7 @@ export const luxes: Quantity.Illuminance = lumens.per(meters.squared()).withSymb
 
 function createPrefix(symbolPrefix: string, multiplier: number): <U extends Unit>(unit: Measure<U>) => Measure<U> {
     return unit => {
-        const symbol = unit.getSymbol();
+        const { symbol } = unit;
         const newSymbol = symbol !== undefined ? `${symbolPrefix}${symbol}` : undefined;
         return Measure.of(multiplier, unit, newSymbol);
     };

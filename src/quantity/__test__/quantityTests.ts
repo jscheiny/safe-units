@@ -17,7 +17,7 @@ describe("Quantities", () => {
                     return;
                 }
                 try {
-                    expect(a.getUnit()).not.toEqual(b.getUnit());
+                    expect(a.unit).not.toEqual(b.unit);
                 } catch (e) {
                     console.log(`Quantities '${aName}' and '${bName}' are the same.`);
                     throw e;
