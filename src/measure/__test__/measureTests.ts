@@ -143,7 +143,6 @@ describe("Measures", () => {
         it("should not pass along symbols through operations", () => {
             const km = Measure.of(1000, meter.squared()).withSymbol("km2");
             const dm = Measure.of(10, meter.squared()).withSymbol("dm2");
-            expect(km.normalized().symbol).toBeUndefined();
             expect(km.negate().symbol).toBeUndefined();
             expect(km.squared().symbol).toBeUndefined();
             expect(km.inverse().symbol).toBeUndefined();

@@ -13,6 +13,7 @@ import {
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./unitValueArithmetic";
 
 export interface Numeric<N> {
+    guard(value: any): value is N;
     one(): N;
     neg(value: N): N;
     add(left: N, right: N): N;
@@ -44,9 +45,8 @@ export interface GenericMeasure<U extends Unit, N> {
     // Methods
     squared: U extends BaseUnit<2> ? () => GenericMeasure<ExponentiateUnit<U, 2>, N> : never;
     cubed: U extends BaseUnit<3> ? () => GenericMeasure<ExponentiateUnit<U, 3>, N> : never;
-    pow<E extends Exponent>(exponent: E): GenericMeasure<ExponentiateUnit<U, E>, N>;
+    pow<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<ExponentiateUnit<U, E>, N> : never;
     withSymbol(symbol: String): GenericMeasure<U, N>;
-    normalized(): GenericMeasure<U, N>;
     plus(other: GenericMeasure<U, N>): GenericMeasure<U, N>;
     minus(other: GenericMeasure<U, N>): GenericMeasure<U, N>;
     negate(): GenericMeasure<U, N>;
@@ -56,6 +56,7 @@ export interface GenericMeasure<U extends Unit, N> {
     per<V extends DivisorUnit<U>>(other: GenericMeasure<V, N>): GenericMeasure<DivideUnits<U, V>, N>;
     inverse(): GenericMeasure<ExponentiateUnit<U, -1>, N>;
     reciprocal(): GenericMeasure<ExponentiateUnit<U, -1>, N>;
+    unsafeMap(fn: (value: N) => N): GenericMeasure<U, N>;
     isLessThan(other: GenericMeasure<U, N>): boolean;
     isLessThanOrEqualTo(other: GenericMeasure<U, N>): boolean;
     isEqualTo(other: GenericMeasure<U, N>): boolean;
@@ -82,10 +83,6 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
 
         // Arithmetic
 
-        public normalized(): GenericMeasure<U, N> {
-            return new InternalMeasure(num.one(), this.unit);
-        }
-
         public plus(other: GenericMeasure<U, N>): GenericMeasure<U, N> {
             return new InternalMeasure(num.add(this.value, other.value), this.unit);
         }
@@ -99,7 +96,7 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
         }
 
         public scale(value: N | GenericMeasure<{}, N>): GenericMeasure<U, N> {
-            const numericValue: N = value instanceof InternalMeasure ? value.value : value;
+            const numericValue = num.guard(value) ? value : value.value;
             return new InternalMeasure(num.mult(numericValue, this.value), this.unit);
         }
 
@@ -117,7 +114,9 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
             return this.over(other);
         }
 
-        public pow<E extends Exponent>(power: E): GenericMeasure<ExponentiateUnit<U, E>, N> {
+        public pow<E extends Exponent>(
+            power: E,
+        ): U extends BaseUnit<E> ? GenericMeasure<ExponentiateUnit<U, E>, N> : never {
             return new InternalMeasure(num.pow(this.value, power), exponentiateUnit(this.unit as any, power)) as any;
         }
 
@@ -127,6 +126,10 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
 
         public reciprocal(): GenericMeasure<ExponentiateUnit<U, -1>, N> {
             return this.inverse();
+        }
+
+        public unsafeMap(fn: (value: N) => N): GenericMeasure<U, N> {
+            return new InternalMeasure(fn(this.value), this.unit);
         }
 
         // Comparisons

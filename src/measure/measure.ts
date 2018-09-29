@@ -5,6 +5,7 @@ import { exponentiateUnit } from "./unitValueArithmetic";
 
 export type Measure<U extends Unit> = GenericMeasure<U, number>;
 export const Measure = createMeasureType({
+    guard: (value): value is number => typeof value === "number",
     one: () => 1,
     neg: x => -x,
     add: (x, y) => x + y,
