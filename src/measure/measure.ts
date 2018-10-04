@@ -1,7 +1,5 @@
-import { Exponent } from "../exponent";
 import { createMeasureType, GenericMeasure } from "./genericMeasure";
-import { BaseUnit, ExponentiateUnit, Unit } from "./unitTypeArithmetic";
-import { exponentiateUnit } from "./unitValueArithmetic";
+import { Unit } from "./unitTypeArithmetic";
 
 export type Measure<U extends Unit> = GenericMeasure<U, number>;
 export const Measure = createMeasureType({
@@ -21,18 +19,3 @@ export const Measure = createMeasureType({
     gt: (x, y) => x > y,
     format: x => `${x}`,
 });
-
-export function square<U extends BaseUnit<2>>(measure: Measure<U>): Measure<ExponentiateUnit<U, 2>> {
-    return pow(measure, 2);
-}
-
-export function cubic<U extends BaseUnit<3>>(measure: Measure<U>): Measure<ExponentiateUnit<U, 3>> {
-    return pow(measure, 3);
-}
-
-export function pow<U extends BaseUnit<N>, N extends Exponent>(
-    measure: Measure<U>,
-    power: N,
-): Measure<ExponentiateUnit<U, N>> {
-    return Measure.unsafeConstruct(Math.pow(measure.value, power), exponentiateUnit(measure.unit, power));
-}
