@@ -1,7 +1,7 @@
 import { Measure } from "../measure/measure";
 import { Unit } from "../measure/unitTypeArithmetic";
 import * as Quantity from "../quantity/quantities";
-import { amperes, candela, kilograms, meters, moles, seconds, steradians } from "./base";
+import { amperes, candelas, kilograms, meters, moles, seconds, steradians } from "./base";
 
 export const hertz: Quantity.Frequency = seconds.inverse().withSymbol("Hz");
 export const newtons: Quantity.Force = kilograms.times(meters.per(seconds.squared())).withSymbol("N");
@@ -18,7 +18,7 @@ export const webers: Quantity.MagneticFlux = joules.per(amperes).withSymbol("Wb"
 export const teslas: Quantity.MagneticFluxDensity = volts.times(seconds.per(meters.squared())).withSymbol("T");
 export const sieverts: Quantity.RadiationDose = joules.per(kilograms).withSymbol("Sv");
 export const katals: Quantity.CatalyticActivity = moles.per(seconds).withSymbol("kat");
-export const lumens: Quantity.LuminousFlux = candela.times(steradians).withSymbol("lm");
+export const lumens: Quantity.LuminousFlux = candelas.times(steradians).withSymbol("lm");
 export const luxes: Quantity.Illuminance = lumens.per(meters.squared()).withSymbol("lx");
 
 // Prefixes

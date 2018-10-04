@@ -1,4 +1,4 @@
-import { cubic, Measure, pow, square } from "../measure";
+import { Measure } from "../measure";
 import { addSymbols } from "./testUtils";
 
 describe("Measures", () => {
@@ -77,11 +77,10 @@ describe("Measures", () => {
 
             expect(value.inverse()).toEqual(Measure.of(0.1, meter.inverse()));
             expect(value.reciprocal()).toEqual(Measure.of(0.1, meter.inverse()));
-            expect(pow(value, 0)).toEqual(Measure.dimensionless(1));
-            expect(pow(value, 1)).toEqual(Measure.of(10, meter));
+            expect(value.pow(0)).toEqual(Measure.dimensionless(1));
+            expect(value.pow(1)).toEqual(Measure.of(10, meter));
             expect(value.squared()).toEqual(Measure.of(100, meter.squared()));
-            expect(square(value)).toEqual(Measure.of(100, meter.squared()));
-            expect(cubic(value)).toEqual(Measure.of(1000, meter.cubed()));
+            expect(value.cubed()).toEqual(Measure.of(1000, meter.cubed()));
         });
     });
 
