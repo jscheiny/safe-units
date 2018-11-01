@@ -1,10 +1,12 @@
+import { GenericMeasure } from "../measure/genericMeasure";
 import { Measure } from "../measure/measure";
 import * as Base from "../unit/base";
 
 // Dimensionless
 
 /** A measure without any unit */
-export const Dimensionless = Measure.dimensionless(1);
+// HACKHACK: Explicitly type this so we can import GenericMeasure and avoid absolute paths in the generated typings.
+export const Dimensionless: GenericMeasure<{}, number> = Measure.dimensionless(1);
 export type Dimensionless = typeof Dimensionless;
 
 // Base units

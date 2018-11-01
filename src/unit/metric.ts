@@ -1,5 +1,6 @@
+import { Exponent } from "../exponent";
+import { GenericMeasure } from "../measure/genericMeasure";
 import { Measure } from "../measure/measure";
-import { Unit } from "../measure/unitTypeArithmetic";
 import * as Quantity from "../quantity/quantities";
 import { amperes, candelas, kilograms, meters, moles, seconds, steradians } from "./base";
 
@@ -23,7 +24,14 @@ export const luxes: Quantity.Illuminance = lumens.per(meters.squared()).withSymb
 
 // Prefixes
 
-function createPrefix(symbolPrefix: string, multiplier: number): <U extends Unit>(unit: Measure<U>) => Measure<U> {
+// HACKHACK: Many of the typings here could be made more simple but instead use their base types to avoid absolute paths
+// in the generated typings.
+function createPrefix(
+    symbolPrefix: string,
+    multiplier: number,
+): <U extends Partial<{ [dimension: string]: Exponent }>>(
+    unit: GenericMeasure<U, number>,
+) => GenericMeasure<U, number> {
     return unit => {
         const { symbol } = unit;
         const newSymbol = symbol !== undefined ? `${symbolPrefix}${symbol}` : undefined;

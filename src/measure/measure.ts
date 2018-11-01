@@ -1,8 +1,8 @@
-import { createMeasureType, GenericMeasure } from "./genericMeasure";
+import { createMeasureType, GenericMeasure, GenericMeasureFactory } from "./genericMeasure";
 import { Unit } from "./unitTypeArithmetic";
 
 export type Measure<U extends Unit> = GenericMeasure<U, number>;
-export const Measure = createMeasureType({
+export const Measure: GenericMeasureFactory<number> = createMeasureType({
     guard: (value): value is number => typeof value === "number",
     one: () => 1,
     neg: x => -x,
