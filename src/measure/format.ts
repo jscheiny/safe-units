@@ -1,35 +1,23 @@
 import { SymbolAndExponent, UnitWithSymbols } from "./unitTypeArithmetic";
 
 export function formatUnit(unit: UnitWithSymbols): string {
-    const sorted = sortDimensions(unit);
-    if (sorted.length === 0) {
-        return "";
-    }
-
-    return " " + sorted.map(formatDimension).join(" * ");
+    const formatted = Object.keys(unit)
+        .map(dimension => unit[dimension])
+        .filter(isDimensionPresent)
+        .sort(orderDimensions)
+        .map(formatDimension);
+    return formatted.length === 0 ? "" : " " + formatted.join(" * ");
 }
 
-function sortDimensions(unit: UnitWithSymbols): SymbolAndExponent[] {
-    const dimensions: SymbolAndExponent[] = [];
-    for (const dimension in unit) {
-        const symbolAndExponent = unit[dimension];
-        if (symbolAndExponent === undefined) {
-            continue;
-        }
-        const [, exponent] = symbolAndExponent;
-        if (exponent !== 0) {
-            dimensions.push(symbolAndExponent);
-        }
+function isDimensionPresent(dimension: SymbolAndExponent | undefined): dimension is SymbolAndExponent {
+    return dimension !== undefined && dimension[1] !== 0;
+}
+
+function orderDimensions([leftSymbol]: SymbolAndExponent, [rightSymbol]: SymbolAndExponent): number {
+    if (leftSymbol < rightSymbol) {
+        return -1;
     }
-
-    dimensions.sort(([leftSymbol], [rightSymbol]) => {
-        if (leftSymbol < rightSymbol) {
-            return -1;
-        }
-        return 1;
-    });
-
-    return dimensions;
+    return 1;
 }
 
 function formatDimension([symbol, exponent]: SymbolAndExponent): string {
