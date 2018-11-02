@@ -14,10 +14,7 @@ function isDimensionPresent(dimension: SymbolAndExponent | undefined): dimension
 }
 
 function orderDimensions([leftSymbol]: SymbolAndExponent, [rightSymbol]: SymbolAndExponent): number {
-    if (leftSymbol < rightSymbol) {
-        return -1;
-    }
-    return 1;
+    return leftSymbol < rightSymbol ? -1 : 1;
 }
 
 function formatDimension([symbol, exponent]: SymbolAndExponent): string {
