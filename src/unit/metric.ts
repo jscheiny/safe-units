@@ -24,14 +24,12 @@ export const luxes: Quantity.Illuminance = lumens.per(meters.squared()).withSymb
 
 // Prefixes
 
+type Unit = Partial<{ [dimension: string]: Exponent }>;
+type PrefixFn = <U extends Unit>(unit: GenericMeasure<U, number>) => GenericMeasure<U, number>;
+
 // HACKHACK: Many of the typings here could be made more simple but instead use their base types to avoid absolute paths
 // in the generated typings.
-function createPrefix(
-    symbolPrefix: string,
-    multiplier: number,
-): <U extends Partial<{ [dimension: string]: Exponent }>>(
-    unit: GenericMeasure<U, number>,
-) => GenericMeasure<U, number> {
+function prefix(symbolPrefix: string, multiplier: number): PrefixFn {
     return unit => {
         const { symbol } = unit;
         const newSymbol = symbol !== undefined ? `${symbolPrefix}${symbol}` : undefined;
@@ -39,23 +37,23 @@ function createPrefix(
     };
 }
 
-export const yotta = createPrefix("Y", 1e24);
-export const zetta = createPrefix("Z", 1e21);
-export const exa = createPrefix("E", 1e18);
-export const peta = createPrefix("P", 1e15);
-export const tera = createPrefix("T", 1e12);
-export const giga = createPrefix("G", 1e9);
-export const mega = createPrefix("M", 1e6);
-export const kilo = createPrefix("k", 1e3);
-export const hecto = createPrefix("h", 100);
-export const deca = createPrefix("da", 10);
-export const deci = createPrefix("d", 0.1);
-export const centi = createPrefix("c", 0.01);
-export const milli = createPrefix("m", 1e-3);
-export const micro = createPrefix("µ", 1e-6);
-export const nano = createPrefix("n", 1e-9);
-export const pico = createPrefix("p", 1e-12);
-export const femto = createPrefix("f", 1e-15);
-export const atto = createPrefix("y", 1e-18);
-export const zepto = createPrefix("z", 1e-21);
-export const yocto = createPrefix("y", 1e-24);
+export const yotta = prefix("Y", 1e24);
+export const zetta = prefix("Z", 1e21);
+export const exa = prefix("E", 1e18);
+export const peta = prefix("P", 1e15);
+export const tera = prefix("T", 1e12);
+export const giga = prefix("G", 1e9);
+export const mega = prefix("M", 1e6);
+export const kilo = prefix("k", 1e3);
+export const hecto = prefix("h", 100);
+export const deca = prefix("da", 10);
+export const deci = prefix("d", 0.1);
+export const centi = prefix("c", 0.01);
+export const milli = prefix("m", 1e-3);
+export const micro = prefix("µ", 1e-6);
+export const nano = prefix("n", 1e-9);
+export const pico = prefix("p", 1e-12);
+export const femto = prefix("f", 1e-15);
+export const atto = prefix("y", 1e-18);
+export const zepto = prefix("z", 1e-21);
+export const yocto = prefix("y", 1e-24);
