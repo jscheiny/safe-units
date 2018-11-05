@@ -1,12 +1,4 @@
-import {
-    genFileHeader,
-    genImports,
-    genUncurriedTypeName,
-    getExponents,
-    indent,
-    isExponent,
-    OperatorSpec,
-} from "./common";
+import { genFileHeader, genImports, genUncurriedTypeName, getExponents, isExponent, OperatorSpec } from "./common";
 
 const ARITHMETIC_ERROR = "ArithmeticError";
 
@@ -55,4 +47,8 @@ function genCurriedType(spec: OperatorSpec, exponents: number[], left: number): 
     lines.push(indent(ARITHMETIC_ERROR));
     lines.push(")");
     return lines.map(indent).map(indent);
+}
+
+function indent(line: string): string {
+    return "    " + line;
 }
