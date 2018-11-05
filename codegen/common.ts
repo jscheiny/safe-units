@@ -67,7 +67,3 @@ export function genUncurriedTypeName(spec: OperatorSpec, left?: string | number,
     const args = left !== undefined && right !== undefined ? `<${left}, ${right}>` : "";
     return `${spec.uncurriedTypeNamePrefix}Exponents${args}`;
 }
-
-export function indent(line: string): string {
-    return "    " + line;
-}

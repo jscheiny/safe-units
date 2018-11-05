@@ -17,5 +17,5 @@ const MultiplicandOf3Works: MultiplicandOf3Works = true;
 type MultiplicandOf0Works = IsSame<Exponent, MultiplicandOf<0>>;
 const MultiplicandOf0Works: MultiplicandOf0Works = true;
 
-type ProductWorks = IsSame<-4 | -2 | 0 | 2 | 4, ProductOf<2>>;
-const ProductWorks: ProductWorks = true;
+type ProductOfWorks = IsSame<-4 | -2 | 0 | 2 | 4, ProductOf<2>>;
+const ProductOfWorks: ProductOfWorks = true;
