@@ -11,11 +11,6 @@ export const Measure: GenericMeasureFactory<number> = createMeasureType({
     mult: (x, y) => x * y,
     div: (x, y) => x / y,
     pow: (x, y) => x ** y,
-    lt: (x, y) => x < y,
-    lte: (x, y) => x <= y,
-    eq: (x, y) => x === y,
-    neq: (x, y) => x !== y,
-    gte: (x, y) => x >= y,
-    gt: (x, y) => x > y,
+    compare: (x, y) => x - y,
     format: x => `${x}`,
 });
