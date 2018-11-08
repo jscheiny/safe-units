@@ -88,9 +88,8 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
             return new InternalMeasure(num.neg(this.value), this.unit);
         }
 
-        public scale(value: N | GenericMeasure<{}, N>): GenericMeasure<U, N> {
-            const numericValue = num.isNumber(value) ? value : value.value;
-            return new InternalMeasure(num.mult(numericValue, this.value), this.unit);
+        public scale(value: N): GenericMeasure<U, N> {
+            return new InternalMeasure(num.mult(this.value, value), this.unit);
         }
 
         public times<V extends MultiplicandUnit<U>>(

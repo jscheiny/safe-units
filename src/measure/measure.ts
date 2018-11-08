@@ -4,7 +4,6 @@ import { Unit } from "./unitTypeArithmetic";
 
 export type Measure<U extends Unit> = GenericMeasure<U, number>;
 export const Measure: GenericMeasureFactory<number> = createMeasureType({
-    isNumber: (value): value is number => typeof value === "number",
     one: () => 1,
     neg: x => -x,
     add: (x, y) => x + y,

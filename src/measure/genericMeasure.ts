@@ -12,8 +12,6 @@ import {
 
 /** The set of numeric operations required to fully represent a `GenericMeasure` for a given numeric type */
 export interface Numeric<N> {
-    /** Check if a given value is a number of type N */
-    isNumber(value: any): value is N;
     /** Returns the multiplicative identity for numbers of type N */
     one(): N;
     /** Returns the negative of a number of type N */
@@ -104,7 +102,7 @@ export interface GenericMeasure<U extends Unit, N> {
      * @param value a scalar dimensionless value by which to scale this measure
      * @returns A measure scaled by the value
      */
-    scale(value: N | GenericMeasure<{}, N>): GenericMeasure<U, N>;
+    scale(value: N): GenericMeasure<U, N>;
 
     /**
      * Multiplies this measure with another measure.

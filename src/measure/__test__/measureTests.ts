@@ -68,9 +68,7 @@ describe("Measures", () => {
 
         it("should scale", () => {
             const value = Measure.of(10, mps);
-            const three = Measure.dimensionless(3);
             expect(value.scale(2)).toEqual(Measure.of(20, mps));
-            expect(value.scale(three)).toEqual(Measure.of(30, mps));
         });
 
         it("should exponentiate", () => {
