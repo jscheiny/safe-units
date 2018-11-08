@@ -9,7 +9,7 @@ describe("Predefined Units", () => {
     function forEachUnit(fn: (unit: Measure<any>, name: string) => void): void {
         UnitNames.forEach(name => {
             const value = (Units as any)[name];
-            if (value instanceof Measure.class) {
+            if (Measure.isMeasure(value)) {
                 fn(value, name);
             } else {
                 for (const subName in value) {
