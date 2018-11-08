@@ -22,12 +22,7 @@ export interface Numeric<N> {
     mult(left: N, right: N): N;
     div(left: N, right: N): N;
     pow(base: N, exponent: Exponent): N;
-    lt(left: N, right: N): boolean;
-    lte(left: N, right: N): boolean;
-    eq(left: N, right: N): boolean;
-    neq(left: N, right: N): boolean;
-    gte(left: N, right: N): boolean;
-    gt(left: N, right: N): boolean;
+    compare(left: N, right: N): number;
     format(value: N): string;
 }
 
@@ -101,6 +96,14 @@ export interface GenericMeasure<U extends Unit, N> {
     pow<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<ExponentiateUnit<U, E>, N> : never;
 
     /**
+     * Raises this measure to a given power. If the result would give exponents outside of the allowable bounds, this
+     * will return `never`.
+     * @param exponent the exponent to raise this measure to
+     * @returns this exponent to the given power
+     */
+    toThe<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<ExponentiateUnit<U, E>, N> : never;
+
+    /**
      * Adds a symbol to this measure.
      * @param symbol the symbol of the unit represented by this measure
      */
@@ -155,6 +158,13 @@ export interface GenericMeasure<U extends Unit, N> {
     per<V extends DivisorUnit<U>>(other: GenericMeasure<V, N>): GenericMeasure<DivideUnits<U, V>, N>;
 
     /**
+     * Divides this measure by another measure.
+     * @param other the divisor
+     * @returns the quotient measure with a unit thats the quotient of the units
+     */
+    div<V extends DivisorUnit<U>>(other: GenericMeasure<V, N>): GenericMeasure<DivideUnits<U, V>, N>;
+
+    /**
      * Returns the reciprocal of this measure.
      * @returns the reciprocal of this measure with a recriprocal unit
      */
@@ -175,40 +185,48 @@ export interface GenericMeasure<U extends Unit, N> {
     unsafeMap(fn: (value: N) => N): GenericMeasure<U, N>;
 
     /**
+     * Compares two measures to each other. Returns a negative value if this < other, a postive value if this > other
+     * and 0 if the two are equal.
+     * @param another measure with the same unit
+     * @returns a value indicating how the value of this measure compares to the value of the other measure
+     */
+    compare(other: GenericMeasure<U, N>): number;
+
+    /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is less than the value of the other measure
      */
-    isLessThan(other: GenericMeasure<U, N>): boolean;
+    lt(other: GenericMeasure<U, N>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is less than or equal to the value of the other measure
      */
-    isLessThanOrEqualTo(other: GenericMeasure<U, N>): boolean;
+    lte(other: GenericMeasure<U, N>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is equal to the value of the other measure
      */
-    isEqualTo(other: GenericMeasure<U, N>): boolean;
+    eq(other: GenericMeasure<U, N>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is not equal to the value of the other measure
      */
-    isNotEqualTo(other: GenericMeasure<U, N>): boolean;
+    neq(other: GenericMeasure<U, N>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is greater than or equal to the value of the other measure
      */
-    isGreaterThanOrEqualTo(other: GenericMeasure<U, N>): boolean;
+    gte(other: GenericMeasure<U, N>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is greater than the value of the other measure
      */
-    isGreaterThan(other: GenericMeasure<U, N>): boolean;
+    gt(other: GenericMeasure<U, N>): boolean;
 
     /**
      * Formats the value and the unit.
@@ -281,18 +299,28 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
             return this.over(other);
         }
 
+        public div<V extends DivisorUnit<U>>(other: GenericMeasure<V, N>): GenericMeasure<DivideUnits<U, V>, N> {
+            return this.over(other);
+        }
+
         public pow<E extends Exponent>(
             power: E,
         ): U extends BaseUnit<E> ? GenericMeasure<ExponentiateUnit<U, E>, N> : never {
             return new InternalMeasure(num.pow(this.value, power), exponentiateUnit(this.unit as any, power)) as any;
         }
 
+        public toThe<E extends Exponent>(
+            power: E,
+        ): U extends BaseUnit<E> ? GenericMeasure<ExponentiateUnit<U, E>, N> : never {
+            return this.pow(power);
+        }
+
         public inverse(): GenericMeasure<ExponentiateUnit<U, -1>, N> {
-            return new InternalMeasure(num.div(num.one(), this.value), exponentiateUnit(this.unit, -1));
+            return this.pow(-1);
         }
 
         public reciprocal(): GenericMeasure<ExponentiateUnit<U, -1>, N> {
-            return this.inverse();
+            return this.pow(-1);
         }
 
         public unsafeMap(fn: (value: N) => N): GenericMeasure<U, N> {
@@ -301,28 +329,32 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
 
         // Comparisons
 
-        public isLessThan(other: GenericMeasure<U, N>): boolean {
-            return num.lt(this.value, other.value);
+        public compare(other: GenericMeasure<U, N>): number {
+            return num.compare(this.value, other.value);
         }
 
-        public isLessThanOrEqualTo(other: GenericMeasure<U, N>): boolean {
-            return num.lte(this.value, other.value);
+        public lt(other: GenericMeasure<U, N>): boolean {
+            return this.compare(other) < 0;
         }
 
-        public isEqualTo(other: GenericMeasure<U, N>): boolean {
-            return num.eq(this.value, other.value);
+        public lte(other: GenericMeasure<U, N>): boolean {
+            return this.compare(other) <= 0;
         }
 
-        public isNotEqualTo(other: GenericMeasure<U, N>): boolean {
-            return num.neq(this.value, other.value);
+        public eq(other: GenericMeasure<U, N>): boolean {
+            return this.compare(other) === 0;
         }
 
-        public isGreaterThanOrEqualTo(other: GenericMeasure<U, N>): boolean {
-            return num.gte(this.value, other.value);
+        public neq(other: GenericMeasure<U, N>): boolean {
+            return this.compare(other) !== 0;
         }
 
-        public isGreaterThan(other: GenericMeasure<U, N>): boolean {
-            return num.gt(this.value, other.value);
+        public gte(other: GenericMeasure<U, N>): boolean {
+            return this.compare(other) >= 0;
+        }
+
+        public gt(other: GenericMeasure<U, N>): boolean {
+            return this.compare(other) > 0;
         }
 
         // Formatting
@@ -341,11 +373,11 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
     }
 
     InternalMeasure.prototype.squared = function(): any {
-        return this.pow(2);
+        return this.toThe(2);
     };
 
     InternalMeasure.prototype.cubed = function(): any {
-        return this.pow(3);
+        return this.toThe(3);
     };
 
     return {

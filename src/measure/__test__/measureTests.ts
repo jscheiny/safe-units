@@ -63,6 +63,7 @@ describe("Measures", () => {
             const right = Measure.of(5, second);
             expect(left.over(right)).toEqual(Measure.of(2, mps2));
             expect(left.per(right)).toEqual(Measure.of(2, mps2));
+            expect(left.div(right)).toEqual(Measure.of(2, mps2));
         });
 
         it("should scale", () => {
@@ -90,39 +91,39 @@ describe("Measures", () => {
         const ten = Measure.of(10, meter);
 
         it("should compare less than", () => {
-            expect(five.isLessThan(zero)).toBe(false);
-            expect(five.isLessThan(five)).toBe(false);
-            expect(five.isLessThan(ten)).toBe(true);
+            expect(five.lt(zero)).toBe(false);
+            expect(five.lt(five)).toBe(false);
+            expect(five.lt(ten)).toBe(true);
         });
 
         it("should compare less than or equal to", () => {
-            expect(five.isLessThanOrEqualTo(zero)).toBe(false);
-            expect(five.isLessThanOrEqualTo(five)).toBe(true);
-            expect(five.isLessThanOrEqualTo(ten)).toBe(true);
+            expect(five.lte(zero)).toBe(false);
+            expect(five.lte(five)).toBe(true);
+            expect(five.lte(ten)).toBe(true);
         });
 
         it("should compare equal to", () => {
-            expect(five.isEqualTo(zero)).toBe(false);
-            expect(five.isEqualTo(five)).toBe(true);
-            expect(five.isEqualTo(ten)).toBe(false);
+            expect(five.eq(zero)).toBe(false);
+            expect(five.eq(five)).toBe(true);
+            expect(five.eq(ten)).toBe(false);
         });
 
         it("should compare not equal to", () => {
-            expect(five.isNotEqualTo(zero)).toBe(true);
-            expect(five.isNotEqualTo(five)).toBe(false);
-            expect(five.isNotEqualTo(ten)).toBe(true);
+            expect(five.neq(zero)).toBe(true);
+            expect(five.neq(five)).toBe(false);
+            expect(five.neq(ten)).toBe(true);
         });
 
         it("should compare greater than or equal to", () => {
-            expect(five.isGreaterThanOrEqualTo(zero)).toBe(true);
-            expect(five.isGreaterThanOrEqualTo(five)).toBe(true);
-            expect(five.isGreaterThanOrEqualTo(ten)).toBe(false);
+            expect(five.gte(zero)).toBe(true);
+            expect(five.gte(five)).toBe(true);
+            expect(five.gte(ten)).toBe(false);
         });
 
         it("should compare greater than", () => {
-            expect(five.isGreaterThan(zero)).toBe(true);
-            expect(five.isGreaterThan(five)).toBe(false);
-            expect(five.isGreaterThan(ten)).toBe(false);
+            expect(five.gt(zero)).toBe(true);
+            expect(five.gt(five)).toBe(false);
+            expect(five.gt(ten)).toBe(false);
         });
     });
 
