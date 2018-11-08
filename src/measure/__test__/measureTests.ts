@@ -63,6 +63,7 @@ describe("Measures", () => {
             const right = Measure.of(5, second);
             expect(left.over(right)).toEqual(Measure.of(2, mps2));
             expect(left.per(right)).toEqual(Measure.of(2, mps2));
+            expect(left.div(right)).toEqual(Measure.of(2, mps2));
         });
 
         it("should scale", () => {
