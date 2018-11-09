@@ -6,7 +6,7 @@ import * as Base from "../unit/base";
 
 /** A measure without any unit */
 // HACKHACK: Explicitly type this so we can import GenericMeasure and avoid absolute paths in the generated typings.
-export const Dimensionless: GenericMeasure<{}, number> = Measure.dimensionless(1);
+export const Dimensionless: GenericMeasure<number, {}> = Measure.dimensionless(1);
 export type Dimensionless = typeof Dimensionless;
 
 // Base units

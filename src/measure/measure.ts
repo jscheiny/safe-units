@@ -2,7 +2,7 @@ import { GenericMeasure } from "./genericMeasure";
 import { createMeasureType, GenericMeasureFactory } from "./genericMeasureFactory";
 import { Unit } from "./unitTypeArithmetic";
 
-export type Measure<U extends Unit> = GenericMeasure<U, number>;
+export type Measure<U extends Unit> = GenericMeasure<number, U>;
 export const Measure: GenericMeasureFactory<number> = createMeasureType({
     one: () => 1,
     neg: x => -x,

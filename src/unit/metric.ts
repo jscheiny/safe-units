@@ -25,7 +25,7 @@ export const luxes: Quantity.Illuminance = lumens.per(meters.squared()).withSymb
 // Prefixes
 
 type Unit = Partial<{ [dimension: string]: Exponent }>;
-type PrefixFn = <U extends Unit>(unit: GenericMeasure<U, number>) => GenericMeasure<U, number>;
+type PrefixFn = <U extends Unit>(unit: GenericMeasure<number, U>) => GenericMeasure<number, U>;
 
 // HACKHACK: Many of the typings here could be made more simple but instead use their base types to avoid absolute paths
 // in the generated typings.
