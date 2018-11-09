@@ -39,6 +39,10 @@ export const AmountOfSubstance: AmountOfSubstance = Base.moles;
 export type LuminousIntensity = typeof Base.candelas;
 export const LuminousIntensity: LuminousIntensity = Base.candelas;
 
+/** bits */
+export type Memory = typeof Base.bits;
+export const Memory: Memory = Base.bits;
+
 // Angular base units
 
 /** radians */

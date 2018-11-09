@@ -1,10 +1,9 @@
-import { GenericMeasure } from "../measure/genericMeasure";
 import { PrefixFunction } from "../measure/genericMeasureFactory";
 import { Measure } from "../measure/measure";
+import { Memory } from "../quantity/quantities";
+import { bits } from "./base";
 
-// HACKHACK: Explicitly type this so we can import GenericMeasure and avoid absolute paths in the generated typings.
-export const bits: GenericMeasure<number, { memory: 1 }> = Measure.dimension("memory", "b");
-export const bytes = Measure.of(8, bits, "B");
+export const bytes: Memory = Measure.of(8, bits, "B");
 
 // HACKHACK: Explicitly type this so we can import PrefixFunction and avoid absolute paths in the generated typings.
 export const kibi: PrefixFunction<number> = Measure.prefix("Ki", 1 << 10);
