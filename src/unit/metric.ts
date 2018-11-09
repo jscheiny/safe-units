@@ -1,5 +1,4 @@
-import { Exponent } from "../exponent";
-import { GenericMeasure } from "../measure/genericMeasure";
+import { PrefixFunction } from "../measure";
 import { Measure } from "../measure/measure";
 import * as Quantity from "../quantity/quantities";
 import { amperes, candelas, kilograms, meters, moles, seconds, steradians } from "./base";
@@ -22,38 +21,24 @@ export const katals: Quantity.CatalyticActivity = moles.per(seconds).withSymbol(
 export const lumens: Quantity.LuminousFlux = candelas.times(steradians).withSymbol("lm");
 export const luxes: Quantity.Illuminance = lumens.per(meters.squared()).withSymbol("lx");
 
-// Prefixes
-
-type Unit = Partial<{ [dimension: string]: Exponent }>;
-type PrefixFn = <U extends Unit>(unit: GenericMeasure<number, U>) => GenericMeasure<number, U>;
-
-// HACKHACK: Many of the typings here could be made more simple but instead use their base types to avoid absolute paths
-// in the generated typings.
-function prefix(symbolPrefix: string, multiplier: number): PrefixFn {
-    return unit => {
-        const { symbol } = unit;
-        const newSymbol = symbol !== undefined ? `${symbolPrefix}${symbol}` : undefined;
-        return Measure.of(multiplier, unit, newSymbol);
-    };
-}
-
-export const yotta = prefix("Y", 1e24);
-export const zetta = prefix("Z", 1e21);
-export const exa = prefix("E", 1e18);
-export const peta = prefix("P", 1e15);
-export const tera = prefix("T", 1e12);
-export const giga = prefix("G", 1e9);
-export const mega = prefix("M", 1e6);
-export const kilo = prefix("k", 1e3);
-export const hecto = prefix("h", 100);
-export const deca = prefix("da", 10);
-export const deci = prefix("d", 0.1);
-export const centi = prefix("c", 0.01);
-export const milli = prefix("m", 1e-3);
-export const micro = prefix("µ", 1e-6);
-export const nano = prefix("n", 1e-9);
-export const pico = prefix("p", 1e-12);
-export const femto = prefix("f", 1e-15);
-export const atto = prefix("y", 1e-18);
-export const zepto = prefix("z", 1e-21);
-export const yocto = prefix("y", 1e-24);
+// HACKHACK: Explicitly type this so we can import PrefixFunction and avoid absolute paths in the generated typings.
+export const yotta: PrefixFunction<number> = Measure.prefix("Y", 1e24);
+export const zetta = Measure.prefix("Z", 1e21);
+export const exa = Measure.prefix("E", 1e18);
+export const peta = Measure.prefix("P", 1e15);
+export const tera = Measure.prefix("T", 1e12);
+export const giga = Measure.prefix("G", 1e9);
+export const mega = Measure.prefix("M", 1e6);
+export const kilo = Measure.prefix("k", 1e3);
+export const hecto = Measure.prefix("h", 100);
+export const deca = Measure.prefix("da", 10);
+export const deci = Measure.prefix("d", 0.1);
+export const centi = Measure.prefix("c", 0.01);
+export const milli = Measure.prefix("m", 1e-3);
+export const micro = Measure.prefix("µ", 1e-6);
+export const nano = Measure.prefix("n", 1e-9);
+export const pico = Measure.prefix("p", 1e-12);
+export const femto = Measure.prefix("f", 1e-15);
+export const atto = Measure.prefix("y", 1e-18);
+export const zepto = Measure.prefix("z", 1e-21);
+export const yocto = Measure.prefix("y", 1e-24);
