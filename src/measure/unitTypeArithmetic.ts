@@ -11,7 +11,9 @@ import {
 export type UnitWithSymbols<U extends Unit = Unit> = { [D in keyof U]+?: [string, NonNullable<U[D]>] };
 export type SymbolAndExponent = [string, Exponent];
 
-export type Unit = Partial<{ [dimension: string]: Exponent }>;
+export interface Unit {
+    [dimension: string]: Exponent | undefined;
+}
 
 // Multiplication
 
