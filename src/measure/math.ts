@@ -106,10 +106,10 @@ export function cbrt<U extends RadicandUnit<3>>(x: Measure<U>): Measure<NthRootU
 }
 
 /** `Math.pow` for measures of any kind. The power is restricted to integers between -5 and 5 */
-export function pow<U extends BaseUnit<E>, E extends Exponent, N>(
-    measure: GenericMeasure<U, N>,
+export function pow<N, U extends BaseUnit<E>, E extends Exponent>(
+    measure: GenericMeasure<N, U>,
     power: E,
-): GenericMeasure<ExponentiateUnit<U, E>, N> {
+): GenericMeasure<N, ExponentiateUnit<U, E>> {
     return measure.pow(power);
 }
 

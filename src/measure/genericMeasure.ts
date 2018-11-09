@@ -33,7 +33,7 @@ export interface Numeric<N> {
 }
 
 /** A numeric value with a corresponding unit of measurement. */
-export interface GenericMeasure<U extends Unit, N> {
+export interface GenericMeasure<N, U extends Unit> {
     /** The numeric value of this measure */
     readonly value: N;
     /** The unit of this measure */
@@ -46,14 +46,14 @@ export interface GenericMeasure<U extends Unit, N> {
      * this function will have type `never`.
      * @returns this measure multiplied by itself
      */
-    squared: U extends BaseUnit<2> ? () => GenericMeasure<ExponentiateUnit<U, 2>, N> : never;
+    squared: U extends BaseUnit<2> ? () => GenericMeasure<N, ExponentiateUnit<U, 2>> : never;
 
     /**
      * If this measure can be cubed, cubes it. If this measure cannot be cubed (due to exponent limitations), then
      * this function will have type `never`.
      * @returns this cube of this measure
      */
-    cubed: U extends BaseUnit<3> ? () => GenericMeasure<ExponentiateUnit<U, 3>, N> : never;
+    cubed: U extends BaseUnit<3> ? () => GenericMeasure<N, ExponentiateUnit<U, 3>> : never;
 
     /**
      * Raises this measure to a given power. If the result would give exponents outside of the allowable bounds, this
@@ -61,7 +61,7 @@ export interface GenericMeasure<U extends Unit, N> {
      * @param exponent the exponent to raise this measure to
      * @returns this exponent to the given power
      */
-    pow<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<ExponentiateUnit<U, E>, N> : never;
+    pow<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<N, ExponentiateUnit<U, E>> : never;
 
     /**
      * Raises this measure to a given power. If the result would give exponents outside of the allowable bounds, this
@@ -69,80 +69,80 @@ export interface GenericMeasure<U extends Unit, N> {
      * @param exponent the exponent to raise this measure to
      * @returns this exponent to the given power
      */
-    toThe<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<ExponentiateUnit<U, E>, N> : never;
+    toThe<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<N, ExponentiateUnit<U, E>> : never;
 
     /**
      * Adds a symbol to this measure.
      * @param symbol the symbol of the unit represented by this measure
      */
-    withSymbol(symbol: String): GenericMeasure<U, N>;
+    withSymbol(symbol: String): GenericMeasure<N, U>;
 
     /**
      * Adds this measure to another measure with the same unit.
      * @param other the value to add
      * @returns the sum
      */
-    plus(other: GenericMeasure<U, N>): GenericMeasure<U, N>;
+    plus(other: GenericMeasure<N, U>): GenericMeasure<N, U>;
 
     /**
      * Subtracts another measure with the same unit from this measure.
      * @param other the value to subtract
      * @returns the difference
      */
-    minus(other: GenericMeasure<U, N>): GenericMeasure<U, N>;
+    minus(other: GenericMeasure<N, U>): GenericMeasure<N, U>;
 
     /**
      * Negates the value of this measure.
      * @returns A measure whose value is the negative of this measure
      */
-    negate(): GenericMeasure<U, N>;
+    negate(): GenericMeasure<N, U>;
 
     /**
      * Multiplies this measure by a dimensionless value.
      * @param value a scalar dimensionless value by which to scale this measure
      * @returns A measure scaled by the value
      */
-    scale(value: N): GenericMeasure<U, N>;
+    scale(value: N): GenericMeasure<N, U>;
 
     /**
      * Multiplies this measure with another measure.
      * @param other the value to multiply
      * @returns the product measure with a unit thats the product of the units
      */
-    times<V extends MultiplicandUnit<U>>(other: GenericMeasure<V, N>): GenericMeasure<MultiplyUnits<U, V>, N>;
+    times<V extends MultiplicandUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, MultiplyUnits<U, V>>;
 
     /**
      * Divides this measure by another measure.
      * @param other the divisor
      * @returns the quotient measure with a unit thats the quotient of the units
      */
-    over<V extends DivisorUnit<U>>(other: GenericMeasure<V, N>): GenericMeasure<DivideUnits<U, V>, N>;
+    over<V extends DivisorUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>>;
 
     /**
      * Divides this measure by another measure.
      * @param other the divisor
      * @returns the quotient measure with a unit thats the quotient of the units
      */
-    per<V extends DivisorUnit<U>>(other: GenericMeasure<V, N>): GenericMeasure<DivideUnits<U, V>, N>;
+    per<V extends DivisorUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>>;
 
     /**
      * Divides this measure by another measure.
      * @param other the divisor
      * @returns the quotient measure with a unit thats the quotient of the units
      */
-    div<V extends DivisorUnit<U>>(other: GenericMeasure<V, N>): GenericMeasure<DivideUnits<U, V>, N>;
+    div<V extends DivisorUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>>;
 
     /**
      * Returns the reciprocal of this measure.
      * @returns the reciprocal of this measure with a recriprocal unit
      */
-    inverse(): GenericMeasure<ExponentiateUnit<U, -1>, N>;
+    inverse(): GenericMeasure<N, ExponentiateUnit<U, -1>>;
 
     /**
      * Returns the reciprocal of this measure.
      * @returns the reciprocal of this measure with a recriprocal unit
      */
-    reciprocal(): GenericMeasure<ExponentiateUnit<U, -1>, N>;
+    reciprocal(): GenericMeasure<N, ExponentiateUnit<U, -1>>;
 
     /**
      * Maps the value of this measure without affecting the unit. This should be used for writing unit safe functions
@@ -150,7 +150,7 @@ export interface GenericMeasure<U extends Unit, N> {
      * @param fn a mapping on the value of the measure
      * @returns a new measure with the same unit whose value has been mapped
      */
-    unsafeMap(fn: (value: N) => N): GenericMeasure<U, N>;
+    unsafeMap(fn: (value: N) => N): GenericMeasure<N, U>;
 
     /**
      * Compares two measures to each other. Returns a negative value if this < other, a postive value if this > other
@@ -158,43 +158,43 @@ export interface GenericMeasure<U extends Unit, N> {
      * @param another measure with the same unit
      * @returns a value indicating how the value of this measure compares to the value of the other measure
      */
-    compare(other: GenericMeasure<U, N>): number;
+    compare(other: GenericMeasure<N, U>): number;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is less than the value of the other measure
      */
-    lt(other: GenericMeasure<U, N>): boolean;
+    lt(other: GenericMeasure<N, U>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is less than or equal to the value of the other measure
      */
-    lte(other: GenericMeasure<U, N>): boolean;
+    lte(other: GenericMeasure<N, U>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is equal to the value of the other measure
      */
-    eq(other: GenericMeasure<U, N>): boolean;
+    eq(other: GenericMeasure<N, U>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is not equal to the value of the other measure
      */
-    neq(other: GenericMeasure<U, N>): boolean;
+    neq(other: GenericMeasure<N, U>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is greater than or equal to the value of the other measure
      */
-    gte(other: GenericMeasure<U, N>): boolean;
+    gte(other: GenericMeasure<N, U>): boolean;
 
     /**
      * @param another measure with the same unit
      * @returns true if the value of this measure is greater than the value of the other measure
      */
-    gt(other: GenericMeasure<U, N>): boolean;
+    gt(other: GenericMeasure<N, U>): boolean;
 
     /**
      * Formats the value and the unit.
@@ -208,5 +208,5 @@ export interface GenericMeasure<U extends Unit, N> {
      * @param a unit to be used to represent this measure
      * @returns a string representation of measure
      */
-    in(unit: GenericMeasure<U, N>): string;
+    in(unit: GenericMeasure<N, U>): string;
 }
