@@ -13,6 +13,9 @@ import {
 } from "./unitTypeArithmetic";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./unitValueArithmetic";
 
+/** A function which applies a prefix multiplier to a given measure */
+export type PrefixFunction<N> = <U extends Unit>(measure: GenericMeasure<N, U>) => GenericMeasure<N, U>;
+
 /** The functions needed to construct a measure of a given numeric type */
 export interface GenericMeasureFactory<N> {
     /** The constructor for this generic measure type, useful for doing `instanceof` checks. */
@@ -41,6 +44,14 @@ export interface GenericMeasureFactory<N> {
      * @returns a measure of value number of quantities.
      */
     of<U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U>;
+
+    /**
+     * Creates a function that takes a measure and applies a symbol to its prefix and scales it by a given multiplier.
+     * @param prefix the prefix to add to symbols of measures passed into the resulting function
+     * @param multiplier the scalar by which to multiply measures passed into the resulting function
+     * @returns a function that takes measures and adds a prefix to their symbols and multiplies them by a given value
+     */
+    prefix(prefix: string, multiplier: N): PrefixFunction<N>;
 
     /**
      * Creates a measure from a raw unit, should be avoided unless you know what you're doing.
@@ -197,6 +208,13 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
         },
         of: <U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U> => {
             return new InternalMeasure(num.mult(value, quantity.value), quantity.unit, symbol);
+        },
+        prefix: (prefix: string, multiplier: N): PrefixFunction<N> => {
+            return unit => {
+                const { value, symbol } = unit;
+                const newSymbol = symbol !== undefined ? `${prefix}${symbol}` : undefined;
+                return new InternalMeasure(num.mult(multiplier, value), unit.unit, newSymbol);
+            };
         },
         unsafeConstruct: <U extends Unit>(
             value: N,
