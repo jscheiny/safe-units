@@ -13,3 +13,5 @@ export const candelas = Measure.dimension("intensity", "cd");
 
 export const radians = Measure.dimension("planeAngle", "rad");
 export const steradians = Measure.dimension("solidAngle", "sr");
+
+export const bits = Measure.dimension("memory", "b");
