@@ -34,6 +34,65 @@ describe("Measures", () => {
         });
     });
 
+    describe("static", () => {
+        it("arithmetic", () => {
+            expect(Measure.add(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(0, mps));
+            expect(Measure.subtract(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(10, mps));
+            expect(Measure.multiply(Measure.of(5, mps), Measure.of(10, second))).toEqual(Measure.of(50, meter));
+            expect(Measure.divide(Measure.of(50, meter), Measure.of(10, second))).toEqual(Measure.of(5, mps));
+        });
+
+        it("abs", () => {
+            expect(Measure.abs(Measure.of(-10, mps))).toEqual(Measure.of(10, mps));
+        });
+
+        it("cbrt", () => {
+            expect(Measure.cbrt(Measure.of(64, second.cubed()))).toEqual(Measure.of(4, second));
+        });
+
+        it("ceil", () => {
+            expect(Measure.ceil(Measure.of(3.4, mps))).toEqual(Measure.of(4, mps));
+        });
+
+        it("floor", () => {
+            expect(Measure.floor(Measure.of(7.8, mps))).toEqual(Measure.of(7, mps));
+        });
+
+        it("hypot", () => {
+            expect(Measure.hypot(Measure.of(3, meter), Measure.of(4, meter))).toEqual(Measure.of(5, meter));
+        });
+
+        it("max", () => {
+            expect(Measure.max(Measure.of(10, mps), Measure.of(5, mps), Measure.of(15, mps))).toEqual(
+                Measure.of(15, mps),
+            );
+        });
+
+        it("min", () => {
+            expect(Measure.min(Measure.of(10, mps), Measure.of(5, mps), Measure.of(15, mps))).toEqual(
+                Measure.of(5, mps),
+            );
+        });
+
+        it("round", () => {
+            expect(Measure.round(Measure.of(7.8, mps))).toEqual(Measure.of(8, mps));
+        });
+
+        it("sqrt", () => {
+            expect(Measure.sqrt(Measure.of(25, meter.squared()))).toEqual(Measure.of(5, meter));
+        });
+
+        it("sum", () => {
+            expect(Measure.sum(Measure.of(10, mps), Measure.of(5, mps), Measure.of(15, mps))).toEqual(
+                Measure.of(30, mps),
+            );
+        });
+
+        it("trunc", () => {
+            expect(Measure.trunc(Measure.of(-7.8, mps))).toEqual(Measure.of(-7, mps));
+        });
+    });
+
     describe("arithmetic", () => {
         it("should negate", () => {
             const value = Measure.of(10, mps);

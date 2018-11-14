@@ -75,7 +75,7 @@ export interface GenericMeasure<N, U extends Unit> {
      * Adds a symbol to this measure.
      * @param symbol the symbol of the unit represented by this measure
      */
-    withSymbol(symbol: String): GenericMeasure<N, U>;
+    withSymbol(symbol: string | undefined): GenericMeasure<N, U>;
 
     /**
      * Adds this measure to another measure with the same unit.
@@ -145,12 +145,16 @@ export interface GenericMeasure<N, U extends Unit> {
     reciprocal(): GenericMeasure<N, ExponentiateUnit<U, -1>>;
 
     /**
-     * Maps the value of this measure without affecting the unit. This should be used for writing unit safe functions
-     * that only alter the value of a measure (e.g. abs).
-     * @param fn a mapping on the value of the measure
-     * @returns a new measure with the same unit whose value has been mapped
+     * Maps the value and possibly unit of this measure.
+     * @param valueMap a mapping on the value of the measure
+     * @param unitMap an optional mapping on the unit of the measure
+     * @returns a new measure whose value and unit have been mapped
      */
     unsafeMap(fn: (value: N) => N): GenericMeasure<N, U>;
+    unsafeMap<V extends Unit>(
+        valueMap: (value: N) => N,
+        unitMap: (unit: UnitWithSymbols<U>) => UnitWithSymbols<V>,
+    ): GenericMeasure<N, V>;
 
     /**
      * Compares two measures to each other. Returns a negative value if this < other, a postive value if this > other
@@ -209,4 +213,7 @@ export interface GenericMeasure<N, U extends Unit> {
      * @returns a string representation of measure
      */
     in(unit: GenericMeasure<N, U>): string;
+
+    /** Shallow copies this measure instance. */
+    clone(): GenericMeasure<N, U>;
 }

@@ -1,6 +1,7 @@
 import { Exponent } from "../exponent";
 import { formatUnit } from "./format";
 import { GenericMeasure, Numeric } from "./genericMeasure";
+import { GenericMeasureStatic, getGenericMeasureStaticMethods } from "./genericMeasureStatic";
 import {
     BaseUnit,
     DivideUnits,
@@ -13,11 +14,8 @@ import {
 } from "./unitTypeArithmetic";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits } from "./unitValueArithmetic";
 
-/** A function which applies a prefix multiplier to a given measure */
-export type PrefixFunction<N> = <U extends Unit>(measure: GenericMeasure<N, U>) => GenericMeasure<N, U>;
-
 /** The functions needed to construct a measure of a given numeric type */
-export interface GenericMeasureFactory<N> {
+interface GenericMeasureFactory<N> {
     /** The constructor for this generic measure type, useful for doing `instanceof` checks. */
     isMeasure(value: any): value is GenericMeasure<N, any>;
 
@@ -46,14 +44,6 @@ export interface GenericMeasureFactory<N> {
     of<U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U>;
 
     /**
-     * Creates a function that takes a measure and applies a symbol to its prefix and scales it by a given multiplier.
-     * @param prefix the prefix to add to symbols of measures passed into the resulting function
-     * @param multiplier the scalar by which to multiply measures passed into the resulting function
-     * @returns a function that takes measures and adds a prefix to their symbols and multiplies them by a given value
-     */
-    prefix(prefix: string, multiplier: N): PrefixFunction<N>;
-
-    /**
      * Creates a measure from a raw unit, should be avoided unless you know what you're doing.
      * @param value the value of the measure
      * @param unit the raw unit of the measure
@@ -61,6 +51,10 @@ export interface GenericMeasureFactory<N> {
      */
     unsafeConstruct<U extends Unit>(value: N, unit: UnitWithSymbols<U>, symbol?: string): GenericMeasure<N, U>;
 }
+
+export type GenericMeasureClass<N, StaticMethods extends {}> = GenericMeasureFactory<N> &
+    GenericMeasureStatic<N> &
+    StaticMethods;
 
 /**
  * Creates a new measure factory for a given numeric type. The numeric type of the measure is inferred from the
@@ -71,7 +65,7 @@ export interface GenericMeasureFactory<N> {
  * type MyMeasure<U extends Unit> = GenericMeasure<U, MyNumberType>;
  * const MyMeasure = createMeasureType({ ... });
  */
-export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> {
+export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticMethods: S): GenericMeasureClass<N, S> {
     class InternalMeasure<U extends Unit> implements GenericMeasure<N, U> {
         public readonly symbol: string | undefined;
         public squared!: U extends BaseUnit<2> ? () => GenericMeasure<N, ExponentiateUnit<U, 2>> : never;
@@ -81,7 +75,7 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
             this.symbol = symbol;
         }
 
-        public withSymbol(symbol: string): GenericMeasure<N, U> {
+        public withSymbol(symbol: string | undefined): GenericMeasure<N, U> {
             return new InternalMeasure(this.value, this.unit, symbol);
         }
 
@@ -141,8 +135,12 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
             return this.pow(-1);
         }
 
-        public unsafeMap(fn: (value: N) => N): GenericMeasure<N, U> {
-            return new InternalMeasure(fn(this.value), this.unit);
+        public unsafeMap<V extends Unit>(
+            valueMap: (value: N) => N,
+            unitMap?: (unit: UnitWithSymbols<U>) => UnitWithSymbols<V>,
+        ): GenericMeasure<N, U | V> {
+            const newUnit = unitMap === undefined ? this.unit : unitMap(this.unit);
+            return new InternalMeasure<U | V>(valueMap(this.value), newUnit);
         }
 
         // Comparisons
@@ -188,6 +186,10 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
             const value = num.format(num.div(this.value, unit.value));
             return `${value} ${unit.symbol}`;
         }
+
+        public clone(): GenericMeasure<N, U> {
+            return new InternalMeasure(this.value, this.unit);
+        }
     }
 
     InternalMeasure.prototype.squared = function(): any {
@@ -198,7 +200,8 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
         return this.toThe(3);
     };
 
-    return {
+    const type: GenericMeasureFactory<N> & GenericMeasureStatic<N> = {
+        ...getGenericMeasureStaticMethods(),
         isMeasure: (value): value is GenericMeasure<N, any> => value instanceof InternalMeasure,
         dimension: <Dim extends string>(dim: Dim, symbol?: string): GenericMeasure<N, { [D in Dim]: 1 }> => {
             return new InternalMeasure(num.one(), dimension(dim, symbol), symbol);
@@ -209,13 +212,6 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
         of: <U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U> => {
             return new InternalMeasure(num.mult(value, quantity.value), quantity.unit, symbol);
         },
-        prefix: (prefix: string, multiplier: N): PrefixFunction<N> => {
-            return unit => {
-                const { value, symbol } = unit;
-                const newSymbol = symbol !== undefined ? `${prefix}${symbol}` : undefined;
-                return new InternalMeasure(num.mult(multiplier, value), unit.unit, newSymbol);
-            };
-        },
         unsafeConstruct: <U extends Unit>(
             value: N,
             unit: UnitWithSymbols<U>,
@@ -223,5 +219,10 @@ export function createMeasureType<N>(num: Numeric<N>): GenericMeasureFactory<N> 
         ): GenericMeasure<N, U> => {
             return new InternalMeasure(value, unit, symbol);
         },
+    };
+
+    return {
+        ...((staticMethods || {}) as any),
+        type,
     };
 }
