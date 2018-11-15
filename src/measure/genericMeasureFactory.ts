@@ -34,6 +34,12 @@ interface GenericMeasureFactory<N> {
     of<U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U>;
 }
 
+/**
+ * A complete measure type for a given numeric type. This consists of:
+ * - Static methods to construct measures (e.g. `Measure.of`)
+ * - Predefined arithmetic static methods (e.g. `Measure.add`)
+ * - User defined static methods (e.g. `Measure.abs`)
+ */
 export type GenericMeasureType<N, StaticMethods extends {}> = GenericMeasureFactory<N> &
     GenericMeasureStatic<N> &
     StaticMethods;
@@ -42,9 +48,11 @@ export type GenericMeasureType<N, StaticMethods extends {}> = GenericMeasureFact
  * Creates a new measure factory for a given numeric type. The numeric type of the measure is inferred from the
  * parameter.
  * @param num the set of numeric operations needed to implement a measure for an arbitrary numeric type
+ * @param staticMethods an object containing methods that should be spread into the static definition of a measure,
+ * useful for attaching static math operations to the type.
  * @returns a factory for constructing measures of the given numeric type
  * @example
- * type MyMeasure<U extends Unit> = GenericMeasure<U, MyNumberType>;
+ * type MyMeasure<U extends Unit> = GenericMeasure<MyNumberType, U>;
  * const MyMeasure = createMeasureType({ ... });
  */
 export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticMethods: S): GenericMeasureType<N, S> {
@@ -53,13 +61,11 @@ export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticM
     const type: GenericMeasureFactory<N> & GenericMeasureStatic<N> = {
         ...getGenericMeasureStaticMethods(),
         isMeasure: (value): value is GenericMeasure<N, any> => value instanceof Measure,
-        dimension: <Dim extends string>(dim: Dim, symbol?: string): GenericMeasure<N, { [D in Dim]: 1 }> => {
+        dimensionless: value => new Measure(value, {}),
+        dimension: <Dim extends string>(dim: Dim, symbol?: string) => {
             return new Measure(num.one(), dimension(dim, symbol), symbol);
         },
-        dimensionless: (value: N): GenericMeasure<N, {}> => {
-            return new Measure(value, {});
-        },
-        of: <U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U> => {
+        of: <U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string) => {
             return new Measure(num.mult(value, quantity.value), quantity.unit, symbol);
         },
     };
