@@ -1,4 +1,3 @@
-import { meters } from "../../unit/base";
 import { Numeric } from "../genericMeasure";
 import { createMeasureType } from "../genericMeasureFactory";
 import { wrapBinaryFn, wrapSpreadFn, wrapUnaryFn } from "../genericMeasureUtils";
@@ -6,6 +5,8 @@ import { Measure } from "../numberMeasure";
 
 describe("Generic measures", () => {
     describe("function wrappers", () => {
+        const meters = Measure.dimension("length", "m");
+
         it("unary wrapper", () => {
             const increment = wrapUnaryFn((x: number) => x + 1);
             const result = increment(Measure.of(10, meters));
