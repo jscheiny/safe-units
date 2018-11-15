@@ -1,5 +1,4 @@
 import { Measure } from "../numberMeasure";
-import { addSymbols } from "./testUtils";
 
 describe("Number Measures", () => {
     const meter = Measure.dimension("L");
@@ -135,8 +134,8 @@ describe("Number Measures", () => {
 
             expect(value.inverse()).toEqual(Measure.of(0.1, meter.inverse()));
             expect(value.reciprocal()).toEqual(Measure.of(0.1, meter.inverse()));
-            expect(value.pow(0)).toEqual(Measure.dimensionless(1));
-            expect(value.pow(1)).toEqual(Measure.of(10, meter));
+            expect(value.toThe(0)).toEqual(Measure.dimensionless(1));
+            expect(value.toThe(1)).toEqual(Measure.of(10, meter));
             expect(value.squared()).toEqual(Measure.of(100, meter.squared()));
             expect(value.cubed()).toEqual(Measure.of(1000, meter.cubed()));
         });
@@ -213,7 +212,6 @@ describe("Number Measures", () => {
     describe("formatting", () => {
         it("should format dimensionless units", () => {
             expect(Measure.dimensionless(10).toString()).toBe("10");
-            expect(Measure.unsafeConstruct(10, addSymbols({ x: 0, y: undefined })).toString()).toBe("10");
         });
 
         it("should format base units", () => {
@@ -251,10 +249,6 @@ describe("Number Measures", () => {
                     .withSymbol("rad")
                     .toString(),
             ).toBe("0");
-        });
-
-        it("should skip formatting explicitly 0 and undefined dimension", () => {
-            expect(Measure.unsafeConstruct(10, addSymbols({ x: 0, y: undefined, z: 2 })).toString()).toBe("10 z^2");
         });
 
         it("should format measures as other measures with symbols", () => {

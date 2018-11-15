@@ -1,7 +1,7 @@
-import * as SafeMath from "./math";
+import * as Trig from "./trig";
 import { Unit } from "./unitTypeArithmetic";
 
-export { SafeMath, Unit };
+export { Trig, Unit };
 export * from "./genericMeasure";
 export * from "./genericMeasureFactory";
 export * from "./genericMeasureUtils";
