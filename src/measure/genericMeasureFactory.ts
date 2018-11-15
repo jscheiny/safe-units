@@ -42,14 +42,6 @@ interface GenericMeasureFactory<N> {
      * @returns a measure of value number of quantities.
      */
     of<U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U>;
-
-    /**
-     * Creates a measure from a raw unit, should be avoided unless you know what you're doing.
-     * @param value the value of the measure
-     * @param unit the raw unit of the measure
-     * @param symbol an optional unit symbo for this measure
-     */
-    unsafeConstruct<U extends Unit>(value: N, unit: UnitWithSymbols<U>, symbol?: string): GenericMeasure<N, U>;
 }
 
 export type GenericMeasureClass<N, StaticMethods extends {}> = GenericMeasureFactory<N> &
@@ -211,13 +203,6 @@ export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticM
         },
         of: <U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U> => {
             return new InternalMeasure(num.mult(value, quantity.value), quantity.unit, symbol);
-        },
-        unsafeConstruct: <U extends Unit>(
-            value: N,
-            unit: UnitWithSymbols<U>,
-            symbol?: string,
-        ): GenericMeasure<N, U> => {
-            return new InternalMeasure(value, unit, symbol);
         },
     };
 
