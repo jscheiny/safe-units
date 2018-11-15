@@ -66,6 +66,6 @@ export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticM
 
     return {
         ...((staticMethods || {}) as any),
-        type,
+        ...type,
     };
 }
