@@ -1,8 +1,6 @@
 import { GenericMeasure } from "./genericMeasure";
+import { PrefixFunction } from "./genericMeasureUtils";
 import { DivideUnits, DivisorUnit, MultiplicandUnit, MultiplyUnits, Unit } from "./unitTypeArithmetic";
-
-/** A function which applies a symbol prefix and multiplier to a given measure */
-export type PrefixFunction<N> = <U extends Unit>(measure: GenericMeasure<N, U>) => GenericMeasure<N, U>;
 
 export interface GenericMeasureStatic<N> {
     /** Static version of left + right */
@@ -23,13 +21,13 @@ export interface GenericMeasureStatic<N> {
         right: GenericMeasure<N, R>,
     ): GenericMeasure<N, DivideUnits<L, R>>;
 
-    /** Sums a list of 1 or more measures, all of the same unit. */
+    /** Sums a list of one or more measures, all of the same unit. */
     sum<U extends Unit>(first: GenericMeasure<N, U>, ...rest: Array<GenericMeasure<N, U>>): GenericMeasure<N, U>;
 
-    /** Returns the smallest of a list of 1 or more measures. */
+    /** Returns the smallest of a list of one or more measures. */
     min<U extends Unit>(first: GenericMeasure<N, U>, ...rest: Array<GenericMeasure<N, U>>): GenericMeasure<N, U>;
 
-    /** Returns the largest of a list of 1 or more measures. */
+    /** Returns the largest of a list of one or more measures. */
     max<U extends Unit>(first: GenericMeasure<N, U>, ...rest: Array<GenericMeasure<N, U>>): GenericMeasure<N, U>;
 
     /**

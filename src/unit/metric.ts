@@ -1,4 +1,4 @@
-import { PrefixFunction } from "../measure/genericMeasureStatic";
+import { PrefixFunction } from "../measure/genericMeasureUtils";
 import { Measure } from "../measure/numberMeasure";
 import * as Quantity from "../quantity/quantities";
 import { amperes, candelas, kilograms, meters, moles, seconds, steradians } from "./base";
