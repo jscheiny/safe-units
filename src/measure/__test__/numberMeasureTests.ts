@@ -1,7 +1,6 @@
-import { Measure } from "../measure";
-import { addSymbols } from "./testUtils";
+import { Measure } from "../numberMeasure";
 
-describe("Measures", () => {
+describe("Number measures", () => {
     const meter = Measure.dimension("L");
     const second = Measure.dimension("T");
     const mps = meter.per(second);
@@ -31,6 +30,65 @@ describe("Measures", () => {
             const dimensionless = Measure.dimensionless(3);
             expect(dimensionless.value).toBe(3);
             expect(dimensionless.unit).toEqual({});
+        });
+    });
+
+    describe("static", () => {
+        it("arithmetic", () => {
+            expect(Measure.add(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(0, mps));
+            expect(Measure.subtract(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(10, mps));
+            expect(Measure.multiply(Measure.of(5, mps), Measure.of(10, second))).toEqual(Measure.of(50, meter));
+            expect(Measure.divide(Measure.of(50, meter), Measure.of(10, second))).toEqual(Measure.of(5, mps));
+        });
+
+        it("abs", () => {
+            expect(Measure.abs(Measure.of(-10, mps))).toEqual(Measure.of(10, mps));
+        });
+
+        it("cbrt", () => {
+            expect(Measure.cbrt(Measure.of(64, second.cubed()))).toEqual(Measure.of(4, second));
+        });
+
+        it("ceil", () => {
+            expect(Measure.ceil(Measure.of(3.4, mps))).toEqual(Measure.of(4, mps));
+        });
+
+        it("floor", () => {
+            expect(Measure.floor(Measure.of(7.8, mps))).toEqual(Measure.of(7, mps));
+        });
+
+        it("hypot", () => {
+            expect(Measure.hypot(Measure.of(3, meter), Measure.of(4, meter))).toEqual(Measure.of(5, meter));
+        });
+
+        it("max", () => {
+            expect(Measure.max(Measure.of(10, mps), Measure.of(5, mps), Measure.of(15, mps))).toEqual(
+                Measure.of(15, mps),
+            );
+        });
+
+        it("min", () => {
+            expect(Measure.min(Measure.of(10, mps), Measure.of(5, mps), Measure.of(15, mps))).toEqual(
+                Measure.of(5, mps),
+            );
+        });
+
+        it("round", () => {
+            expect(Measure.round(Measure.of(7.8, mps))).toEqual(Measure.of(8, mps));
+        });
+
+        it("sqrt", () => {
+            expect(Measure.sqrt(Measure.of(25, meter.squared()))).toEqual(Measure.of(5, meter));
+        });
+
+        it("sum", () => {
+            expect(Measure.sum(Measure.of(10, mps), Measure.of(5, mps), Measure.of(15, mps))).toEqual(
+                Measure.of(30, mps),
+            );
+        });
+
+        it("trunc", () => {
+            expect(Measure.trunc(Measure.of(-7.8, mps))).toEqual(Measure.of(-7, mps));
         });
     });
 
@@ -76,8 +134,8 @@ describe("Measures", () => {
 
             expect(value.inverse()).toEqual(Measure.of(0.1, meter.inverse()));
             expect(value.reciprocal()).toEqual(Measure.of(0.1, meter.inverse()));
-            expect(value.pow(0)).toEqual(Measure.dimensionless(1));
-            expect(value.pow(1)).toEqual(Measure.of(10, meter));
+            expect(value.toThe(0)).toEqual(Measure.dimensionless(1));
+            expect(value.toThe(1)).toEqual(Measure.of(10, meter));
             expect(value.squared()).toEqual(Measure.of(100, meter.squared()));
             expect(value.cubed()).toEqual(Measure.of(1000, meter.cubed()));
         });
@@ -154,7 +212,6 @@ describe("Measures", () => {
     describe("formatting", () => {
         it("should format dimensionless units", () => {
             expect(Measure.dimensionless(10).toString()).toBe("10");
-            expect(Measure.unsafeConstruct(10, addSymbols({ x: 0, y: undefined })).toString()).toBe("10");
         });
 
         it("should format base units", () => {
@@ -192,10 +249,6 @@ describe("Measures", () => {
                     .withSymbol("rad")
                     .toString(),
             ).toBe("0");
-        });
-
-        it("should skip formatting explicitly 0 and undefined dimension", () => {
-            expect(Measure.unsafeConstruct(10, addSymbols({ x: 0, y: undefined, z: 2 })).toString()).toBe("10 z^2");
         });
 
         it("should format measures as other measures with symbols", () => {

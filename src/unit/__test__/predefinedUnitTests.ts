@@ -1,9 +1,9 @@
 import * as Units from "..";
-import { Measure } from "../../measure/measure";
+import { Measure } from "../../measure/numberMeasure";
 import { meters } from "../base";
 import { kilo, micro } from "../metric";
 
-describe("Predefined Units", () => {
+describe("Predefined units", () => {
     const UnitNames = Object.keys(Units);
 
     function forEachUnit(fn: (unit: Measure<any>, name: string) => void): void {

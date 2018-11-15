@@ -1,5 +1,5 @@
 import { GenericMeasure } from "../measure/genericMeasure";
-import { Measure } from "../measure/measure";
+import { Measure } from "../measure/numberMeasure";
 import * as Base from "../unit/base";
 
 // Dimensionless

@@ -1,5 +1,5 @@
-import { PrefixFunction } from "../measure/genericMeasureFactory";
-import { Measure } from "../measure/measure";
+import { PrefixFunction } from "../measure/genericMeasureUtils";
+import { Measure } from "../measure/numberMeasure";
 import { Memory } from "../quantity/quantities";
 import { bits } from "./base";
 

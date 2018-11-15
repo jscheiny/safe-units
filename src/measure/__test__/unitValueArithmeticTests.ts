@@ -1,7 +1,21 @@
+import { Exponent } from "../../exponent";
+import { Unit, UnitWithSymbols } from "../unitTypeArithmetic";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "../unitValueArithmetic";
-import { addSymbols } from "./testUtils";
 
 describe("Unit value arithmetic", () => {
+    function addSymbols<U extends Unit>(unit: U): UnitWithSymbols<U> {
+        const result: UnitWithSymbols = {};
+        for (const dimension in unit) {
+            const exponent: Exponent | undefined = unit[dimension];
+            if (exponent === undefined) {
+                result[dimension] = undefined;
+            } else {
+                result[dimension] = [dimension, exponent];
+            }
+        }
+        return result as any;
+    }
+
     const x = dimension("x");
     const y = dimension("y");
 

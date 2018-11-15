@@ -1,5 +1,5 @@
 import { GenericMeasure } from "../measure/genericMeasure";
-import { Measure } from "../measure/measure";
+import { Measure } from "../measure/numberMeasure";
 
 // HACKHACK: Explicitly type this so we can import GenericMeasure and avoid absolute paths in the generated typings.
 export const meters: GenericMeasure<number, { length: 1 }> = Measure.dimension("length", "m");
