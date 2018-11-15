@@ -27,10 +27,6 @@ export function createMeasureClass<N>(num: Numeric<N>): GenericMeasureConstructo
             this.symbol = symbol;
         }
 
-        public withSymbol(symbol: string | undefined): GenericMeasure<N, U> {
-            return new InternalMeasure(this.value, this.unit, symbol);
-        }
-
         // Arithmetic
 
         public plus(other: GenericMeasure<N, U>): GenericMeasure<N, U> {
@@ -67,24 +63,18 @@ export function createMeasureClass<N>(num: Numeric<N>): GenericMeasureConstructo
             return this.over(other);
         }
 
-        public pow<E extends Exponent>(
+        public toThe<E extends Exponent>(
             power: E,
         ): U extends BaseUnit<E> ? GenericMeasure<N, ExponentiateUnit<U, E>> : never {
             return new InternalMeasure(num.pow(this.value, power), exponentiateUnit(this.unit as any, power)) as any;
         }
 
-        public toThe<E extends Exponent>(
-            power: E,
-        ): U extends BaseUnit<E> ? GenericMeasure<N, ExponentiateUnit<U, E>> : never {
-            return this.pow(power);
-        }
-
         public inverse(): GenericMeasure<N, ExponentiateUnit<U, -1>> {
-            return this.pow(-1);
+            return this.toThe(-1);
         }
 
         public reciprocal(): GenericMeasure<N, ExponentiateUnit<U, -1>> {
-            return this.pow(-1);
+            return this.toThe(-1);
         }
 
         public unsafeMap<V extends Unit>(
@@ -137,6 +127,10 @@ export function createMeasureClass<N>(num: Numeric<N>): GenericMeasureConstructo
             }
             const value = num.format(num.div(this.value, unit.value));
             return `${value} ${unit.symbol}`;
+        }
+
+        public withSymbol(symbol: string | undefined): GenericMeasure<N, U> {
+            return new InternalMeasure(this.value, this.unit, symbol);
         }
 
         public clone(): GenericMeasure<N, U> {

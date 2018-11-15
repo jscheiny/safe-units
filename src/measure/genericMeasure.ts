@@ -61,21 +61,7 @@ export interface GenericMeasure<N, U extends Unit> {
      * @param exponent the exponent to raise this measure to
      * @returns this exponent to the given power
      */
-    pow<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<N, ExponentiateUnit<U, E>> : never;
-
-    /**
-     * Raises this measure to a given power. If the result would give exponents outside of the allowable bounds, this
-     * will return `never`.
-     * @param exponent the exponent to raise this measure to
-     * @returns this exponent to the given power
-     */
     toThe<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<N, ExponentiateUnit<U, E>> : never;
-
-    /**
-     * Adds a symbol to this measure.
-     * @param symbol the symbol of the unit represented by this measure
-     */
-    withSymbol(symbol: string | undefined): GenericMeasure<N, U>;
 
     /**
      * Adds this measure to another measure with the same unit.
@@ -213,6 +199,12 @@ export interface GenericMeasure<N, U extends Unit> {
      * @returns a string representation of measure
      */
     in(unit: GenericMeasure<N, U>): string;
+
+    /**
+     * Adds a symbol to this measure.
+     * @param symbol the symbol of the unit represented by this measure
+     */
+    withSymbol(symbol: string | undefined): GenericMeasure<N, U>;
 
     /** Shallow copies this measure instance. */
     clone(): GenericMeasure<N, U>;
