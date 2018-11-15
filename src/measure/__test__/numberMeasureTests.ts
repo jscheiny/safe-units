@@ -1,6 +1,6 @@
 import { Measure } from "../numberMeasure";
 
-describe("Number Measures", () => {
+describe("Number measures", () => {
     const meter = Measure.dimension("L");
     const second = Measure.dimension("T");
     const mps = meter.per(second);

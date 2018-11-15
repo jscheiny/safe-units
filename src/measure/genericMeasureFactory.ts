@@ -55,7 +55,7 @@ export type GenericMeasureType<N, StaticMethods extends {}> = GenericMeasureFact
  * type MyMeasure<U extends Unit> = GenericMeasure<MyNumberType, U>;
  * const MyMeasure = createMeasureType({ ... });
  */
-export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticMethods: S): GenericMeasureType<N, S> {
+export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticMethods?: S): GenericMeasureType<N, S> {
     const Measure = createMeasureClass(num);
 
     const type: GenericMeasureFactory<N> & GenericMeasureStatic<N> = {
