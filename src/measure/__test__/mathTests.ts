@@ -1,7 +1,7 @@
 import { degrees, piRadians } from "../../unit/angle";
 import { meters, radians } from "../../unit/base";
 import * as SafeMath from "../math";
-import { Measure } from "../measure";
+import { Measure } from "../numberMeasure";
 
 describe("Math", () => {
     it("trig", () => {

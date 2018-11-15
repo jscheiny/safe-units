@@ -1,7 +1,7 @@
-import { Measure } from "../measure";
+import { Measure } from "../numberMeasure";
 import { addSymbols } from "./testUtils";
 
-describe("Measures", () => {
+describe("Number Measures", () => {
     const meter = Measure.dimension("L");
     const second = Measure.dimension("T");
     const mps = meter.per(second);

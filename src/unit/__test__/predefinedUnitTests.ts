@@ -1,5 +1,5 @@
 import * as Units from "..";
-import { Measure } from "../../measure/measure";
+import { Measure } from "../../measure/numberMeasure";
 import { meters } from "../base";
 import { kilo, micro } from "../metric";
 

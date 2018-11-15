@@ -1,5 +1,5 @@
 import { PrefixFunction } from "../measure/genericMeasureStatic";
-import { Measure } from "../measure/measure";
+import { Measure } from "../measure/numberMeasure";
 import * as Quantity from "../quantity/quantities";
 import { amperes, candelas, kilograms, meters, moles, seconds, steradians } from "./base";
 
