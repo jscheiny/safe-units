@@ -1,7 +1,7 @@
-import { Length, PlaneAngle } from "../quantity/quantities";
+import { GenericMeasure } from "../measure/genericMeasure";
+import { Measure } from "../measure/numberMeasure";
 import { radians } from "../unit/base";
-import { GenericMeasure } from "./genericMeasure";
-import { Measure } from "./numberMeasure";
+import { Length, PlaneAngle } from "./quantities";
 
 /**
  * `Math.acos` for `number` measures.

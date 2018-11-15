@@ -1,7 +1,7 @@
+import { Measure } from "../../measure/numberMeasure";
+import * as Trig from "../../quantity/trig";
 import { degrees, piRadians } from "../../unit/angle";
 import { meters, radians } from "../../unit/base";
-import { Measure } from "../numberMeasure";
-import * as Trig from "../trig";
 
 describe("Trig", () => {
     const zeroRadians = Measure.of(0, radians);
