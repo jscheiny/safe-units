@@ -77,8 +77,13 @@ export function nthRootUnit<U extends RadicandUnit<N>, N extends Exponent>(
     return expAndRootImpl(unit, exponent => exponent / root);
 }
 
-export const sqrtUnit = <U extends RadicandUnit<2>>(unit: UnitWithSymbols<U>) => nthRootUnit(unit, 2);
-export const cbrtUnit = <U extends RadicandUnit<3>>(unit: UnitWithSymbols<U>) => nthRootUnit(unit, 3);
+export function sqrtUnit<U extends RadicandUnit<2>>(unit: UnitWithSymbols<U>): UnitWithSymbols<NthRootUnit<U, 2>> {
+    return nthRootUnit(unit, 2);
+}
+
+export function cbrtUnit<U extends RadicandUnit<3>>(unit: UnitWithSymbols<U>): UnitWithSymbols<NthRootUnit<U, 3>> {
+    return nthRootUnit(unit, 3);
+}
 
 function expAndRootImpl(unit: UnitWithSymbols, updateExponent: (exp: Exponent) => number): any {
     const result: UnitWithSymbols = {};
