@@ -1,5 +1,5 @@
 import { GenericMeasure } from "./genericMeasure";
-import { createMeasureType, GenericMeasureClass } from "./genericMeasureFactory";
+import { createMeasureType, GenericMeasureType } from "./genericMeasureFactory";
 import { NthRootUnit, RadicandUnit, Unit } from "./unitTypeArithmetic";
 import { cbrtUnit, sqrtUnit } from "./unitValueArithmetic";
 
@@ -46,7 +46,7 @@ const staticMethods: MeasureStaticMethods = {
 };
 
 export type Measure<U extends Unit> = GenericMeasure<number, U>;
-export const Measure: GenericMeasureClass<number, MeasureStaticMethods> = createMeasureType(
+export const Measure: GenericMeasureType<number, MeasureStaticMethods> = createMeasureType(
     {
         one: () => 1,
         neg: x => -x,
