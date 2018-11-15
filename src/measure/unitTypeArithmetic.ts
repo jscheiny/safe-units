@@ -43,9 +43,9 @@ export type ExponentiateUnit<U extends Unit, N extends Exponent> = StripZeroes<
 >;
 
 /** A type that is assignable from all units that can be raised to the N without producing an error. */
-export type BaseUnit<N extends Exponent> = Partial<{
-    [dimension: string]: MultiplicandOf<N>;
-}>;
+export interface BaseUnit<N extends Exponent> {
+    [dimension: string]: MultiplicandOf<N> | undefined;
+}
 
 // Roots
 
@@ -55,9 +55,9 @@ export type NthRootUnit<U extends Unit, N extends Exponent> = StripZeroes<
 >;
 
 /** A type that is assignable from all units whose Nth root does not produce an error. */
-export type RadicandUnit<N extends Exponent> = Partial<{
-    [dimension: string]: ProductOf<N>;
-}>;
+export interface RadicandUnit<N extends Exponent> {
+    [dimension: string]: ProductOf<N> | undefined;
+}
 
 // Utility types
 
