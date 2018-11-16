@@ -1,8 +1,7 @@
-import { Exponent } from "../exponent";
 import { formatUnit } from "./format";
 import { GenericMeasure, Numeric } from "./genericMeasure";
 import {
-    BaseUnit,
+    AllowedExponents,
     DivideUnits,
     DivisorUnit,
     ExponentiateUnit,
@@ -20,8 +19,8 @@ export interface GenericMeasureConstructor<N> {
 export function createMeasureClass<N>(num: Numeric<N>): GenericMeasureConstructor<N> {
     class InternalMeasure<U extends Unit> implements GenericMeasure<N, U> {
         public readonly symbol: string | undefined;
-        public squared!: U extends BaseUnit<2> ? () => GenericMeasure<N, ExponentiateUnit<U, 2>> : never;
-        public cubed!: U extends BaseUnit<3> ? () => GenericMeasure<N, ExponentiateUnit<U, 3>> : never;
+        public squared!: 2 extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, 2>> : never;
+        public cubed!: 3 extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, 3>> : never;
 
         constructor(public readonly value: N, public readonly unit: UnitWithSymbols<U>, symbol?: string) {
             this.symbol = symbol;
@@ -63,10 +62,8 @@ export function createMeasureClass<N>(num: Numeric<N>): GenericMeasureConstructo
             return this.over(other);
         }
 
-        public toThe<E extends Exponent>(
-            power: E,
-        ): U extends BaseUnit<E> ? GenericMeasure<N, ExponentiateUnit<U, E>> : never {
-            return new InternalMeasure(num.pow(this.value, power), exponentiateUnit(this.unit as any, power)) as any;
+        public toThe<E extends AllowedExponents<U>>(power: E): GenericMeasure<N, ExponentiateUnit<U, E>> {
+            return new InternalMeasure(num.pow(this.value, power), exponentiateUnit(this.unit, power)) as any;
         }
 
         public inverse(): GenericMeasure<N, ExponentiateUnit<U, -1>> {

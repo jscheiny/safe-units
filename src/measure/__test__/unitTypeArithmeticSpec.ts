@@ -1,6 +1,6 @@
 import { Exponent, IsSame } from "../../exponent";
 import {
-    BaseUnit,
+    AllowedExponents,
     DivideUnits,
     ExponentiateUnit,
     MultiplicandUnit,
@@ -54,25 +54,16 @@ const SquaringWorks: SquaringWorks = true;
 type CubingWorks = IsSame<{ a: 3 }, ExponentiateUnit<{ a: 1 }, 3>>;
 const CubingWorks: CubingWorks = true;
 
-// BaseUnit
+// AllowedExponents
 
-type BaseUnitAcceptsSquareRoots = { a: 2; b: 1 } extends BaseUnit<2> ? true : never;
-const BaseUnitAcceptsSquareRoots: BaseUnitAcceptsSquareRoots = true;
+type AllowedLargeExponentWorks = IsSame<Exponent, AllowedExponents<{ a: 1; b: 0 }>>;
+const AllowedLargeExponentWorks: AllowedLargeExponentWorks = true;
 
-type BaseUnitRejectsLargeExponents = { a: 2; b: -4 } extends BaseUnit<2> ? never : true;
-const BaseUnitRejectsLargeExponents: BaseUnitRejectsLargeExponents = true;
+type AllowedMediumExponentWorks = IsSame<-2 | -1 | 0 | 1 | 2, AllowedExponents<{ a: 2; b: 1 }>>;
+const AllowedMediumExponentWorks: AllowedMediumExponentWorks = true;
 
-type BaseUnitAcceptsCubeRoots = { a: 1; b: 0 } extends BaseUnit<3> ? true : never;
-const BaseUnitAcceptsCubeRoots: BaseUnitAcceptsCubeRoots = true;
-
-type BaseUnit3RejectsLargeExponents = { a: 3 } extends BaseUnit<3> ? never : true;
-const BaseUnit3RejectsLargeExponents: BaseUnit3RejectsLargeExponents = true;
-
-type BaseUnitAllowsAllUnitsFor1 = Unit extends BaseUnit<1> ? true : never;
-const BaseUnitAllowsAllUnitsFor1: BaseUnitAllowsAllUnitsFor1 = true;
-
-type BaseUnitAllowsAllUnitsFor0 = Unit extends BaseUnit<0> ? true : never;
-const BaseUnitAllowsAllUnitsFor0: BaseUnitAllowsAllUnitsFor0 = true;
+type AllowedSmallExponentWorks = IsSame<-1 | 0 | 1, AllowedExponents<{ a: 3; b: 1 }>>;
+const AllowedSmallExponentWorks: AllowedSmallExponentWorks = true;
 
 // NthRootUnit
 
