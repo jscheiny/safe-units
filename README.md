@@ -5,10 +5,10 @@
 Safe Units is a type-safe units of measurement framework for performing dimensional analysis in TypeScript at compile time. Safe Units provides an implementation of an SI based unit system but is flexible enough to allow users to create their own unit systems which can be independent or can interoperate with the built-in units. This library makes heavy use of conditional types and thus requires 2.8.3+.
 
 ```typescript
-import { Length, Measure, Time, Unit, Velocity } from "safe-units";
+import { Length, Measure, meters, seconds, Time, Velocity } from "safe-units";
 
-const length: Length = Measure.of(30, Unit.meters);
-const time: Time = Measure.of(15, Unit.seconds);
+const length: Length = Measure.of(30, meters);
+const time: Time = Measure.of(15, seconds);
 const velocity: Velocity = length.over(time);
 
 console.log(length.toString());   // 30 m
@@ -33,13 +33,13 @@ const error: Velocity = length.times(time); // Error: A measure of m*s isn't ass
 ### Measure arithmetic
 
 ```typescript
-import { Area, Force, Length, Mass, Measure, Pressure, Quantity, SafeMath, Unit, Volume } from "safe-units";
+import { Acceleration, Area, Force, Length, Mass, Measure, Pressure, Unit, Volume } from "safe-units";
 
 const length: Length = Measure.of(30, Unit.feet);
 const width: Length = Measure.of(20, Unit.miles);
 const height: Length = Measure.of(10, Unit.meters);
 const area: Area = length.times(width);
-const squareSide: Length = SafeMath.sqrt(area);
+const squareSide: Length = Measure.sqrt(area);
 const volume: Volume = area.times(height);
 const perimeter: Length = length.scale(2).plus(width.scale(2));
 const mass: Mass = Measure.of(100, Unit.pounds);
@@ -51,15 +51,15 @@ const pressure: Pressure = force.over(area);
 ### Type errors
 
 ```typescript
-import { Length, Force, Measure, SafeMath } from "safe-units";
+import { Force, Length, Measure, meters, seconds, Time } from "safe-units";
 
-const length: Length = Measure.of(10, Unit.meters);
-const time: Time = Measure.of(10, Unit.seconds);
+const length: Length = Measure.of(10, meters);
+const time: Time = Measure.of(10, seconds);
 length.plus(time); // Error: Measures of different units cannot be added
 length.minus(time); // Error: Measures of different units cannot be subtracted
 
-const force: Force = length.over(time) // Error: Measure of m/s is not assignable to measure of kg*m/s^2
-const root = SafeMath.sqrt(length) // Error: Can't take sqrt of measure of m since it's not a perfect square
+const force: Force = length.over(time); // Error: Measure of m/s is not assignable to measure of kg*m/s^2
+const root = Measure.sqrt(length); // Error: Can't take sqrt of measure of m since it's not a perfect square
 ```
 
 ### Naming units
@@ -73,9 +73,11 @@ console.log(Measure.of(8, furlongs).in(miles)); // 1 mi
 console.log(Measure.of(1, miles).in(furlongs)); // 8 fur
 
 const fortnights = Measure.of(14, days, "ftn");
-const furlongsPerFornight = furlongs.per(fortnights).withSymbol("fur/ftn");
+const megaFurlongsPerMicroFornight = mega(furlongs)
+    .per(micro(fortnights))
+    .withSymbol("Mfur/µftn");
 
-console.log(speedOfLight.in(furlongsPerFornight)); // 1802617499785.2544 fur/ftn
+console.log(speedOfLight.in(megaFurlongsPerMicroFornight)); // 1.8026174997852542 Mfur/µftn
 ```
 
 ### Deriving quantities
