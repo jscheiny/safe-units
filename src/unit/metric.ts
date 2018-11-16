@@ -1,7 +1,7 @@
 import { PrefixFunction } from "../measure/genericMeasureUtils";
 import { Measure } from "../measure/numberMeasure";
-import * as Quantity from "../quantity/quantities";
 import { amperes, candelas, kilograms, meters, moles, seconds, steradians } from "./base";
+import * as Quantity from "./quantities";
 
 export const hertz: Quantity.Frequency = seconds.inverse().withSymbol("Hz");
 export const newtons: Quantity.Force = kilograms.times(meters.per(seconds.squared())).withSymbol("N");

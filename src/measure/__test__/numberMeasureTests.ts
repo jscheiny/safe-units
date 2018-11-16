@@ -33,7 +33,28 @@ describe("Number measures", () => {
         });
     });
 
-    describe("static", () => {
+    describe("prefixes", () => {
+        const grams = Measure.dimension("mass", "g");
+        const kilo = Measure.prefix("k", 1000);
+
+        it("should scale the base unit", () => {
+            const kg = kilo(grams);
+            expect(kg.unit).toEqual(grams.unit);
+            expect(kg.value).toBe(1000);
+        });
+
+        it("should apply a prefix when a symbol is present on the base unit", () => {
+            expect(kilo(grams).symbol).toBe("kg");
+        });
+
+        it("should not apply a prefix when a symbol is not present on the base unit", () => {
+            const km = kilo(meter);
+            expect(km.symbol).toBeUndefined();
+            expect(km.value).toBe(1000);
+        });
+    });
+
+    describe("math", () => {
         it("arithmetic", () => {
             expect(Measure.add(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(0, mps));
             expect(Measure.subtract(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(10, mps));

@@ -1,6 +1,6 @@
 import { Measure } from "../measure/numberMeasure";
-import { PlaneAngle } from "../quantity/quantities";
 import { radians } from "./base";
+import { PlaneAngle } from "./quantities";
 
 export const piRadians: PlaneAngle = Measure.of(Math.PI, radians, "pi rad");
 export const tauRadians: PlaneAngle = Measure.of(2, piRadians, "tau rad");
