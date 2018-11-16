@@ -60,11 +60,11 @@ export const Frequency = Time.inverse();
 export type Frequency = typeof Frequency;
 
 /** 1 / s^2 */
-export const FrequencyDrift = Time.inverse().squared();
+export const FrequencyDrift = Time.toThe(-2);
 export type FrequencyDrift = typeof FrequencyDrift;
 
 /** 1 / m^2 */
-export const FuelEfficiency = Length.inverse().squared();
+export const FuelEfficiency = Length.toThe(-2);
 export type FuelEfficiency = typeof FuelEfficiency;
 
 /** 1 / m */
@@ -228,7 +228,7 @@ export const MagneticFlux = Energy.over(ElectricCurrent);
 export type MagneticFlux = typeof MagneticFlux;
 
 /** kg / (s^2 ⋅ A) */
-export const MagneticFluxDensity = Voltage.times(Time).over(Length.squared());
+export const MagneticFluxDensity = Voltage.times(Time).over(Area);
 export type MagneticFluxDensity = typeof MagneticFluxDensity;
 
 /** kg ⋅ m / (s^2 ⋅ A^2)  */
