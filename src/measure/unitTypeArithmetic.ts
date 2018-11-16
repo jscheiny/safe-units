@@ -43,10 +43,15 @@ export type ExponentiateUnit<U extends Unit, N extends Exponent> = 0 extends N
     ? {}
     : 1 extends N ? U : { [Dim in keyof U]: MultiplyExponents<GetExponent<U, Dim>, N> };
 
-/** A type that is assignable from all units that can be raised to the N without producing an error. */
-export interface BaseUnit<N extends Exponent> {
-    [dimension: string]: MultiplicandOf<N> | undefined;
-}
+/** Returns the union of exponents to which a given unit is allowed to be raised.  */
+export type AllowedExponents<U extends Unit> = Exclude<Exponent, NonAllowedExponents<U>> | AlwaysAllowedExponents;
+
+/** Returns the union of exponents that raising and exponent to would produce an error. */
+export type NonAllowedExponents<U extends Unit> = {
+    [Dim in keyof U]: undefined extends U[Dim] ? never : Exclude<Exponent, MultiplicandOf<NonNullable<U[Dim]>>>
+}[keyof U];
+
+type AlwaysAllowedExponents = -1 | 0 | 1;
 
 // Roots
 

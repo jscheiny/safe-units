@@ -1,6 +1,6 @@
 import { Exponent, NonZeroExponent } from "../exponent";
 import {
-    BaseUnit,
+    AllowedExponents,
     DivideUnits,
     ExponentiateUnit,
     MultiplyUnits,
@@ -63,7 +63,7 @@ export function divideUnits<L extends Unit, R extends Unit>(
     return multiplyUnits(left, exponentiateUnit(right, -1)) as any;
 }
 
-export function exponentiateUnit<U extends BaseUnit<N>, N extends Exponent>(
+export function exponentiateUnit<U extends Unit, N extends AllowedExponents<U>>(
     unit: UnitWithSymbols<U>,
     power: N,
 ): UnitWithSymbols<ExponentiateUnit<U, N>> {

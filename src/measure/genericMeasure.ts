@@ -1,6 +1,6 @@
 import { Exponent } from "../exponent";
 import {
-    BaseUnit,
+    AllowedExponents,
     DivideUnits,
     DivisorUnit,
     ExponentiateUnit,
@@ -46,14 +46,14 @@ export interface GenericMeasure<N, U extends Unit> {
      * this function will have type `never`.
      * @returns this measure multiplied by itself
      */
-    squared: U extends BaseUnit<2> ? () => GenericMeasure<N, ExponentiateUnit<U, 2>> : never;
+    squared: 2 extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, 2>> : never;
 
     /**
      * If this measure can be cubed, cubes it. If this measure cannot be cubed (due to exponent limitations), then
      * this function will have type `never`.
      * @returns this cube of this measure
      */
-    cubed: U extends BaseUnit<3> ? () => GenericMeasure<N, ExponentiateUnit<U, 3>> : never;
+    cubed: 3 extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, 3>> : never;
 
     /**
      * Raises this measure to a given power. If the result would give exponents outside of the allowable bounds, this
@@ -61,7 +61,7 @@ export interface GenericMeasure<N, U extends Unit> {
      * @param exponent the exponent to raise this measure to
      * @returns this exponent to the given power
      */
-    toThe<E extends Exponent>(exponent: E): U extends BaseUnit<E> ? GenericMeasure<N, ExponentiateUnit<U, E>> : never;
+    toThe<E extends AllowedExponents<U>>(exponent: E): GenericMeasure<N, ExponentiateUnit<U, E>>;
 
     /**
      * Adds this measure to another measure with the same unit.

@@ -9,8 +9,8 @@ Area.minus(Volume); // $ExpectError
 
 const s = Volume.squared; // $ExpectType never
 const c = Area.cubed; // $ExpectType never
-Area.toThe(4); // $ExpectType never
-Volume.toThe(-2); // $ExpectType never
+Area.toThe(4); // $ExpectError
+Volume.toThe(-2); // $ExpectError
 
 Measure.sqrt(Volume); // $ExpectError
 Measure.cbrt(Area); // $ExpectError
