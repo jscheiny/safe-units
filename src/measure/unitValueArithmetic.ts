@@ -1,4 +1,4 @@
-import { Exponent } from "../exponent";
+import { Exponent, NonZeroExponent } from "../exponent";
 import {
     BaseUnit,
     DivideUnits,
@@ -70,7 +70,7 @@ export function exponentiateUnit<U extends BaseUnit<N>, N extends Exponent>(
     return expAndRootImpl(unit, exponent => exponent * power);
 }
 
-export function nthRootUnit<U extends RadicandUnit<N>, N extends Exponent>(
+export function nthRootUnit<U extends RadicandUnit<N>, N extends NonZeroExponent>(
     unit: UnitWithSymbols<U>,
     root: N,
 ): UnitWithSymbols<NthRootUnit<U, N>> {

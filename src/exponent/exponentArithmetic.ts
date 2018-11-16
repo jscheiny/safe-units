@@ -4,6 +4,8 @@ import { DivideExponents } from "./generated/division";
 import { Exponent } from "./generated/exponent";
 import { MultiplyExponents } from "./generated/multiplication";
 
+export type NonZeroExponent = Exclude<Exponent, 0>;
+
 type SubtractExponents<L extends Exponent, R extends Exponent> = AddExponents<L, Negative<R>>;
 type Negative<N extends Exponent> = MultiplyExponents<N, -1>;
 

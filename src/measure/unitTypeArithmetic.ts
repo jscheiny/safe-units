@@ -5,6 +5,7 @@ import {
     Exponent,
     MultiplicandOf,
     MultiplyExponents,
+    NonZeroExponent,
     ProductOf,
 } from "../exponent";
 
@@ -50,9 +51,9 @@ export interface BaseUnit<N extends Exponent> {
 // Roots
 
 /** Returns the nth root of a unit. This is the inverse scalar multiple of the dimension vector. */
-export type NthRootUnit<U extends Unit, N extends Exponent> = StripZeroes<
-    { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> }
->;
+export type NthRootUnit<U extends Unit, N extends NonZeroExponent> = 1 extends N
+    ? U
+    : { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> };
 
 /** A type that is assignable from all units whose Nth root does not produce an error. */
 export interface RadicandUnit<N extends Exponent> {
@@ -68,4 +69,4 @@ type StripZeroes<U extends Unit> = { [Dim in NonZeroKeys<U>]: U[Dim] };
 type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]> extends 0 ? never : Dim }[keyof U];
 
 /** Get the exponent at a given dimension of a unit, or 0 if that dimension is undefined */
-type GetExponent<U extends Unit, D> = D extends keyof Unit ? (undefined extends U[D] ? 0 : NonNullable<U[D]>) : 0;
+export type GetExponent<U extends Unit, D> = D extends keyof U ? NonNullable<U[D]> : 0;
