@@ -5,7 +5,7 @@ import { Measure } from "../numberMeasure";
 
 describe("Generic measures", () => {
     describe("function wrappers", () => {
-        const meters = Measure.dimension("length", "m");
+        const meters = Measure.dimension("L", "m");
 
         it("unary wrapper", () => {
             const increment = wrapUnaryFn((x: number) => x + 1);
