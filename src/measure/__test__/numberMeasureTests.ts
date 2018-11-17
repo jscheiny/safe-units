@@ -1,10 +1,10 @@
 import { Measure } from "../numberMeasure";
 
 describe("Number measures", () => {
-    const meter = Measure.dimension("L");
-    const second = Measure.dimension("T");
-    const mps = meter.per(second);
-    const mps2 = mps.per(second);
+    const meters = Measure.dimension("length", "m");
+    const seconds = Measure.dimension("time", "s");
+    const mps = meters.per(seconds);
+    const mps2 = mps.per(seconds);
 
     describe("dimension", () => {
         it("should create dimensions with value 1", () => {
@@ -20,10 +20,10 @@ describe("Number measures", () => {
         });
 
         it("should construct from a number and another measure", () => {
-            const kilometer = Measure.of(1000, meter);
+            const kilometer = Measure.of(1000, meters);
             const measure = Measure.of(5.2, kilometer);
             expect(measure.value).toBe(5200);
-            expect(measure.unit).toEqual(meter.unit);
+            expect(measure.unit).toEqual(meters.unit);
         });
 
         it("should construct dimensionless values", () => {
@@ -34,23 +34,23 @@ describe("Number measures", () => {
     });
 
     describe("prefixes", () => {
-        const grams = Measure.dimension("mass", "g");
         const kilo = Measure.prefix("k", 1000);
 
         it("should scale the base unit", () => {
-            const kg = kilo(grams);
-            expect(kg.unit).toEqual(grams.unit);
-            expect(kg.value).toBe(1000);
+            const km = kilo(meters);
+            expect(km.unit).toEqual(meters.unit);
+            expect(km.value).toBe(1000);
         });
 
         it("should apply a prefix when a symbol is present on the base unit", () => {
-            expect(kilo(grams).symbol).toBe("kg");
+            expect(kilo(meters).symbol).toBe("km");
         });
 
         it("should not apply a prefix when a symbol is not present on the base unit", () => {
-            const km = kilo(meter);
-            expect(km.symbol).toBeUndefined();
-            expect(km.value).toBe(1000);
+            const blargs = Measure.of(1e-3, meters);
+            const kblargs = kilo(blargs);
+            expect(kblargs.symbol).toBeUndefined();
+            expect(kblargs.value).toBe(1);
         });
     });
 
@@ -58,8 +58,8 @@ describe("Number measures", () => {
         it("arithmetic", () => {
             expect(Measure.add(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(0, mps));
             expect(Measure.subtract(Measure.of(5, mps), Measure.of(-5, mps))).toEqual(Measure.of(10, mps));
-            expect(Measure.multiply(Measure.of(5, mps), Measure.of(10, second))).toEqual(Measure.of(50, meter));
-            expect(Measure.divide(Measure.of(50, meter), Measure.of(10, second))).toEqual(Measure.of(5, mps));
+            expect(Measure.multiply(Measure.of(5, mps), Measure.of(10, seconds))).toEqual(Measure.of(50, meters));
+            expect(Measure.divide(Measure.of(50, meters), Measure.of(10, seconds))).toEqual(Measure.of(5, mps));
         });
 
         it("abs", () => {
@@ -67,7 +67,7 @@ describe("Number measures", () => {
         });
 
         it("cbrt", () => {
-            expect(Measure.cbrt(Measure.of(64, second.cubed()))).toEqual(Measure.of(4, second));
+            expect(Measure.cbrt(Measure.of(64, seconds.cubed()))).toEqual(Measure.of(4, seconds));
         });
 
         it("ceil", () => {
@@ -79,7 +79,7 @@ describe("Number measures", () => {
         });
 
         it("hypot", () => {
-            expect(Measure.hypot(Measure.of(3, meter), Measure.of(4, meter))).toEqual(Measure.of(5, meter));
+            expect(Measure.hypot(Measure.of(3, meters), Measure.of(4, meters))).toEqual(Measure.of(5, meters));
         });
 
         it("max", () => {
@@ -99,7 +99,7 @@ describe("Number measures", () => {
         });
 
         it("sqrt", () => {
-            expect(Measure.sqrt(Measure.of(25, meter.squared()))).toEqual(Measure.of(5, meter));
+            expect(Measure.sqrt(Measure.of(25, meters.squared()))).toEqual(Measure.of(5, meters));
         });
 
         it("sum", () => {
@@ -126,20 +126,20 @@ describe("Number measures", () => {
         });
 
         it("should subtract", () => {
-            const left = Measure.of(10, second);
-            const right = Measure.of(5, second);
-            expect(left.minus(right)).toEqual(Measure.of(5, second));
+            const left = Measure.of(10, seconds);
+            const right = Measure.of(5, seconds);
+            expect(left.minus(right)).toEqual(Measure.of(5, seconds));
         });
 
         it("should multiply", () => {
             const left = Measure.of(10, mps);
-            const right = Measure.of(5, second);
-            expect(left.times(right)).toEqual(Measure.of(50, meter));
+            const right = Measure.of(5, seconds);
+            expect(left.times(right)).toEqual(Measure.of(50, meters));
         });
 
         it("should divide", () => {
             const left = Measure.of(10, mps);
-            const right = Measure.of(5, second);
+            const right = Measure.of(5, seconds);
             expect(left.over(right)).toEqual(Measure.of(2, mps2));
             expect(left.per(right)).toEqual(Measure.of(2, mps2));
             expect(left.div(right)).toEqual(Measure.of(2, mps2));
@@ -151,21 +151,21 @@ describe("Number measures", () => {
         });
 
         it("should exponentiate", () => {
-            const value = Measure.of(10, meter);
+            const value = Measure.of(10, meters);
 
-            expect(value.inverse()).toEqual(Measure.of(0.1, meter.inverse()));
-            expect(value.reciprocal()).toEqual(Measure.of(0.1, meter.inverse()));
+            expect(value.inverse()).toEqual(Measure.of(0.1, meters.inverse()));
+            expect(value.reciprocal()).toEqual(Measure.of(0.1, meters.inverse()));
             expect(value.toThe(0)).toEqual(Measure.dimensionless(1));
-            expect(value.toThe(1)).toEqual(Measure.of(10, meter));
-            expect(value.squared()).toEqual(Measure.of(100, meter.squared()));
-            expect(value.cubed()).toEqual(Measure.of(1000, meter.cubed()));
+            expect(value.toThe(1)).toEqual(Measure.of(10, meters));
+            expect(value.squared()).toEqual(Measure.of(100, meters.squared()));
+            expect(value.cubed()).toEqual(Measure.of(1000, meters.cubed()));
         });
     });
 
     describe("comparison", () => {
-        const zero = Measure.of(0, meter);
-        const five = Measure.of(5, meter);
-        const ten = Measure.of(10, meter);
+        const zero = Measure.of(0, meters);
+        const five = Measure.of(5, meters);
+        const ten = Measure.of(10, meters);
 
         it("should compare less than", () => {
             expect(five.lt(zero)).toBe(false);
@@ -206,11 +206,11 @@ describe("Number measures", () => {
 
     describe("symbols", () => {
         it("should assign a symbol via .of()", () => {
-            expect(Measure.of(1000, meter, "km").symbol).toBe("km");
+            expect(Measure.of(1000, meters, "km").symbol).toBe("km");
         });
 
         it("should copy assign a symbol via .withSymbol()", () => {
-            const original = Measure.of(1000, meter);
+            const original = Measure.of(1000, meters);
             const result = original.withSymbol("km");
             expect(result).not.toBe(original);
             expect(original.symbol).toBeUndefined();
@@ -218,8 +218,8 @@ describe("Number measures", () => {
         });
 
         it("should not pass along symbols through operations", () => {
-            const km = Measure.of(1000, meter.squared()).withSymbol("km2");
-            const dm = Measure.of(10, meter.squared()).withSymbol("dm2");
+            const km = Measure.of(1000, meters.squared()).withSymbol("km2");
+            const dm = Measure.of(10, meters.squared()).withSymbol("dm2");
             expect(km.negate().symbol).toBeUndefined();
             expect(km.squared().symbol).toBeUndefined();
             expect(km.inverse().symbol).toBeUndefined();
@@ -236,35 +236,35 @@ describe("Number measures", () => {
         });
 
         it("should format base units", () => {
-            expect(meter.toString()).toBe("1 L");
-            expect(Measure.of(5.3, meter).toString()).toBe("5.3 L");
+            expect(meters.toString()).toBe("1 m");
+            expect(Measure.of(5.3, meters).toString()).toBe("5.3 m");
         });
 
         it("should format complex units", () => {
-            expect(Measure.of(5, meter.squared()).toString()).toBe("5 L^2");
-            expect(Measure.of(5, second.inverse()).toString()).toBe("5 T^-1");
-            expect(Measure.of(5, meter.times(second)).toString()).toBe("5 L * T");
-            expect(Measure.of(5, meter.over(second)).toString()).toBe("5 L * T^-1");
-            expect(Measure.of(5, meter.cubed().over(second)).toString()).toBe("5 L^3 * T^-1");
-            expect(Measure.of(5, meter.cubed().over(second.squared())).toString()).toBe("5 L^3 * T^-2");
+            expect(Measure.of(5, meters.squared()).toString()).toBe("5 m^2");
+            expect(Measure.of(5, seconds.inverse()).toString()).toBe("5 s^-1");
+            expect(Measure.of(5, meters.times(seconds)).toString()).toBe("5 m * s");
+            expect(Measure.of(5, meters.over(seconds)).toString()).toBe("5 m * s^-1");
+            expect(Measure.of(5, meters.cubed().over(seconds)).toString()).toBe("5 m^3 * s^-1");
+            expect(Measure.of(5, meters.cubed().over(seconds.squared())).toString()).toBe("5 m^3 * s^-2");
         });
 
         it("should have consistent formatting no matter how the unit is constructed", () => {
-            const metersTimesSecond = "5 L * T";
-            expect(Measure.of(5, meter.times(second)).toString()).toBe(metersTimesSecond);
-            expect(Measure.of(5, second.times(meter)).toString()).toBe(metersTimesSecond);
+            const metersTimesSecond = "5 m * s";
+            expect(Measure.of(5, meters.times(seconds)).toString()).toBe(metersTimesSecond);
+            expect(Measure.of(5, seconds.times(meters)).toString()).toBe(metersTimesSecond);
 
-            const metersPerSecond = "5 L * T^-1";
-            expect(Measure.of(5, meter.per(second)).toString()).toBe(metersPerSecond);
-            expect(Measure.of(5, second.inverse().times(meter)).toString()).toBe(metersPerSecond);
+            const metersPerSecond = "5 m * s^-1";
+            expect(Measure.of(5, meters.per(seconds)).toString()).toBe(metersPerSecond);
+            expect(Measure.of(5, seconds.inverse().times(meters)).toString()).toBe(metersPerSecond);
         });
 
         it("should not format using symbol even if present", () => {
             expect(
-                Measure.of(5, meter.squared())
+                Measure.of(5, meters.squared())
                     .withSymbol("m2")
                     .toString(),
-            ).toBe("5 L^2");
+            ).toBe("5 m^2");
             expect(
                 Measure.dimensionless(0)
                     .withSymbol("rad")
@@ -273,13 +273,13 @@ describe("Number measures", () => {
         });
 
         it("should format measures as other measures with symbols", () => {
-            const glorbs = Measure.of(100, meter, "glb");
-            expect(Measure.of(1000, meter).in(glorbs)).toBe("10 glb");
+            const glorbs = Measure.of(100, meters, "glb");
+            expect(Measure.of(1000, meters).in(glorbs)).toBe("10 glb");
         });
 
         it("should use normal formatting if the other measure has no symbol", () => {
-            const glorbs = Measure.of(100, meter);
-            expect(Measure.of(1000, meter).in(glorbs)).toBe("1000 L");
+            const glorbs = Measure.of(100, meters);
+            expect(Measure.of(1000, meters).in(glorbs)).toBe("1000 m");
         });
 
         it("should use base unit symbols to format when available", () => {
