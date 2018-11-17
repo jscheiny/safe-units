@@ -1,9 +1,9 @@
 import { Measure } from "../measure/numberMeasure";
-import { Length, Mass, Volume } from "../quantity/quantities";
 import { grams, meters } from "./base";
 import { grains, inches, pounds } from "./common";
 import { micro } from "./metric";
 import { liters } from "./other";
+import { Length, Mass, Volume } from "./quantities";
 
 // Length
 export const points: Length = Measure.of(352.778, micro(meters), "p");

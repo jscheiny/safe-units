@@ -1,6 +1,6 @@
 import { GenericMeasure } from "../measure/genericMeasure";
 import { Measure } from "../measure/numberMeasure";
-import { radians } from "../unit/base";
+import { radians } from "./base";
 import { Length, PlaneAngle } from "./quantities";
 
 /**

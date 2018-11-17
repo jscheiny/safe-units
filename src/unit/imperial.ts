@@ -1,6 +1,6 @@
 import { Measure } from "../measure/numberMeasure";
-import { Mass, Volume } from "../quantity/quantities";
 import { grains, inches, pounds } from "./common";
+import { Mass, Volume } from "./quantities";
 
 // Liquid Volume
 export const fluidOunces: Volume = Measure.of(1.7339, inches.cubed(), "fl oz");

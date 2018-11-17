@@ -1,6 +1,6 @@
 import { Measure } from "../measure/numberMeasure";
-import { Area, Length, Mass, Time } from "../quantity/quantities";
 import { grams, meters, seconds } from "./base";
+import { Area, Length, Mass, Time } from "./quantities";
 
 // Time
 export const minutes: Time = Measure.of(60, seconds, "min");

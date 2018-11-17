@@ -1,7 +1,7 @@
 import { PrefixFunction } from "../measure/genericMeasureUtils";
 import { Measure } from "../measure/numberMeasure";
-import { Memory } from "../quantity/quantities";
 import { bits } from "./base";
+import { Memory } from "./quantities";
 
 export const bytes: Memory = Measure.of(8, bits, "B");
 
