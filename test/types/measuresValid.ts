@@ -4,13 +4,13 @@ Measure.dimension("x"); // $ExpectType GenericMeasure<number, { x: 1; }>
 
 const m = meters; // $ExpectType GenericMeasure<number, { length: 1; }>
 const s = seconds; // $ExpectType GenericMeasure<number, { time: 1; }>
-const n = newtons; // $ExpectType GenericMeasure<number, StripZeroes<{ length: 1; time: -2; mass: 1; }>>
+const n = newtons; // $ExpectType GenericMeasure<number, { length: 1; time: -2; mass: 1; }>
 
-const a = newtons.over(kilograms); // $ExpectType GenericMeasure<number, StripZeroes<{ length: 1; time: -2; mass: 0; }>>
-const accel: Acceleration = a; // $ExpectType GenericMeasure<number, StripZeroes<{ length: 1; time: -2; mass: 0; }>>
+const a = newtons.over(kilograms); // $ExpectType GenericMeasure<number, { length: 1; time: -2; }>
+const accel: Acceleration = a; // $ExpectType GenericMeasure<number, { length: 1; time: -2; }>
 
-const absement = meters.times(seconds); // $ExpectType GenericMeasure<number, StripZeroes<{ length: 1; time: 1; }>>
-const velocity = meters.over(seconds); // $ExpectType GenericMeasure<number, StripZeroes<{ length: 1; time: -1; }>>
+const absement = meters.times(seconds); // $ExpectType GenericMeasure<number, { length: 1; time: 1; }>
+const velocity = meters.over(seconds); // $ExpectType GenericMeasure<number, { length: 1; time: -1; }>
 
 meters.plus(meters); // $ExpectType GenericMeasure<number, { length: 1; }>
 meters.minus(meters); // $ExpectType GenericMeasure<number, { length: 1; }>
