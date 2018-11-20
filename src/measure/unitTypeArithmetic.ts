@@ -7,6 +7,7 @@ import {
     MultiplyExponents,
     NonZeroExponent,
     ProductOf,
+    SubtractExponents,
 } from "../exponent";
 
 export interface Unit {
@@ -19,7 +20,7 @@ export type SymbolAndExponent = [string, Exponent];
 // Multiplication
 
 /** Returns the product of two units. This is the sum of two dimension vectors. */
-export type MultiplyUnits<L extends Unit, R extends Unit> = StripZeroes<
+export type MultiplyUnits<L extends Unit, R extends Unit> = CleanUnit<
     { [Dim in keyof L | keyof R]: AddExponents<GetExponent<L, Dim>, GetExponent<R, Dim>> }
 >;
 
@@ -29,8 +30,8 @@ export type MultiplicandUnit<U extends Unit> = Partial<{ [D in keyof U]: AddendO
 // Division
 
 /** Returns the quotient of two units. This is the difference of two dimension vectors. */
-export type DivideUnits<L extends Unit, R extends Unit> = StripZeroes<
-    { [Dim in keyof L | keyof R]: AddExponents<GetExponent<L, Dim>, MultiplyExponents<GetExponent<R, Dim>, -1>> }
+export type DivideUnits<L extends Unit, R extends Unit> = CleanUnit<
+    { [Dim in keyof L | keyof R]: SubtractExponents<GetExponent<L, Dim>, GetExponent<R, Dim>> }
 >;
 
 /** A type that is assignable from all units that U can be divided by without producing an error. */
@@ -41,17 +42,15 @@ export type DivisorUnit<U extends Unit> = MultiplicandUnit<ExponentiateUnit<U, -
 /** Returns the unit raised to a power. This is the scalar multiple of the dimension vector. */
 export type ExponentiateUnit<U extends Unit, N extends Exponent> = 0 extends N
     ? {}
-    : 1 extends N ? U : { [Dim in keyof U]: MultiplyExponents<GetExponent<U, Dim>, N> };
+    : { [Dim in keyof U]: MultiplyExponents<GetExponent<U, Dim>, N> };
 
 /** Returns the union of exponents to which a given unit is allowed to be raised.  */
-export type AllowedExponents<U extends Unit> = Exclude<Exponent, NonAllowedExponents<U>> | AlwaysAllowedExponents;
+export type AllowedExponents<U extends Unit> = Exclude<Exponent, NonAllowedExponents<U>> | -1 | 0 | 1;
 
 /** Returns the union of exponents that raising and exponent to would produce an error. */
 export type NonAllowedExponents<U extends Unit> = {
     [Dim in keyof U]: undefined extends U[Dim] ? never : Exclude<Exponent, MultiplicandOf<NonNullable<U[Dim]>>>
 }[keyof U];
-
-type AlwaysAllowedExponents = -1 | 0 | 1;
 
 // Roots
 
@@ -66,6 +65,11 @@ export interface RadicandUnit<N extends Exponent> {
 }
 
 // Utility types
+
+/** Makes a unit pretty in intellisense views.  */
+// `ExponentiateUnit<U, 1>` is a noop that seems to accomplish this but is slow to compile and we should see if there's
+// a workaround.
+type CleanUnit<U extends Unit> = ExponentiateUnit<StripZeroes<U>, 1>;
 
 /** Removes all zero exponent dimensions from a dimension vector */
 type StripZeroes<U extends Unit> = { [Dim in NonZeroKeys<U>]: U[Dim] };
