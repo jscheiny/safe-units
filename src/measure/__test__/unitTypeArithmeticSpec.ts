@@ -3,6 +3,7 @@ import {
     AllowedExponents,
     DivideUnits,
     ExponentiateUnit,
+    IsSingleStringLiteral,
     MultiplicandUnit,
     MultiplyUnits,
     NthRootUnit,
@@ -85,3 +86,14 @@ const RadicandUnitAcceptsPerfectCubes: RadicandUnitAcceptsPerfectCubes = true;
 
 type RadicandUnitRejectsNonPerfectCubes = { a: 3; b: 2 } extends RadicandUnit<3> ? never : true;
 const RadicandUnitRejectsNonPerfectCubes: RadicandUnitRejectsNonPerfectCubes = true;
+
+// IsSingleStringLiteral
+
+type SingleLiteralWorks = IsSame<IsSingleStringLiteral<"A">, true>;
+const SingleLiteralWorks: SingleLiteralWorks = true;
+
+type UnionLiteralWorks = IsSame<IsSingleStringLiteral<"A" | "B">, false>;
+const UnionLiteralWorks: UnionLiteralWorks = true;
+
+type StringTypeWorks = IsSame<IsSingleStringLiteral<string>, false>;
+const StringTypeWorks: StringTypeWorks = true;
