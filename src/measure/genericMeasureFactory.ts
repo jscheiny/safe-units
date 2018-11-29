@@ -1,8 +1,12 @@
 import { GenericMeasure, Numeric } from "./genericMeasure";
 import { createMeasureClass } from "./genericMeasureClass";
 import { GenericMeasureStatic, getGenericMeasureStaticMethods } from "./genericMeasureStatic";
-import { Unit } from "./unitTypeArithmetic";
+import { IsSingleStringLiteral, Unit } from "./unitTypeArithmetic";
 import { dimension } from "./unitValueArithmetic";
+
+type DimensionResult<N, D extends string> = true extends IsSingleStringLiteral<D>
+    ? GenericMeasure<N, { [Dim in D]: 1 }>
+    : never;
 
 /** The functions needed to construct a measure of a given numeric type */
 interface GenericMeasureFactory<N> {
@@ -15,7 +19,7 @@ interface GenericMeasureFactory<N> {
      * @param symbol the symbol of the base unit of the dimension (e.g. "m")
      * @returns A measure representing 1 base unit of the dimension (1 m)
      */
-    dimension<Dim extends string>(dim: Dim, symbol?: string): GenericMeasure<N, { [D in Dim]: 1 }>;
+    dimension<D extends string>(dim: D, symbol?: string): DimensionResult<N, D>;
 
     /**
      * Creates a dimensionless measure.
@@ -62,12 +66,10 @@ export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticM
         ...getGenericMeasureStaticMethods(),
         isMeasure: (value): value is GenericMeasure<N, any> => value instanceof Measure,
         dimensionless: value => new Measure(value, {}),
-        dimension: <Dim extends string>(dim: Dim, symbol?: string) => {
-            return new Measure(num.one(), dimension(dim, symbol), symbol);
-        },
-        of: <U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string) => {
-            return new Measure(num.mult(value, quantity.value), quantity.unit, symbol);
-        },
+        dimension: <D extends string>(dim: D, symbol?: string) =>
+            new Measure(num.one(), dimension(dim, symbol), symbol) as DimensionResult<N, D>,
+        of: <U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string) =>
+            new Measure(num.mult(value, quantity.value), quantity.unit, symbol),
     };
 
     return {

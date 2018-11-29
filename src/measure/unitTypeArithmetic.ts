@@ -78,4 +78,11 @@ type StripZeroes<U extends Unit> = { [Dim in NonZeroKeys<U>]: U[Dim] };
 type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]> extends 0 ? never : Dim }[keyof U];
 
 /** Get the exponent at a given dimension of a unit, or 0 if that dimension is undefined */
-export type GetExponent<U extends Unit, D> = D extends keyof U ? NonNullable<U[D]> : 0;
+type GetExponent<U extends Unit, D> = D extends keyof U ? NonNullable<U[D]> : 0;
+
+/** Returns true if T represents a single string literal and not a union or the entire string type. */
+export type IsSingleStringLiteral<T extends string> = string extends T
+    ? false
+    : IsSingleStringLiteralHelper<T> extends never ? true : false;
+
+type IsSingleStringLiteralHelper<T, TCopy = T> = T extends string ? Exclude<TCopy, T> : never;
