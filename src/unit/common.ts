@@ -1,5 +1,5 @@
 import { Measure } from "../measure/numberMeasure";
-import { grams, meters, seconds } from "./base";
+import { kilograms, meters, seconds } from "./base";
 import { Area, Length, Mass, Time } from "./quantities";
 
 // Time
@@ -28,6 +28,7 @@ export const roods: Area = furlongs.times(rods).withSymbol("rood");
 export const acres: Area = furlongs.times(chains).withSymbol("acre");
 
 // Mass
+export const grams: Mass = Measure.of(0.001, kilograms, "g");
 export const pounds: Mass = Measure.of(453.592_37, grams, "lb");
 export const grains: Mass = Measure.of(1 / 7000, pounds, "gr");
 export const ounces: Mass = Measure.of(1 / 16, pounds, "oz");
