@@ -1,7 +1,6 @@
-import { ArithmeticError } from "./common";
 import { AddExponents } from "./generated/addition";
 import { DivideExponents } from "./generated/division";
-import { Exponent } from "./generated/exponent";
+import { ArithmeticError, Exponent } from "./generated/exponent";
 import { MultiplyExponents } from "./generated/multiplication";
 
 export type NonZeroExponent = Exclude<Exponent, 0>;
