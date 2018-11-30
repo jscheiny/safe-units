@@ -1,4 +1,5 @@
 import { exists, mkdir, writeFile } from "fs";
+import { OperatorSpec } from "./common";
 import { genExponentType } from "./genExponent";
 import { genOperatorTests } from "./genTests";
 import { genOperatorTypes } from "./genTypes";
@@ -14,7 +15,11 @@ export interface EmitPlan {
 }
 
 export function emit(callback?: () => void): void {
-    const emits: EmitPlan[] = getEmitPlans();
+    const emits: EmitPlan[] = [
+        { path: `${SRC_PREFIX}/exponent.ts`, source: genExponentType(codeGenSpec) },
+        ...getOperatorEmitPlans(SRC_PREFIX, genOperatorTypes),
+        ...getOperatorEmitPlans(TEST_PREFIX, genOperatorTests),
+    ];
     prepForEmit(() => {
         let index = -1;
         const nextEmit = () => {
@@ -26,18 +31,13 @@ export function emit(callback?: () => void): void {
     });
 }
 
-export function getEmitPlans(): EmitPlan[] {
+function getOperatorEmitPlans(prefix: string, genSource: (spec: OperatorSpec) => string): EmitPlan[] {
     const { operators, ...common } = codeGenSpec;
-    const emits: EmitPlan[] = [{ path: `${SRC_PREFIX}/exponent.ts`, source: genExponentType(codeGenSpec) }];
-    operators.forEach(operator => {
-        const operatorSpec = { ...operator, ...common };
+    return operators.map(operator => {
+        const operatorSpec: OperatorSpec = { ...operator, ...common };
         const { fileNamePrefix } = operator;
-        emits.push(
-            { path: `${SRC_PREFIX}/${fileNamePrefix}.ts`, source: genOperatorTypes(operatorSpec) },
-            { path: `${TEST_PREFIX}/${fileNamePrefix}.ts`, source: genOperatorTests(operatorSpec) },
-        );
+        return { path: `${prefix}/${fileNamePrefix}.ts`, source: genSource(operatorSpec) };
     });
-    return emits;
 }
 
 function prepForEmit(callback: () => void): void {
