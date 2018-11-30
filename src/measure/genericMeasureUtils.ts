@@ -56,3 +56,19 @@ export function wrapSpreadFn<N>(fn: (...x: N[]) => N): SpreadMeasureFunction<N> 
         return first.unsafeMap(() => newValue);
     };
 }
+
+/**
+ * Converts a binary function of unitless numbers into a function of one or more measures by using that function as a
+ * reducer for the measures. This assumes that the underlying operation makes no change to the unit of the measure. For
+ * example this would be an incorrect usage: `product = wrapReducerFn((prev, curr) => prev * curr)` since multiplying
+ * two measures would result in a different unit. Note that the resulting function requires at least one value in order
+ * to compute the unit of the resulting measure.
+ * @param fn a binary function of numeric types
+ * @returns a spread function of measures that reduces its arguments using the binary function passed
+ */
+export function wrapReducerFn<N>(fn: (curr: N, prev: N, index: number) => N): SpreadMeasureFunction<N> {
+    return (first, ...rest) => {
+        const values = rest.map(m => m.value);
+        return first.unsafeMap(() => values.reduce(fn, first.value));
+    };
+}

@@ -1,11 +1,12 @@
 import { Numeric } from "../genericMeasure";
 import { createMeasureType } from "../genericMeasureFactory";
-import { wrapBinaryFn, wrapSpreadFn, wrapUnaryFn } from "../genericMeasureUtils";
+import { wrapBinaryFn, wrapReducerFn, wrapSpreadFn, wrapUnaryFn } from "../genericMeasureUtils";
 import { Measure } from "../numberMeasure";
 
 describe("Generic measures", () => {
     describe("function wrappers", () => {
         const meters = Measure.dimension("L", "m");
+        const add = (left: number, right: number) => left + right;
 
         it("unary wrapper", () => {
             const increment = wrapUnaryFn((x: number) => x + 1);
@@ -14,13 +15,19 @@ describe("Generic measures", () => {
         });
 
         it("binary wrapper", () => {
-            const add = wrapBinaryFn((left: number, right: number) => left + right);
-            const result = add(Measure.of(5, meters), Measure.of(10, meters));
+            const measureAdd = wrapBinaryFn(add);
+            const result = measureAdd(Measure.of(5, meters), Measure.of(10, meters));
             expect(result).toEqual(Measure.of(15, meters));
         });
 
         it("spread wrapper", () => {
-            const sum = wrapSpreadFn((...values: number[]) => values.reduce((a, b) => a + b, 0));
+            const sum = wrapSpreadFn((...values: number[]) => values.reduce(add, 0));
+            const result = sum(Measure.of(5, meters), Measure.of(10, meters), Measure.of(15, meters));
+            expect(result).toEqual(Measure.of(30, meters));
+        });
+
+        it("reducer wrapper", () => {
+            const sum = wrapReducerFn(add);
             const result = sum(Measure.of(5, meters), Measure.of(10, meters), Measure.of(15, meters));
             expect(result).toEqual(Measure.of(30, meters));
         });

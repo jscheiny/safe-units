@@ -1,8 +1,17 @@
 import { GenericMeasure } from "./genericMeasure";
-import { PrefixFunction } from "./genericMeasureUtils";
+import { BinaryMeasureFunction, PrefixFunction, SpreadMeasureFunction } from "./genericMeasureUtils";
 import { DivideUnits, DivisorUnit, MultiplicandUnit, MultiplyUnits, Unit } from "./unitTypeArithmetic";
 
 export interface GenericMeasureStatic<N> {
+    /** Sums a list of one or more measures, all of the same unit. */
+    sum: SpreadMeasureFunction<N>;
+
+    /** Returns the smallest of a list of one or more measures. */
+    min: SpreadMeasureFunction<N>;
+
+    /** Returns the largest of a list of one or more measures. */
+    max: SpreadMeasureFunction<N>;
+
     /** Static version of left + right */
     add<U extends Unit>(left: GenericMeasure<N, U>, right: GenericMeasure<N, U>): GenericMeasure<N, U>;
 
@@ -21,15 +30,6 @@ export interface GenericMeasureStatic<N> {
         right: GenericMeasure<N, R>,
     ): GenericMeasure<N, DivideUnits<L, R>>;
 
-    /** Sums a list of one or more measures, all of the same unit. */
-    sum<U extends Unit>(first: GenericMeasure<N, U>, ...rest: Array<GenericMeasure<N, U>>): GenericMeasure<N, U>;
-
-    /** Returns the smallest of a list of one or more measures. */
-    min<U extends Unit>(first: GenericMeasure<N, U>, ...rest: Array<GenericMeasure<N, U>>): GenericMeasure<N, U>;
-
-    /** Returns the largest of a list of one or more measures. */
-    max<U extends Unit>(first: GenericMeasure<N, U>, ...rest: Array<GenericMeasure<N, U>>): GenericMeasure<N, U>;
-
     /**
      * Creates a function that takes a measure and applies a symbol to its prefix and scales it by a given multiplier.
      * @param prefix the prefix to add to symbols of measures passed into the resulting function
@@ -40,40 +40,21 @@ export interface GenericMeasureStatic<N> {
 }
 
 export const getGenericMeasureStaticMethods = <N>(): GenericMeasureStatic<N> => ({
+    sum: reduce((prev, curr) => prev.plus(curr)),
+    min: reduce((min, curr) => (curr.lt(min) ? curr : min)),
+    max: reduce((max, curr) => (curr.gt(max) ? curr : max)),
     add: (left, right) => left.plus(right),
     subtract: (left, right) => left.minus(right),
     multiply: (left, right) => left.times(right),
     divide: (left, right) => left.over(right),
-    sum: (first, ...rest) => {
-        let result = first.clone();
-        for (const curr of rest) {
-            result = result.plus(curr);
-        }
-        return result;
-    },
-    min: (first, ...rest) => {
-        let min = first;
-        for (const curr of rest) {
-            if (curr.lt(min)) {
-                min = curr;
-            }
-        }
-        return min;
-    },
-    max: (first, ...rest) => {
-        let max = first;
-        for (const curr of rest) {
-            if (curr.gt(max)) {
-                max = curr;
-            }
-        }
-        return max;
-    },
     prefix: (prefix, multiplier) => {
         return measure => {
             const { symbol } = measure;
-            const newSymbol = symbol !== undefined ? `${prefix}${symbol}` : undefined;
-            return measure.scale(multiplier).withSymbol(newSymbol);
+            return measure.scale(multiplier).withSymbol(symbol && `${prefix}${symbol}`);
         };
     },
 });
+
+function reduce<N>(fn: BinaryMeasureFunction<N>): SpreadMeasureFunction<N> {
+    return (first, ...rest) => rest.reduce(fn, first);
+}
