@@ -290,4 +290,13 @@ describe("Number measures", () => {
             expect(Measure.of(1, m.squared().per(s.squared())).toString()).toBe("1 meter^2 * second^-2");
         });
     });
+
+    describe("utils", () => {
+        it("should clone", () => {
+            const original = Measure.of(100, meters);
+            const copy = original.clone();
+            expect(original).not.toBe(copy);
+            expect(original).toEqual(copy);
+        });
+    });
 });
