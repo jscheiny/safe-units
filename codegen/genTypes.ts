@@ -4,17 +4,12 @@ const ARITHMETIC_ERROR = "ArithmeticError";
 
 export function genOperatorTypes(spec: OperatorSpec): string {
     const exponents = getExponents(spec);
-    return [...genFileHeader(), ...genTypesImports(), ...genUncurriedType(spec, exponents)].join("\n");
-}
-
-function genTypesImports(): string[] {
     return [
-        ...genImports(
-            { symbols: ["ArithmeticError"], source: "../common" },
-            { symbols: ["Exponent"], source: "./exponent" },
-        ),
+        ...genFileHeader(),
+        ...genImports({ symbols: ["ArithmeticError", "Exponent"], source: "./exponent" }),
         "",
-    ];
+        ...genUncurriedType(spec, exponents),
+    ].join("\n");
 }
 
 function genUncurriedType(spec: OperatorSpec, exponents: number[]): string[] {
