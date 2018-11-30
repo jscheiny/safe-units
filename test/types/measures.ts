@@ -1,4 +1,6 @@
-import { Acceleration, kilograms, Measure, meters, newtons, seconds, Velocity } from "safe-units";
+import { Acceleration, Area, kilograms, Measure, meters, newtons, seconds, Velocity, Volume } from "safe-units";
+
+// Valid usages
 
 Measure.dimension("x"); // $ExpectType GenericMeasure<number, { x: 1; }>
 
@@ -24,3 +26,23 @@ velocity.toThe(0); // $ExpectType GenericMeasure<number, {}>
 
 Measure.sqrt(velocity.toThe(-4)); // $ExpectType GenericMeasure<number, { length: -2; time: 2; }>
 Measure.cbrt(absement.toThe(3)); // $ExpectType GenericMeasure<number, { length: 1; time: 1; }>
+
+// Error usages
+
+Measure.dimension("x" as "x" | "y"); // $ExpectType never
+Measure.dimension("x" as string); // $ExpectType never
+
+Volume.times(Volume); // $ExpectError
+const volumeInverse = Volume.inverse();
+Volume.over(volumeInverse); // $ExpectError
+
+Volume.plus(Area); // $ExpectError
+Area.minus(Volume); // $ExpectError
+
+const sq = Volume.squared; // $ExpectType never
+const cu = Area.cubed; // $ExpectType never
+Area.toThe(4); // $ExpectError
+Volume.toThe(-2); // $ExpectError
+
+Measure.sqrt(Volume); // $ExpectError
+Measure.cbrt(Area); // $ExpectError
