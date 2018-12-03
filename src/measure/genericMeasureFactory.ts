@@ -38,15 +38,17 @@ interface GenericMeasureFactory<N> {
     of<U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U>;
 }
 
+type GenericMeasureCommon<N> = GenericMeasureFactory<N> & GenericMeasureStatic<N>;
+type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>;
+
 /**
  * A complete measure type for a given numeric type. This consists of:
  * - Static methods to construct measures (e.g. `Measure.of`)
  * - Predefined arithmetic static methods (e.g. `Measure.add`)
  * - User defined static methods (e.g. `Measure.abs`)
  */
-export type GenericMeasureType<N, StaticMethods extends {}> = GenericMeasureFactory<N> &
-    GenericMeasureStatic<N> &
-    StaticMethods;
+export type GenericMeasureType<N, StaticMethods extends {}> = GenericMeasureCommon<N> &
+    Omit<StaticMethods, keyof GenericMeasureCommon<N>>;
 
 /**
  * Creates a new measure factory for a given numeric type. The numeric type of the measure is inferred from the
@@ -62,7 +64,7 @@ export type GenericMeasureType<N, StaticMethods extends {}> = GenericMeasureFact
 export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticMethods?: S): GenericMeasureType<N, S> {
     const Measure = createMeasureClass(num);
 
-    const type: GenericMeasureFactory<N> & GenericMeasureStatic<N> = {
+    const type: GenericMeasureCommon<N> = {
         ...getGenericMeasureStaticMethods(),
         isMeasure: (value): value is GenericMeasure<N, any> => value instanceof Measure,
         dimensionless: value => new Measure(value, {}),
