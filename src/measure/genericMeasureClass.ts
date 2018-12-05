@@ -115,7 +115,7 @@ export function createMeasureClass<N>(num: Numeric<N>): GenericMeasureConstructo
         // Formatting
 
         public toString(): string {
-            return `${num.format(this.value)}${formatUnit(this.unit)}`;
+            return `${num.format(this.value)} ${formatUnit(this.unit)}`.trimRight();
         }
 
         public in(unit: GenericMeasure<N, U>): string {

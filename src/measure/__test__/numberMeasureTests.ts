@@ -3,6 +3,7 @@ import { Measure } from "../numberMeasure";
 describe("Number measures", () => {
     const meters = Measure.dimension("length", "m");
     const seconds = Measure.dimension("time", "s");
+    const kilograms = Measure.dimension("mass", "kg");
     const mps = meters.per(seconds);
     const mps2 = mps.per(seconds);
 
@@ -231,32 +232,56 @@ describe("Number measures", () => {
     });
 
     describe("formatting", () => {
+        function expectFormat(unit: Measure<any>, formatted: string): void {
+            expect(unit.toString()).toBe(formatted);
+        }
         it("should format dimensionless units", () => {
-            expect(Measure.dimensionless(10).toString()).toBe("10");
+            expectFormat(Measure.dimensionless(10), "10");
         });
 
         it("should format base units", () => {
-            expect(meters.toString()).toBe("1 m");
-            expect(Measure.of(5.3, meters).toString()).toBe("5.3 m");
+            expectFormat(meters, "1 m");
         });
 
-        it("should format complex units", () => {
-            expect(Measure.of(5, meters.squared()).toString()).toBe("5 m^2");
-            expect(Measure.of(5, seconds.inverse()).toString()).toBe("5 s^-1");
-            expect(Measure.of(5, meters.times(seconds)).toString()).toBe("5 m * s");
-            expect(Measure.of(5, meters.over(seconds)).toString()).toBe("5 m * s^-1");
-            expect(Measure.of(5, meters.cubed().over(seconds)).toString()).toBe("5 m^3 * s^-1");
-            expect(Measure.of(5, meters.cubed().over(seconds.squared())).toString()).toBe("5 m^3 * s^-2");
+        it("should format units with only positive exponents", () => {
+            expectFormat(meters.squared(), "1 m^2");
+            expectFormat(meters.times(seconds), "1 m * s");
+            expectFormat(meters.cubed().times(seconds.squared()), "1 m^3 * s^2");
+        });
+
+        it("should format units with only negative exponents", () => {
+            expectFormat(seconds.inverse(), "1 s^-1");
+            expectFormat(seconds.toThe(-2), "1 s^-2");
+            expectFormat(seconds.toThe(-2).times(meters.toThe(-3)), "1 m^-3 * s^-2");
+        });
+
+        it("should format units with positive exponents and one negative exponent", () => {
+            expectFormat(meters.per(seconds), "1 m / s");
+            expectFormat(meters.squared().per(seconds.squared()), "1 m^2 / s^2");
+            expectFormat(meters.times(kilograms).per(seconds.squared()), "1 kg * m / s^2");
+        });
+
+        it("should format units with positive exponents and negative exponents", () => {
+            expectFormat(meters.per(seconds.times(kilograms)), "1 m / (kg * s)");
+            expectFormat(meters.squared().per(seconds.squared().times(kilograms)), "1 m^2 / (kg * s^2)");
+            expectFormat(
+                meters
+                    .cubed()
+                    .times(kilograms)
+                    .per(kilograms.cubed())
+                    .per(seconds.squared()),
+                "1 m^3 / (kg^2 * s^2)",
+            );
         });
 
         it("should have consistent formatting no matter how the unit is constructed", () => {
-            const metersTimesSecond = "5 m * s";
-            expect(Measure.of(5, meters.times(seconds)).toString()).toBe(metersTimesSecond);
-            expect(Measure.of(5, seconds.times(meters)).toString()).toBe(metersTimesSecond);
+            const metersTimesSecond = "1 m * s";
+            expectFormat(meters.times(seconds), metersTimesSecond);
+            expectFormat(seconds.times(meters), metersTimesSecond);
 
-            const metersPerSecond = "5 m * s^-1";
-            expect(Measure.of(5, meters.per(seconds)).toString()).toBe(metersPerSecond);
-            expect(Measure.of(5, seconds.inverse().times(meters)).toString()).toBe(metersPerSecond);
+            const metersPerSecond = "1 m / s";
+            expectFormat(meters.per(seconds), metersPerSecond);
+            expectFormat(seconds.inverse().times(meters), metersPerSecond);
         });
 
         it("should not format using symbol even if present", () => {
@@ -286,8 +311,8 @@ describe("Number measures", () => {
             const m = Measure.dimension("test-length", "meter");
             const s = Measure.dimension("test-time", "second");
             expect(m.toString()).toBe("1 meter");
-            expect(Measure.of(1, m.per(s)).toString()).toBe("1 meter * second^-1");
-            expect(Measure.of(1, m.squared().per(s.squared())).toString()).toBe("1 meter^2 * second^-2");
+            expect(Measure.of(1, m.per(s)).toString()).toBe("1 meter / second");
+            expect(Measure.of(1, m.squared().per(s.squared())).toString()).toBe("1 meter^2 / second^2");
         });
     });
 
