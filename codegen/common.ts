@@ -38,19 +38,9 @@ export function genFileHeader(disableTslint: boolean = true): string[] {
     return header;
 }
 
-interface ImportSpec {
-    symbols: string[];
-    source: string;
-}
-
-export function genImports(...imports: ImportSpec[]): string[] {
-    imports.sort((first, second) => order(first.source, second.source));
-    return imports.map(genImport);
-}
-
-function genImport({ symbols, source }: ImportSpec): string {
+export function genImport(symbols: string[], source: string): string[] {
     symbols.sort(order);
-    return `import { ${symbols.join(", ")} } from "${source}";`;
+    return [`import { ${symbols.join(", ")} } from "${source}";`, ""];
 }
 
 function order(first: string, second: string): number {

@@ -1,4 +1,4 @@
-import { genFileHeader, genImports, genUncurriedTypeName, getExponents, isExponent, OperatorSpec } from "./common";
+import { genFileHeader, genImport, genUncurriedTypeName, getExponents, isExponent, OperatorSpec } from "./common";
 
 const ARITHMETIC_ERROR = "ArithmeticError";
 
@@ -6,8 +6,7 @@ export function genOperatorTypes(spec: OperatorSpec): string {
     const exponents = getExponents(spec);
     return [
         ...genFileHeader(),
-        ...genImports({ symbols: ["ArithmeticError", "Exponent"], source: "./exponent" }),
-        "",
+        ...genImport(["ArithmeticError", "Exponent"], "./exponent"),
         ...genUncurriedType(spec, exponents),
     ].join("\n");
 }

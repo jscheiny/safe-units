@@ -1,11 +1,15 @@
-import { genFileHeader, genImports, genUncurriedTypeName, getExponents, isExponent, OperatorSpec } from "./common";
+import { genFileHeader, genImport, genUncurriedTypeName, getExponents, isExponent, OperatorSpec } from "./common";
 
 export function genOperatorTests(spec: OperatorSpec): string {
-    const lines: string[] = [
+    return [
         ...genFileHeader(false),
-        ...genImports({ symbols: [genUncurriedTypeName(spec)], source: "../../../src/exponent" }),
-        "",
-    ];
+        ...genImport([genUncurriedTypeName(spec)], "../../../src/exponent"),
+        ...genTests(spec),
+    ].join("\n");
+}
+
+function genTests(spec: OperatorSpec): string[] {
+    const lines: string[] = [];
     const exponents = getExponents(spec);
     for (const left of exponents) {
         for (const right of exponents) {
@@ -13,7 +17,7 @@ export function genOperatorTests(spec: OperatorSpec): string {
         }
     }
     lines.push("");
-    return lines.join("\n");
+    return lines;
 }
 
 function genTest(spec: OperatorSpec, left: number, right: number): string {
