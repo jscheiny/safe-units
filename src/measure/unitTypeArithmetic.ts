@@ -8,6 +8,7 @@ import {
     NonZeroExponent,
     ProductOf,
     SubtractExponents,
+    SubtrahendOf,
 } from "../exponent";
 
 export interface Unit {
@@ -35,7 +36,7 @@ export type DivideUnits<L extends Unit, R extends Unit> = CleanUnit<
 >;
 
 /** A type that is assignable from all units that U can be divided by without producing an error. */
-export type DivisorUnit<U extends Unit> = MultiplicandUnit<ExponentiateUnit<U, -1>>;
+export type DivisorUnit<U extends Unit> = Partial<{ [D in keyof U]: SubtrahendOf<NonNullable<U[D]>> }> & Unit;
 
 // Exponentiation
 
