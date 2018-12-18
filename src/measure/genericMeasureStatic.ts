@@ -12,19 +12,19 @@ export interface GenericMeasureStatic<N> {
     /** Returns the largest of a list of one or more measures. */
     max: SpreadMeasureFunction<N>;
 
-    /** Static version of left + right */
+    /** Static version of `left.plus(right)` */
     add<U extends Unit>(left: GenericMeasure<N, U>, right: GenericMeasure<N, U>): GenericMeasure<N, U>;
 
-    /** Static version of left - right */
+    /** Static version of `left.minus(right)` */
     subtract<U extends Unit>(left: GenericMeasure<N, U>, right: GenericMeasure<N, U>): GenericMeasure<N, U>;
 
-    /** Static version of left * right */
+    /** Static version of `left.times(right)` */
     multiply<L extends Unit, R extends MultiplicandUnit<L>>(
         left: GenericMeasure<N, L>,
         right: GenericMeasure<N, R>,
     ): GenericMeasure<N, MultiplyUnits<L, R>>;
 
-    /** Static version of left / right */
+    /** Static version of `left.div(right)` */
     divide<L extends Unit, R extends DivisorUnit<L>>(
         left: GenericMeasure<N, L>,
         right: GenericMeasure<N, R>,
