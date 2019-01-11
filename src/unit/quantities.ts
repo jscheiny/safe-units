@@ -1,402 +1,401 @@
-import { GenericMeasure } from "../measure/genericMeasure";
+import { GenericMeasure, LiftMeasure } from "../measure/genericMeasure";
 import { Measure } from "../measure/numberMeasure";
 import * as Base from "./base";
 
 // Dimensionless
 
 /** A measure without any unit */
-// HACKHACK: Explicitly type this so we can import GenericMeasure and avoid absolute paths in the generated typings.
-export const Dimensionless: GenericMeasure<number, {}> = Measure.dimensionless(1);
-export type Dimensionless = typeof Dimensionless;
+export type Dimensionless<N = number> = LiftMeasure<typeof Dimensionless, N>;
+const Dimensionless: GenericMeasure<number, {}> = Measure.dimensionless(1);
 
 // Base units
 
 /** meters */
-export type Length = typeof Base.meters;
-export const Length: Length = Base.meters;
+export type Length<N = number> = LiftMeasure<typeof Base.meters, N>;
+const Length: Length = Base.meters;
 
 /** kilograms */
-export type Mass = typeof Base.kilograms;
-export const Mass: Mass = Base.kilograms;
+export type Mass<N = number> = LiftMeasure<typeof Base.kilograms, N>;
+const Mass: Mass = Base.kilograms;
 
 /** seconds */
-export type Time = typeof Base.seconds;
-export const Time: Time = Base.seconds;
+export type Time<N = number> = LiftMeasure<typeof Base.seconds, N>;
+const Time: Time = Base.seconds;
 
 /** Amperes */
-export type ElectricCurrent = typeof Base.amperes;
-export const ElectricCurrent: ElectricCurrent = Base.amperes;
+export type ElectricCurrent<N = number> = LiftMeasure<typeof Base.amperes, N>;
+const ElectricCurrent: ElectricCurrent = Base.amperes;
 
 /** Kelvin */
-export type Temperature = typeof Base.kelvin;
-export const Temperature: Temperature = Base.kelvin;
+export type Temperature<N = number> = LiftMeasure<typeof Base.kelvin, N>;
+const Temperature: Temperature = Base.kelvin;
 
 /** moles */
-export type AmountOfSubstance = typeof Base.moles;
-export const AmountOfSubstance: AmountOfSubstance = Base.moles;
+export type AmountOfSubstance<N = number> = LiftMeasure<typeof Base.moles, N>;
+const AmountOfSubstance: AmountOfSubstance = Base.moles;
 
 /** candelas */
-export type LuminousIntensity = typeof Base.candelas;
-export const LuminousIntensity: LuminousIntensity = Base.candelas;
+export type LuminousIntensity<N = number> = LiftMeasure<typeof Base.candelas, N>;
+const LuminousIntensity: LuminousIntensity = Base.candelas;
 
 /** bits */
-export type Memory = typeof Base.bits;
-export const Memory: Memory = Base.bits;
+export type Memory<N = number> = LiftMeasure<typeof Base.bits, N>;
+const Memory: Memory = Base.bits;
 
 // Angular base units
 
 /** radians */
-export type PlaneAngle = typeof Base.radians;
-export const PlaneAngle: PlaneAngle = Base.radians;
+export type PlaneAngle<N = number> = LiftMeasure<typeof Base.radians, N>;
+const PlaneAngle: PlaneAngle = Base.radians;
 
 /** steradians */
-export type SolidAngle = typeof Base.steradians;
-export const SolidAngle: SolidAngle = Base.steradians;
+export type SolidAngle<N = number> = LiftMeasure<typeof Base.steradians, N>;
+const SolidAngle: SolidAngle = Base.steradians;
 
 // Derived units
 
 /** 1 / s */
-export const Frequency = Time.inverse();
-export type Frequency = typeof Frequency;
+export type Frequency<N = number> = LiftMeasure<typeof Frequency, N>;
+const Frequency = Time.inverse();
 
 /** 1 / s^2 */
-export const FrequencyDrift = Time.toThe(-2);
-export type FrequencyDrift = typeof FrequencyDrift;
+export type FrequencyDrift<N = number> = LiftMeasure<typeof FrequencyDrift, N>;
+const FrequencyDrift = Time.toThe(-2);
 
 /** 1 / m^2 */
-export const FuelEfficiency = Length.toThe(-2);
-export type FuelEfficiency = typeof FuelEfficiency;
+export type FuelEfficiency<N = number> = LiftMeasure<typeof FuelEfficiency, N>;
+const FuelEfficiency = Length.toThe(-2);
 
 /** 1 / m */
-export const Wavenumber = Length.inverse();
-export type Wavenumber = typeof Wavenumber;
+export type Wavenumber<N = number> = LiftMeasure<typeof Wavenumber, N>;
+const Wavenumber = Length.inverse();
 
 /** m^2 */
-export const Area = Length.squared();
-export type Area = typeof Area;
+export type Area<N = number> = LiftMeasure<typeof Area, N>;
+const Area = Length.squared();
 
 /** m^3 */
-export const Volume = Length.cubed();
-export type Volume = typeof Volume;
+export type Volume<N = number> = LiftMeasure<typeof Volume, N>;
+const Volume = Length.cubed();
 
 /** m ⋅ s */
-export const Absement = Length.times(Time);
-export type Absement = typeof Absement;
+export type Absement<N = number> = LiftMeasure<typeof Absement, N>;
+const Absement = Length.times(Time);
 
 /** m / s */
-export const Velocity = Length.over(Time);
-export type Velocity = typeof Velocity;
+export type Velocity<N = number> = LiftMeasure<typeof Velocity, N>;
+const Velocity = Length.over(Time);
 
 /** m / s^2 */
-export const Acceleration = Velocity.over(Time);
-export type Acceleration = typeof Acceleration;
+export type Acceleration<N = number> = LiftMeasure<typeof Acceleration, N>;
+const Acceleration = Velocity.over(Time);
 
 /** m / s^3 */
-export const Jerk = Acceleration.over(Time);
-export type Jerk = typeof Jerk;
+export type Jerk<N = number> = LiftMeasure<typeof Jerk, N>;
+const Jerk = Acceleration.over(Time);
 
 /** m / s^4 */
-export const Jounce = Jerk.over(Time);
-export type Jounce = typeof Jounce;
+export type Jounce<N = number> = LiftMeasure<typeof Jounce, N>;
+const Jounce = Jerk.over(Time);
 
 /** m / s^5 */
-export const Crackle = Jounce.over(Time);
-export type Crackle = typeof Crackle;
+export type Crackle<N = number> = LiftMeasure<typeof Crackle, N>;
+const Crackle = Jounce.over(Time);
 
 /** m^3 / s */
-export const VolumetricFlow = Volume.over(Time);
-export type VolumetricFlow = typeof VolumetricFlow;
+export type VolumetricFlow<N = number> = LiftMeasure<typeof VolumetricFlow, N>;
+const VolumetricFlow = Volume.over(Time);
 
 /** kg / s */
-export const MassFlowRate = Mass.over(Time);
-export type MassFlowRate = typeof MassFlowRate;
+export type MassFlowRate<N = number> = LiftMeasure<typeof MassFlowRate, N>;
+const MassFlowRate = Mass.over(Time);
 
 /** kg / m */
-export const LinearDensity = Mass.over(Length);
-export type LinearDensity = typeof LinearDensity;
+export type LinearDensity<N = number> = LiftMeasure<typeof LinearDensity, N>;
+const LinearDensity = Mass.over(Length);
 
 /** kg / m^2  */
-export const AreaDensity = Mass.over(Area);
-export type AreaDensity = typeof AreaDensity;
+export type AreaDensity<N = number> = LiftMeasure<typeof AreaDensity, N>;
+const AreaDensity = Mass.over(Area);
 
 /** kg / m^3 */
-export const VolumeDensity = Mass.over(Volume);
-export type VolumeDensity = typeof VolumeDensity;
+export type VolumeDensity<N = number> = LiftMeasure<typeof VolumeDensity, N>;
+const VolumeDensity = Mass.over(Volume);
 
 /** kg ⋅ m / s^2 */
-export const Force = Mass.times(Acceleration);
-export type Force = typeof Force;
+export type Force<N = number> = LiftMeasure<typeof Force, N>;
+const Force = Mass.times(Acceleration);
 
 /** km ⋅ m / s^3 */
-export const Yank = Force.over(Time);
-export type Yank = typeof Yank;
+export type Yank<N = number> = LiftMeasure<typeof Yank, N>;
+const Yank = Force.over(Time);
 
 /** kg / (m ⋅ s^2)  */
-export const Pressure = Force.over(Area);
-export type Pressure = typeof Pressure;
+export type Pressure<N = number> = LiftMeasure<typeof Pressure, N>;
+const Pressure = Force.over(Area);
 
 /** m ⋅ s^2 / kg */
-export const Compressibility = Pressure.inverse();
-export type Compressibility = typeof Compressibility;
+export type Compressibility<N = number> = LiftMeasure<typeof Compressibility, N>;
+const Compressibility = Pressure.inverse();
 
 /** kg / (m ⋅ s) */
-export const DynamicViscosity = Pressure.times(Time);
-export type DynamicViscosity = typeof DynamicViscosity;
+export type DynamicViscosity<N = number> = LiftMeasure<typeof DynamicViscosity, N>;
+const DynamicViscosity = Pressure.times(Time);
 
 /** kg / s^2 */
-export const SurfaceTension = Force.over(Length);
-export type SurfaceTension = typeof SurfaceTension;
+export type SurfaceTension<N = number> = LiftMeasure<typeof SurfaceTension, N>;
+const SurfaceTension = Force.over(Length);
 
 /** kg ⋅ m / s  */
-export const Momentum = Force.times(Time);
-export type Momentum = typeof Momentum;
+export type Momentum<N = number> = LiftMeasure<typeof Momentum, N>;
+const Momentum = Force.times(Time);
 
 /** kg ⋅ m^2 */
-export const MomentOfInertia = Mass.times(Area);
-export type MomentOfInertia = typeof MomentOfInertia;
+export type MomentOfInertia<N = number> = LiftMeasure<typeof MomentOfInertia, N>;
+const MomentOfInertia = Mass.times(Area);
 
 /** kg ⋅ m^2 / s^2 */
-export const Energy = Force.times(Length);
-export type Energy = typeof Energy;
+export type Energy<N = number> = LiftMeasure<typeof Energy, N>;
+const Energy = Force.times(Length);
 
 /** kg ⋅ m^2 / s^3 */
-export const Power = Energy.over(Time);
-export type Power = typeof Power;
+export type Power<N = number> = LiftMeasure<typeof Power, N>;
+const Power = Energy.over(Time);
 
 /** kg / (m ⋅ s^3) */
-export const PowerDensity = Power.over(Volume);
-export type PowerDensity = typeof PowerDensity;
+export type PowerDensity<N = number> = LiftMeasure<typeof PowerDensity, N>;
+const PowerDensity = Power.over(Volume);
 
 /** kg ⋅ m^2 / (s^3 ⋅ A) */
-export const Voltage = Power.over(ElectricCurrent);
-export type Voltage = typeof Voltage;
+export type Voltage<N = number> = LiftMeasure<typeof Voltage, N>;
+const Voltage = Power.over(ElectricCurrent);
 
 /** s ⋅ A */
-export const ElectricCharge = ElectricCurrent.times(Time);
-export type ElectricCharge = typeof ElectricCharge;
+export type ElectricCharge<N = number> = LiftMeasure<typeof ElectricCharge, N>;
+const ElectricCharge = ElectricCurrent.times(Time);
 
 /** s ⋅ A / m^3 */
-export const ElectricChargeDensity = ElectricCharge.over(Volume);
-export type ElectricChargeDensity = typeof ElectricChargeDensity;
+export type ElectricChargeDensity<N = number> = LiftMeasure<typeof ElectricChargeDensity, N>;
+const ElectricChargeDensity = ElectricCharge.over(Volume);
 
 /** A / m^2 */
-export const ElectricCurrentDensity = ElectricCurrent.over(Area);
-export type ElectricCurrentDensity = typeof ElectricCurrentDensity;
+export type ElectricCurrentDensity<N = number> = LiftMeasure<typeof ElectricCurrentDensity, N>;
+const ElectricCurrentDensity = ElectricCurrent.over(Area);
 
 /** s ⋅ A / m^2 */
-export const ElectricDisplacement = ElectricCharge.over(Area);
-export type ElectricDisplacement = typeof ElectricDisplacement;
+export type ElectricDisplacement<N = number> = LiftMeasure<typeof ElectricDisplacement, N>;
+const ElectricDisplacement = ElectricCharge.over(Area);
 
 /** kg ⋅ m / (s^3 ⋅ A) */
-export const EletricFieldStrength = Voltage.over(Length);
-export type EletricFieldStrength = typeof EletricFieldStrength;
+export type EletricFieldStrength<N = number> = LiftMeasure<typeof EletricFieldStrength, N>;
+const EletricFieldStrength = Voltage.over(Length);
 
 /** s^4 ⋅ A^2 / (kg ⋅ m^2) */
-export const ElectricalCapacitance = ElectricCharge.over(Voltage);
-export type ElectricalCapacitance = typeof ElectricalCapacitance;
+export type ElectricalCapacitance<N = number> = LiftMeasure<typeof ElectricalCapacitance, N>;
+const ElectricalCapacitance = ElectricCharge.over(Voltage);
 
 /** s^3 ⋅ A / (kg ⋅ m^2) */
-export const ElectricalConductance = ElectricCurrent.over(Voltage);
-export type ElectricalConductance = typeof ElectricalConductance;
+export type ElectricalConductance<N = number> = LiftMeasure<typeof ElectricalConductance, N>;
+const ElectricalConductance = ElectricCurrent.over(Voltage);
 
 /** s^3 ⋅ A^2 / (kg ⋅ m^3) */
-export const ElectricalConductivity = ElectricalConductance.over(Length);
-export type ElectricalConductivity = typeof ElectricalConductivity;
+export type ElectricalConductivity<N = number> = LiftMeasure<typeof ElectricalConductivity, N>;
+const ElectricalConductivity = ElectricalConductance.over(Length);
 
 /** kg ⋅ m^2 / (s^3 ⋅ A^2) */
-export const ElectricalResistance = Voltage.over(ElectricCurrent);
-export type ElectricalResistance = typeof ElectricalResistance;
+export type ElectricalResistance<N = number> = LiftMeasure<typeof ElectricalResistance, N>;
+const ElectricalResistance = Voltage.over(ElectricCurrent);
 
 /** kg ⋅ m^3 / (s^3 ⋅ A^2) */
-export const ElectricalResistivity = ElectricalResistance.times(Length);
-export type ElectricalResistivity = typeof ElectricalResistivity;
+export type ElectricalResistivity<N = number> = LiftMeasure<typeof ElectricalResistivity, N>;
+const ElectricalResistivity = ElectricalResistance.times(Length);
 
 /** kg ⋅ m^2 / (s^2 ⋅ A^2) */
-export const ElectricalInductance = ElectricalResistance.times(Time);
-export type ElectricalInductance = typeof ElectricalInductance;
+export type ElectricalInductance<N = number> = LiftMeasure<typeof ElectricalInductance, N>;
+const ElectricalInductance = ElectricalResistance.times(Time);
 
 /** s ⋅ A / m */
-export const LinearChargeDensity = ElectricCharge.over(Length);
-export type LinearChargeDensity = typeof LinearChargeDensity;
+export type LinearChargeDensity<N = number> = LiftMeasure<typeof LinearChargeDensity, N>;
+const LinearChargeDensity = ElectricCharge.over(Length);
 
 /** s^4 ⋅ A^2 / (kg ⋅ m^3) */
-export const Permittivity = ElectricalCapacitance.over(Length);
-export type Permittivity = typeof Permittivity;
+export type Permittivity<N = number> = LiftMeasure<typeof Permittivity, N>;
+const Permittivity = ElectricalCapacitance.over(Length);
 
 /** kg ⋅ m^2 / (s^2 ⋅ A) */
-export const MagneticFlux = Energy.over(ElectricCurrent);
-export type MagneticFlux = typeof MagneticFlux;
+export type MagneticFlux<N = number> = LiftMeasure<typeof MagneticFlux, N>;
+const MagneticFlux = Energy.over(ElectricCurrent);
 
 /** kg / (s^2 ⋅ A) */
-export const MagneticFluxDensity = Voltage.times(Time).over(Area);
-export type MagneticFluxDensity = typeof MagneticFluxDensity;
+export type MagneticFluxDensity<N = number> = LiftMeasure<typeof MagneticFluxDensity, N>;
+const MagneticFluxDensity = Voltage.times(Time).over(Area);
 
 /** kg ⋅ m / (s^2 ⋅ A^2)  */
-export const MagneticPermeability = ElectricalInductance.over(Length);
-export type MagneticPermeability = typeof MagneticPermeability;
+export type MagneticPermeability<N = number> = LiftMeasure<typeof MagneticPermeability, N>;
+const MagneticPermeability = ElectricalInductance.over(Length);
 
 /** A / m */
-export const Magnetization = ElectricCurrent.over(Length);
-export type Magnetization = typeof Magnetization;
+export type Magnetization<N = number> = LiftMeasure<typeof Magnetization, N>;
+const Magnetization = ElectricCurrent.over(Length);
 
 /** s^2 ⋅ A^2 / (kg ⋅ m^2) */
-export const MagneticReluctance = ElectricalInductance.inverse();
-export type MagneticReluctance = typeof MagneticReluctance;
+export type MagneticReluctance<N = number> = LiftMeasure<typeof MagneticReluctance, N>;
+const MagneticReluctance = ElectricalInductance.inverse();
 
 /** kg ⋅ m^3 / (s^2 ⋅ A) */
-export const MagneticMoment = MagneticFlux.times(Length);
-export type MagneticMoment = typeof MagneticMoment;
+export type MagneticMoment<N = number> = LiftMeasure<typeof MagneticMoment, N>;
+const MagneticMoment = MagneticFlux.times(Length);
 
 /** kg ⋅ m / (s^2 ⋅ A) */
-export const MagneticRigidity = MagneticFluxDensity.times(Length);
-export type MagneticRigidity = typeof MagneticRigidity;
+export type MagneticRigidity<N = number> = LiftMeasure<typeof MagneticRigidity, N>;
+const MagneticRigidity = MagneticFluxDensity.times(Length);
 
 /** m^2 ⋅ A */
-export const MagneticDipoleMoment = Energy.over(MagneticFluxDensity);
-export type MagneticDipoleMoment = typeof MagneticDipoleMoment;
+export type MagneticDipoleMoment<N = number> = LiftMeasure<typeof MagneticDipoleMoment, N>;
+const MagneticDipoleMoment = Energy.over(MagneticFluxDensity);
 
 /** s^2 ⋅ A^2 / (kg ⋅ m) */
-export const MagneticSusceptibility = Length.over(ElectricalInductance);
-export type MagneticSusceptibility = typeof MagneticSusceptibility;
+export type MagneticSusceptibility<N = number> = LiftMeasure<typeof MagneticSusceptibility, N>;
+const MagneticSusceptibility = Length.over(ElectricalInductance);
 
 /** kg / s^3  */
-export const Irradiance = Power.over(Area);
-export type Irradiance = typeof Irradiance;
+export type Irradiance<N = number> = LiftMeasure<typeof Irradiance, N>;
+const Irradiance = Power.over(Area);
 
 /** kg ⋅ m / (s^2 ⋅ K)  */
-export const Entropy = Energy.over(Temperature);
-export type Entropy = typeof Entropy;
+export type Entropy<N = number> = LiftMeasure<typeof Entropy, N>;
+const Entropy = Energy.over(Temperature);
 
 /** m^2 / (s^2 ⋅ K) */
-export const SpecificHeat = Energy.over(Mass.times(Temperature));
-export type SpecificHeat = typeof SpecificHeat;
+export type SpecificHeat<N = number> = LiftMeasure<typeof SpecificHeat, N>;
+const SpecificHeat = Energy.over(Mass.times(Temperature));
 
 /** m^3 / kg  */
-export const SpecificVolume = Volume.over(Mass);
-export type SpecificVolume = typeof SpecificVolume;
+export type SpecificVolume<N = number> = LiftMeasure<typeof SpecificVolume, N>;
+const SpecificVolume = Volume.over(Mass);
 
 /** kg ⋅ m / (s^3 ⋅ K)  */
-export const ThermalConductivity = Power.over(Length.times(Temperature));
-export type ThermalConductivity = typeof ThermalConductivity;
+export type ThermalConductivity<N = number> = LiftMeasure<typeof ThermalConductivity, N>;
+const ThermalConductivity = Power.over(Length.times(Temperature));
 
 /** s^3 ⋅ K / (kg ⋅ m^2) */
-export const ThermalResistance = Temperature.over(Power);
-export type ThermalResistance = typeof ThermalResistance;
+export type ThermalResistance<N = number> = LiftMeasure<typeof ThermalResistance, N>;
+const ThermalResistance = Temperature.over(Power);
 
 /** 1 / K */
-export const ThermalExpansionCoefficient = Temperature.inverse();
-export type ThermalExpansionCoefficient = typeof ThermalExpansionCoefficient;
+export type ThermalExpansionCoefficient<N = number> = LiftMeasure<typeof ThermalExpansionCoefficient, N>;
+const ThermalExpansionCoefficient = Temperature.inverse();
 
 /** K / m */
-export const ThermalGradient = Temperature.over(Length);
-export type ThermalGradient = typeof ThermalGradient;
+export type ThermalGradient<N = number> = LiftMeasure<typeof ThermalGradient, N>;
+const ThermalGradient = Temperature.over(Length);
 
 /** kg ⋅ m^2 / (s^2 ⋅ K ⋅ mol) */
-export const MolarEntropy = Entropy.over(AmountOfSubstance);
-export type MolarEntropy = typeof MolarEntropy;
+export type MolarEntropy<N = number> = LiftMeasure<typeof MolarEntropy, N>;
+const MolarEntropy = Entropy.over(AmountOfSubstance);
 
 /** kg ⋅ m^2 / (s^2 ⋅ mol) */
-export const MolarEnergy = Energy.over(AmountOfSubstance);
-export type MolarEnergy = typeof MolarEnergy;
+export type MolarEnergy<N = number> = LiftMeasure<typeof MolarEnergy, N>;
+const MolarEnergy = Energy.over(AmountOfSubstance);
 
 /** mol / m^3 */
-export const Molarity = AmountOfSubstance.over(Volume);
-export type Molarity = typeof Molarity;
+export type Molarity<N = number> = LiftMeasure<typeof Molarity, N>;
+const Molarity = AmountOfSubstance.over(Volume);
 
 /** m^3 / mol */
-export const MolarVolume = Volume.over(AmountOfSubstance);
-export type MolarVolume = typeof MolarVolume;
+export type MolarVolume<N = number> = LiftMeasure<typeof MolarVolume, N>;
+const MolarVolume = Volume.over(AmountOfSubstance);
 
 /** mol / kg */
-export const Molality = AmountOfSubstance.over(Mass);
-export type Molality = typeof Molality;
+export type Molality<N = number> = LiftMeasure<typeof Molality, N>;
+const Molality = AmountOfSubstance.over(Mass);
 
 /** kg / mol  */
-export const MolarMass = Mass.over(AmountOfSubstance);
-export type MolarMass = typeof MolarMass;
+export type MolarMass<N = number> = LiftMeasure<typeof MolarMass, N>;
+const MolarMass = Mass.over(AmountOfSubstance);
 
 /** s^3 ⋅ A^2 / (kg ⋅ mol) */
-export const MolarConductivity = ElectricalConductance.times(Area).over(AmountOfSubstance);
-export type MolarConductivity = typeof MolarConductivity;
+export type MolarConductivity<N = number> = LiftMeasure<typeof MolarConductivity, N>;
+const MolarConductivity = ElectricalConductance.times(Area).over(AmountOfSubstance);
 
 /** mol / s */
-export const CatalyticActivity = AmountOfSubstance.over(Time);
-export type CatalyticActivity = typeof CatalyticActivity;
+export type CatalyticActivity<N = number> = LiftMeasure<typeof CatalyticActivity, N>;
+const CatalyticActivity = AmountOfSubstance.over(Time);
 
 /** m^3 / (s ⋅ mol) */
-export const CatalyticEfficiency = Volume.over(AmountOfSubstance.times(Time));
-export type CatalyticEfficiency = typeof CatalyticEfficiency;
+export type CatalyticEfficiency<N = number> = LiftMeasure<typeof CatalyticEfficiency, N>;
+const CatalyticEfficiency = Volume.over(AmountOfSubstance.times(Time));
 
 /** mol / (m^3 ⋅ s)  */
-export const ReactionRate = CatalyticActivity.over(Volume);
-export type ReactionRate = typeof ReactionRate;
+export type ReactionRate<N = number> = LiftMeasure<typeof ReactionRate, N>;
+const ReactionRate = CatalyticActivity.over(Volume);
 
 /** m^2 / s^2 */
-export const RadiationDose = Energy.over(Mass);
-export type RadiationDose = typeof RadiationDose;
+export type RadiationDose<N = number> = LiftMeasure<typeof RadiationDose, N>;
+const RadiationDose = Energy.over(Mass);
 
 /** m^2 / s^3 */
-export const RadiationDoseRate = RadiationDose.over(Time);
-export type RadiationDoseRate = typeof RadiationDoseRate;
+export type RadiationDoseRate<N = number> = LiftMeasure<typeof RadiationDoseRate, N>;
+const RadiationDoseRate = RadiationDose.over(Time);
 
 /** s^2 ⋅ A / kg  */
-export const ElectronMobility = Area.over(Voltage.times(Time));
-export type ElectronMobility = typeof ElectronMobility;
+export type ElectronMobility<N = number> = LiftMeasure<typeof ElectronMobility, N>;
+const ElectronMobility = Area.over(Voltage.times(Time));
 
 /** kg ⋅ m^2 / s */
-export const AngularMomentum = Force.times(Length).times(Time);
-export type AngularMomentum = typeof AngularMomentum;
+export type AngularMomentum<N = number> = LiftMeasure<typeof AngularMomentum, N>;
+const AngularMomentum = Force.times(Length).times(Time);
 
 /** m^2 /s */
-export const SpecificAngularMomentum = AngularMomentum.over(Mass);
-export type SpecificAngularMomentum = typeof SpecificAngularMomentum;
+export type SpecificAngularMomentum<N = number> = LiftMeasure<typeof SpecificAngularMomentum, N>;
+const SpecificAngularMomentum = AngularMomentum.over(Mass);
 
 /** cd / m^2 */
-export const Luminance = LuminousIntensity.over(Area);
-export type Luminance = typeof Luminance;
+export type Luminance<N = number> = LiftMeasure<typeof Luminance, N>;
+const Luminance = LuminousIntensity.over(Area);
 
 // Angular derived units
 
 /** cd ⋅ sr */
-export const LuminousFlux = LuminousIntensity.times(SolidAngle);
-export type LuminousFlux = typeof LuminousFlux;
+export type LuminousFlux<N = number> = LiftMeasure<typeof LuminousFlux, N>;
+const LuminousFlux = LuminousIntensity.times(SolidAngle);
 
 /** cd ⋅ sr / m^2 */
-export const Illuminance = LuminousFlux.over(Area);
-export type Illuminance = typeof Illuminance;
+export type Illuminance<N = number> = LiftMeasure<typeof Illuminance, N>;
+const Illuminance = LuminousFlux.over(Area);
 
 /** s ⋅ cd ⋅ sr */
-export const LuminousEnergy = LuminousFlux.times(Time);
-export type LuminousEnergy = typeof LuminousEnergy;
+export type LuminousEnergy<N = number> = LiftMeasure<typeof LuminousEnergy, N>;
+const LuminousEnergy = LuminousFlux.times(Time);
 
 /** s ⋅ cd ⋅ sr / m^2 */
-export const LuminousExposure = Illuminance.times(Time);
-export type LuminousExposure = typeof LuminousExposure;
+export type LuminousExposure<N = number> = LiftMeasure<typeof LuminousExposure, N>;
+const LuminousExposure = Illuminance.times(Time);
 
 /** s^3 ⋅ cd ⋅ sr / (kg ⋅ m^2) */
-export const LuminousEfficiency = LuminousFlux.over(Power);
-export type LuminousEfficiency = typeof LuminousEfficiency;
+export type LuminousEfficiency<N = number> = LiftMeasure<typeof LuminousEfficiency, N>;
+const LuminousEfficiency = LuminousFlux.over(Power);
 
 /** kg ⋅ m^2 / (s^3 ⋅ sr) */
-export const RadiantIntensity = Power.over(SolidAngle);
-export type RadiantIntensity = typeof RadiantIntensity;
+export type RadiantIntensity<N = number> = LiftMeasure<typeof RadiantIntensity, N>;
+const RadiantIntensity = Power.over(SolidAngle);
 
 /** kg ⋅ m / (s^3 ⋅ sr)  */
-export const SpectralIntensity = RadiantIntensity.over(Length);
-export type SpectralIntensity = typeof SpectralIntensity;
+export type SpectralIntensity<N = number> = LiftMeasure<typeof SpectralIntensity, N>;
+const SpectralIntensity = RadiantIntensity.over(Length);
 
 /** kg / (s^3 ⋅ sr) */
-export const Radiance = RadiantIntensity.over(Area);
-export type Radiance = typeof Radiance;
+export type Radiance<N = number> = LiftMeasure<typeof Radiance, N>;
+const Radiance = RadiantIntensity.over(Area);
 
 /** kg / (m ⋅ s^3 ⋅ sr) */
-export const SpectralRadiance = RadiantIntensity.over(Volume);
-export type SpectralRadiance = typeof SpectralRadiance;
+export type SpectralRadiance<N = number> = LiftMeasure<typeof SpectralRadiance, N>;
+const SpectralRadiance = RadiantIntensity.over(Volume);
 
 /** rad / s */
-export const AngularVelocity = PlaneAngle.over(Time);
-export type AngularVelocity = typeof AngularVelocity;
+export type AngularVelocity<N = number> = LiftMeasure<typeof AngularVelocity, N>;
+const AngularVelocity = PlaneAngle.over(Time);
 
 /** rad / s^2 */
-export const AngularAcceleration = AngularVelocity.over(Time);
-export type AngularAcceleration = typeof AngularAcceleration;
+export type AngularAcceleration<N = number> = LiftMeasure<typeof AngularAcceleration, N>;
+const AngularAcceleration = AngularVelocity.over(Time);

@@ -209,3 +209,13 @@ export interface GenericMeasure<N, U extends Unit> {
     /** Shallow copies this measure instance. */
     clone(): GenericMeasure<N, U>;
 }
+
+/**
+ * Translates a measure type from one numeric type to another while preserving the unit.
+ * @example
+ * const metersPerSecond = meters.per(seconds);
+ * type Velocity<N> = LiftMeasure<typeof metersPerSecond, N>;
+ */
+export type LiftMeasure<M extends GenericMeasure<any, any>, N> = M extends GenericMeasure<any, infer U>
+    ? GenericMeasure<N, U>
+    : never;
