@@ -1,16 +1,44 @@
 import { GenericMeasure } from "../measure/genericMeasure";
+import { GenericMeasureType } from "../measure/genericMeasureFactory";
 import { Measure } from "../measure/numberMeasure";
 
-// HACKHACK: Explicitly type this so we can import GenericMeasure and avoid absolute paths in the generated typings.
-export const meters: GenericMeasure<number, { length: 1 }> = Measure.dimension("length", "m");
-export const kilograms = Measure.dimension("mass", "kg");
-export const seconds = Measure.dimension("time", "s");
-export const amperes = Measure.dimension("current", "A");
-export const kelvin = Measure.dimension("temperature", "K");
-export const moles = Measure.dimension("substance", "mol");
-export const candelas = Measure.dimension("intensity", "cd");
+interface BaseUnitsMap {
+    meters: "length";
+    kilograms: "mass";
+    seconds: "time";
+    amperes: "current";
+    kelvin: "temperature";
+    moles: "substance";
+    candelas: "intensity";
+    radians: "planeAngle";
+    steradians: "solidAngle";
+    bits: "memory";
+}
 
-export const radians = Measure.dimension("planeAngle", "rad");
-export const steradians = Measure.dimension("solidAngle", "sr");
+export type BaseUnits<N> = { [U in keyof BaseUnitsMap]: GenericMeasure<N, { [K in BaseUnitsMap[U]]: 1 }> };
 
-export const bits = Measure.dimension("memory", "b");
+export const createBaseUnits = <N>(MeasureType: GenericMeasureType<N, any>): BaseUnits<N> => ({
+    meters: MeasureType.dimension("length", "m"),
+    kilograms: MeasureType.dimension("mass", "kg"),
+    seconds: MeasureType.dimension("time", "s"),
+    amperes: MeasureType.dimension("current", "A"),
+    kelvin: MeasureType.dimension("temperature", "K"),
+    moles: MeasureType.dimension("substance", "mol"),
+    candelas: MeasureType.dimension("intensity", "cd"),
+    radians: MeasureType.dimension("planeAngle", "rad"),
+    steradians: MeasureType.dimension("solidAngle", "sr"),
+    bits: MeasureType.dimension("memory", "b"),
+});
+
+export const {
+    meters,
+    kilograms,
+    seconds,
+    amperes,
+    kelvin,
+    moles,
+    candelas,
+    radians,
+    steradians,
+    bits,
+} = createBaseUnits(Measure);
