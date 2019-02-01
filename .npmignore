@@ -1,6 +1,7 @@
 coverage/
 codegen/
 scripts/
+test/
 jest.config.json
 .travis.yml
 tslint.json
