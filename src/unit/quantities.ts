@@ -1,4 +1,4 @@
-import { GenericMeasure, LiftMeasure } from "../measure/genericMeasure";
+import { IGenericMeasure, LiftMeasure } from "../measure/genericMeasure";
 import { Measure } from "../measure/numberMeasure";
 import * as Base from "./base";
 
@@ -6,7 +6,7 @@ import * as Base from "./base";
 
 /** A measure without any unit */
 export type Dimensionless<N = number> = LiftMeasure<typeof Dimensionless, N>;
-const Dimensionless: GenericMeasure<number, {}> = Measure.dimensionless(1);
+const Dimensionless: IGenericMeasure<number, {}> = Measure.dimensionless(1);
 
 // Base units
 

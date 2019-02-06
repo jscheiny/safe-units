@@ -1,9 +1,9 @@
 import { Exponent } from "../../exponent";
-import { Unit, UnitWithSymbols } from "../unitTypeArithmetic";
+import { IUnit, UnitWithSymbols } from "../unitTypeArithmetic";
 import { dimension, divideUnits, exponentiateUnit, multiplyUnits, nthRootUnit } from "../unitValueArithmetic";
 
 describe("Unit value arithmetic", () => {
-    function addSymbols<U extends Unit>(unit: U): UnitWithSymbols<U> {
+    function addSymbols<U extends IUnit>(unit: U): UnitWithSymbols<U> {
         const result: UnitWithSymbols = {};
         for (const dimension in unit) {
             const exponent: Exponent | undefined = unit[dimension];

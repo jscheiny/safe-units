@@ -1,24 +1,24 @@
-import { GenericMeasure } from "./genericMeasure";
-import { Unit } from "./unitTypeArithmetic";
+import { IGenericMeasure } from "./genericMeasure";
+import { IUnit } from "./unitTypeArithmetic";
 
 /** A function which applies a symbol prefix and multiplier to a given measure. */
 export type PrefixFunction<N> = {
-    <U extends Unit>(measure: GenericMeasure<N, U>): GenericMeasure<N, U>;
+    <U extends IUnit>(measure: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
 };
 
 /** A function which transforms a single measure into another measure with the same unit. */
 export type UnaryMeasureFunction<N> = {
-    <U extends Unit>(x: GenericMeasure<N, U>): GenericMeasure<N, U>;
+    <U extends IUnit>(x: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
 };
 
 /** A function which transforms two measures with same unit into a single measure with the same unit. */
 export type BinaryMeasureFunction<N> = {
-    <U extends Unit>(left: GenericMeasure<N, U>, right: GenericMeasure<N, U>): GenericMeasure<N, U>;
+    <U extends IUnit>(left: IGenericMeasure<N, U>, right: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
 };
 
 /** A function which transforms one or more measure with the same unit into a single measure with the same unit. */
 export type SpreadMeasureFunction<N> = {
-    <U extends Unit>(first: GenericMeasure<N, U>, ...rest: Array<GenericMeasure<N, U>>): GenericMeasure<N, U>;
+    <U extends IUnit>(first: IGenericMeasure<N, U>, ...rest: Array<IGenericMeasure<N, U>>): IGenericMeasure<N, U>;
 };
 
 /**

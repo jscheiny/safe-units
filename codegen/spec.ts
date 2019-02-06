@@ -1,8 +1,8 @@
-import { CodeGenSpec } from "./common";
+import { ICodeGenSpec } from "./common";
 
 const maxExponent = 5;
 
-export const codeGenSpec: CodeGenSpec = {
+export const codeGenSpec: ICodeGenSpec = {
     minExponent: -maxExponent,
     maxExponent,
     operators: [
@@ -12,7 +12,7 @@ export const codeGenSpec: CodeGenSpec = {
             curriedTypeNamePrefix: "Add",
             testTypeNamePrefix: "Sum",
             specialCases: {
-                [0]: "R",
+                0: "R",
             },
             compute: (left, right) => left + right,
         },
@@ -22,8 +22,8 @@ export const codeGenSpec: CodeGenSpec = {
             curriedTypeNamePrefix: "MultiplyBy",
             testTypeNamePrefix: "Product",
             specialCases: {
-                [0]: "0",
-                [1]: "R",
+                0: "0",
+                1: "R",
             },
             compute: (left, right) => left * right,
         },
@@ -33,7 +33,7 @@ export const codeGenSpec: CodeGenSpec = {
             curriedTypeNamePrefix: "DividedBy",
             testTypeNamePrefix: "Quotient",
             specialCases: {
-                [0]: "(R extends 0 ? ArithmeticError : 0)",
+                0: "(R extends 0 ? ArithmeticError : 0)",
             },
             compute: (left, right) => left / right,
         },

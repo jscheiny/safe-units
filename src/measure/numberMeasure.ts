@@ -1,10 +1,10 @@
-import { GenericMeasure, Numeric } from "./genericMeasure";
+import { IGenericMeasure, INumericOperations } from "./genericMeasure";
 import { createMeasureType, GenericMeasureType } from "./genericMeasureFactory";
 import { SpreadMeasureFunction, UnaryMeasureFunction, wrapSpreadFn, wrapUnaryFn } from "./genericMeasureUtils";
-import { NthRootUnit, RadicandUnit, Unit } from "./unitTypeArithmetic";
+import { IRadicandUnit, IUnit, NthRootUnit } from "./unitTypeArithmetic";
 import { cbrtUnit, sqrtUnit } from "./unitValueArithmetic";
 
-interface MeasureStaticMethods {
+interface IMeasureStaticMethods {
     abs: UnaryMeasureFunction<number>;
     ceil: UnaryMeasureFunction<number>;
     floor: UnaryMeasureFunction<number>;
@@ -12,11 +12,11 @@ interface MeasureStaticMethods {
     round: UnaryMeasureFunction<number>;
     trunc: UnaryMeasureFunction<number>;
     hypot: SpreadMeasureFunction<number>;
-    sqrt<U extends RadicandUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>>;
-    cbrt<U extends RadicandUnit<3>>(x: Measure<U>): Measure<NthRootUnit<U, 3>>;
+    sqrt<U extends IRadicandUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>>;
+    cbrt<U extends IRadicandUnit<3>>(x: Measure<U>): Measure<NthRootUnit<U, 3>>;
 }
 
-const staticMethods: MeasureStaticMethods = {
+const staticMethods: IMeasureStaticMethods = {
     abs: wrapUnaryFn(Math.abs),
     ceil: wrapUnaryFn(Math.ceil),
     floor: wrapUnaryFn(Math.floor),
@@ -28,7 +28,7 @@ const staticMethods: MeasureStaticMethods = {
     cbrt: x => x.unsafeMap(Math.cbrt, cbrtUnit),
 };
 
-const numericOps: Numeric<number> = {
+const numericOps: INumericOperations<number> = {
     one: () => 1,
     neg: x => -x,
     add: (x, y) => x + y,
@@ -40,5 +40,5 @@ const numericOps: Numeric<number> = {
     format: x => `${x}`,
 };
 
-export type Measure<U extends Unit> = GenericMeasure<number, U>;
-export const Measure: GenericMeasureType<number, MeasureStaticMethods> = createMeasureType(numericOps, staticMethods);
+export type Measure<U extends IUnit> = IGenericMeasure<number, U>;
+export const Measure: GenericMeasureType<number, IMeasureStaticMethods> = createMeasureType(numericOps, staticMethods);

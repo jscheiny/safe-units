@@ -1,6 +1,6 @@
-import { CommonSpec, genFileHeader, getExponents } from "./common";
+import { genFileHeader, getExponents, ICommonSpec } from "./common";
 
-export function genExponentType(spec: CommonSpec): string {
+export function genExponentType(spec: ICommonSpec): string {
     const exponents = getExponents(spec).join(" | ");
     return [
         ...genFileHeader(false),

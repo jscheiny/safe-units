@@ -1,5 +1,5 @@
 import { exists, mkdir, writeFile } from "fs";
-import { OperatorSpec } from "./common";
+import { IOperatorSpec } from "./common";
 import { genExponentType } from "./genExponent";
 import { genOperatorTests } from "./genTests";
 import { genOperatorTypes } from "./genTypes";
@@ -9,13 +9,13 @@ const DIR = "generated";
 const SRC_PREFIX = `src/exponent/${DIR}`;
 const TEST_PREFIX = `test/types/${DIR}`;
 
-export interface EmitPlan {
+export interface IEmitPlan {
     path: string;
     source: string;
 }
 
 export function emit(callback?: () => void): void {
-    const emits: EmitPlan[] = [
+    const emits: IEmitPlan[] = [
         { path: `${SRC_PREFIX}/exponent.ts`, source: genExponentType(codeGenSpec) },
         ...getOperatorEmitPlans(SRC_PREFIX, genOperatorTypes),
         ...getOperatorEmitPlans(TEST_PREFIX, genOperatorTests),
@@ -31,10 +31,10 @@ export function emit(callback?: () => void): void {
     });
 }
 
-function getOperatorEmitPlans(prefix: string, genSource: (spec: OperatorSpec) => string): EmitPlan[] {
+function getOperatorEmitPlans(prefix: string, genSource: (spec: IOperatorSpec) => string): IEmitPlan[] {
     const { operators, ...common } = codeGenSpec;
     return operators.map(operator => {
-        const operatorSpec: OperatorSpec = { ...operator, ...common };
+        const operatorSpec: IOperatorSpec = { ...operator, ...common };
         const { fileNamePrefix } = operator;
         return { path: `${prefix}/${fileNamePrefix}.ts`, source: genSource(operatorSpec) };
     });
@@ -59,7 +59,7 @@ function makeDirectory(path: string, callback: () => void): void {
     });
 }
 
-function emitFile({ path, source }: EmitPlan, callback?: () => void): void {
+function emitFile({ path, source }: IEmitPlan, callback?: () => void): void {
     writeFile(path, source, error => {
         if (error) {
             console.error(`There was an error writing to ${path}`);
