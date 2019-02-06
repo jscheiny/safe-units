@@ -1,13 +1,13 @@
-export interface CommonSpec {
+export interface ICommonSpec {
     minExponent: number;
     maxExponent: number;
 }
 
-export interface CodeGenSpec extends CommonSpec {
-    operators: PartialOperatorSpec[];
+export interface ICodeGenSpec extends ICommonSpec {
+    operators: IPartialOperatorSpec[];
 }
 
-export interface PartialOperatorSpec {
+export interface IPartialOperatorSpec {
     fileNamePrefix: string;
     uncurriedTypeNamePrefix: string;
     curriedTypeNamePrefix: string;
@@ -16,9 +16,9 @@ export interface PartialOperatorSpec {
     compute: (left: number, right: number) => number;
 }
 
-export interface OperatorSpec extends CommonSpec, PartialOperatorSpec {}
+export interface IOperatorSpec extends ICommonSpec, IPartialOperatorSpec {}
 
-export function getExponents({ minExponent, maxExponent }: CommonSpec): number[] {
+export function getExponents({ minExponent, maxExponent }: ICommonSpec): number[] {
     const exponents: number[] = [];
     for (let exponent = minExponent; exponent <= maxExponent; exponent++) {
         exponents.push(exponent);
@@ -26,7 +26,7 @@ export function getExponents({ minExponent, maxExponent }: CommonSpec): number[]
     return exponents;
 }
 
-export function isExponent(exponent: number, { minExponent, maxExponent }: CommonSpec): boolean {
+export function isExponent(exponent: number, { minExponent, maxExponent }: ICommonSpec): boolean {
     return exponent >= minExponent && exponent <= maxExponent && exponent === Math.floor(exponent);
 }
 
@@ -53,7 +53,7 @@ function order(first: string, second: string): number {
     return 0;
 }
 
-export function genUncurriedTypeName(spec: OperatorSpec, left?: string | number, right?: string | number): string {
+export function genUncurriedTypeName(spec: IOperatorSpec, left?: string | number, right?: string | number): string {
     const args = left !== undefined && right !== undefined ? `<${left}, ${right}>` : "";
     return `${spec.uncurriedTypeNamePrefix}Exponents${args}`;
 }

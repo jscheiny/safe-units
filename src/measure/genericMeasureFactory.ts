@@ -1,17 +1,17 @@
-import { GenericMeasure, Numeric } from "./genericMeasure";
+import { IGenericMeasure, INumericOperations } from "./genericMeasure";
 import { createMeasureClass } from "./genericMeasureClass";
-import { GenericMeasureStatic, getGenericMeasureStaticMethods } from "./genericMeasureStatic";
-import { IsSingleStringLiteral, Unit } from "./unitTypeArithmetic";
+import { getGenericMeasureStaticMethods, IGenericMeasureStatic } from "./genericMeasureStatic";
+import { IsSingleStringLiteral, IUnit } from "./unitTypeArithmetic";
 import { dimension } from "./unitValueArithmetic";
 
 type DimensionResult<N, D extends string> = true extends IsSingleStringLiteral<D>
-    ? GenericMeasure<N, { [Dim in D]: 1 }>
+    ? IGenericMeasure<N, { [Dim in D]: 1 }>
     : never;
 
 /** The functions needed to construct a measure of a given numeric type */
-interface GenericMeasureFactory<N> {
+interface IGenericMeasureFactory<N> {
     /** The constructor for this generic measure type, useful for doing `instanceof` checks. */
-    isMeasure(value: any): value is GenericMeasure<N, any>;
+    isMeasure(value: any): value is IGenericMeasure<N, any>;
 
     /**
      * Creates a new dimension base unit.
@@ -26,7 +26,7 @@ interface GenericMeasureFactory<N> {
      * @param value the value of the measure
      * @returns a measure with no dimensions
      */
-    dimensionless(value: N): GenericMeasure<N, {}>;
+    dimensionless(value: N): IGenericMeasure<N, {}>;
 
     /**
      * Creates a measure as a multiple of another measure.
@@ -35,10 +35,10 @@ interface GenericMeasureFactory<N> {
      * @param symbol an optional unit symbol for this measure
      * @returns a measure of value number of quantities.
      */
-    of<U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U>;
+    of<U extends IUnit>(value: N, quantity: IGenericMeasure<N, U>, symbol?: string): IGenericMeasure<N, U>;
 }
 
-type GenericMeasureCommon<N> = GenericMeasureFactory<N> & GenericMeasureStatic<N>;
+type GenericMeasureCommon<N> = IGenericMeasureFactory<N> & IGenericMeasureStatic<N>;
 type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>;
 
 /**
@@ -61,16 +61,19 @@ export type GenericMeasureType<N, StaticMethods extends {}> = GenericMeasureComm
  * type MyMeasure<U extends Unit> = GenericMeasure<MyNumberType, U>;
  * const MyMeasure = createMeasureType({ ... });
  */
-export function createMeasureType<N, S extends {} = {}>(num: Numeric<N>, staticMethods?: S): GenericMeasureType<N, S> {
+export function createMeasureType<N, S extends {} = {}>(
+    num: INumericOperations<N>,
+    staticMethods?: S,
+): GenericMeasureType<N, S> {
     const Measure = createMeasureClass(num);
 
     const type: GenericMeasureCommon<N> = {
         ...getGenericMeasureStaticMethods(),
-        isMeasure: (value): value is GenericMeasure<N, any> => value instanceof Measure,
+        isMeasure: (value): value is IGenericMeasure<N, any> => value instanceof Measure,
         dimensionless: value => new Measure(value, {}),
         dimension: <D extends string>(dim: D, symbol?: string) =>
             new Measure(num.one(), dimension(dim, symbol), symbol) as DimensionResult<N, D>,
-        of: <U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string) =>
+        of: <U extends IUnit>(value: N, quantity: IGenericMeasure<N, U>, symbol?: string) =>
             new Measure(num.mult(value, quantity.value), quantity.unit, symbol),
     };
 

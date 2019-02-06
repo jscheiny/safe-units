@@ -3,11 +3,11 @@ import {
     AllowedExponents,
     DivideUnits,
     ExponentiateUnit,
+    IRadicandUnit,
+    IUnit,
     MultiplyUnits,
     NthRootUnit,
-    RadicandUnit,
     SymbolAndExponent,
-    Unit,
     UnitWithSymbols,
 } from "./unitTypeArithmetic";
 
@@ -15,7 +15,7 @@ export function dimension<Dim extends string>(dim: Dim, symbol?: string): UnitWi
     return { [dim]: [symbol || dim, 1] } as any;
 }
 
-export function multiplyUnits<L extends Unit, R extends Unit>(
+export function multiplyUnits<L extends IUnit, R extends IUnit>(
     left: UnitWithSymbols<L>,
     right: UnitWithSymbols<R>,
 ): UnitWithSymbols<MultiplyUnits<L, R>> {
@@ -56,32 +56,32 @@ function copySymbolAndExponent(unit: UnitWithSymbols, dimension: string): Symbol
     return [symbol, exponent];
 }
 
-export function divideUnits<L extends Unit, R extends Unit>(
+export function divideUnits<L extends IUnit, R extends IUnit>(
     left: UnitWithSymbols<L>,
     right: UnitWithSymbols<R>,
 ): UnitWithSymbols<DivideUnits<L, R>> {
     return multiplyUnits(left, exponentiateUnit(right, -1)) as any;
 }
 
-export function exponentiateUnit<U extends Unit, N extends AllowedExponents<U>>(
+export function exponentiateUnit<U extends IUnit, N extends AllowedExponents<U>>(
     unit: UnitWithSymbols<U>,
     power: N,
 ): UnitWithSymbols<ExponentiateUnit<U, N>> {
     return expAndRootImpl(unit, exponent => exponent * power);
 }
 
-export function nthRootUnit<U extends RadicandUnit<N>, N extends NonZeroExponent>(
+export function nthRootUnit<U extends IRadicandUnit<N>, N extends NonZeroExponent>(
     unit: UnitWithSymbols<U>,
     root: N,
 ): UnitWithSymbols<NthRootUnit<U, N>> {
     return expAndRootImpl(unit, exponent => exponent / root);
 }
 
-export function sqrtUnit<U extends RadicandUnit<2>>(unit: UnitWithSymbols<U>): UnitWithSymbols<NthRootUnit<U, 2>> {
+export function sqrtUnit<U extends IRadicandUnit<2>>(unit: UnitWithSymbols<U>): UnitWithSymbols<NthRootUnit<U, 2>> {
     return nthRootUnit(unit, 2);
 }
 
-export function cbrtUnit<U extends RadicandUnit<3>>(unit: UnitWithSymbols<U>): UnitWithSymbols<NthRootUnit<U, 3>> {
+export function cbrtUnit<U extends IRadicandUnit<3>>(unit: UnitWithSymbols<U>): UnitWithSymbols<NthRootUnit<U, 3>> {
     return nthRootUnit(unit, 3);
 }
 

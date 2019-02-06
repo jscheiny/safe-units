@@ -1,6 +1,6 @@
-import { Unit } from "./unitTypeArithmetic";
+import { IUnit } from "./unitTypeArithmetic";
 
-export { Unit };
+export { IUnit };
 export * from "./genericMeasure";
 export * from "./genericMeasureFactory";
 export * from "./genericMeasureUtils";

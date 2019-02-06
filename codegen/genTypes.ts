@@ -1,8 +1,8 @@
-import { genFileHeader, genImport, genUncurriedTypeName, getExponents, isExponent, OperatorSpec } from "./common";
+import { genFileHeader, genImport, genUncurriedTypeName, getExponents, IOperatorSpec, isExponent } from "./common";
 
 const ARITHMETIC_ERROR = "ArithmeticError";
 
-export function genOperatorTypes(spec: OperatorSpec): string {
+export function genOperatorTypes(spec: IOperatorSpec): string {
     const exponents = getExponents(spec);
     return [
         ...genFileHeader(),
@@ -11,7 +11,7 @@ export function genOperatorTypes(spec: OperatorSpec): string {
     ].join("\n");
 }
 
-function genUncurriedType(spec: OperatorSpec, exponents: number[]): string[] {
+function genUncurriedType(spec: IOperatorSpec, exponents: number[]): string[] {
     const lines = [`export type ${genUncurriedTypeName(spec, "L extends Exponent", "R extends Exponent")}`];
     let first = true;
     for (const left of exponents) {
@@ -30,7 +30,7 @@ function genUncurriedType(spec: OperatorSpec, exponents: number[]): string[] {
     return lines;
 }
 
-function genCurriedType(spec: OperatorSpec, exponents: number[], left: number): string[] {
+function genCurriedType(spec: IOperatorSpec, exponents: number[], left: number): string[] {
     const lines = ["("];
     for (const right of exponents) {
         const result = spec.compute(left, right);
