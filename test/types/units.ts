@@ -1,8 +1,7 @@
 import { Exponent } from "../../src/exponent";
 import {
     MultiplyUnits,
-    IsSingleStringLiteral,
-    IRadicandUnit,
+    RadicandUnit,
     NthRootUnit,
     MultiplicandUnit,
     DivideUnits,
@@ -10,6 +9,7 @@ import {
     AllowedExponents,
 } from "../../src/measure/unitTypeArithmetic";
 import { IsSame } from "./utils";
+import { IsSingleStringLiteral } from "../../src/measure/typeUtils";
 
 type Extends<A, B> = A extends B ? true : false;
 
@@ -50,10 +50,10 @@ type CubeRooting = NthRootUnit<{ a: 3; b: -3 }, 3>; // $ExpectType { a: 1; b: -1
 
 // RadicandUnit
 
-type RadicandAcceptsPerfectSquares = Extends<{ a: 2; b: -4; c: 0 }, IRadicandUnit<2>>; // $ExpectType true
-type RadicandRejectsNonPerfectSquares = Extends<{ a: 2; b: 1 }, IRadicandUnit<2>>; // $ExpectType false
-type RadicandAcceptsPerfectCubes = Extends<{ a: 3; b: -3 }, IRadicandUnit<3>>; // $ExpectType true
-type RadicandRejectsNonPerfectCubes = Extends<{ a: 3; b: 2 }, IRadicandUnit<3>>; // $ExpectType false
+type RadicandAcceptsPerfectSquares = Extends<{ a: 2; b: -4; c: 0 }, RadicandUnit<2>>; // $ExpectType true
+type RadicandRejectsNonPerfectSquares = Extends<{ a: 2; b: 1 }, RadicandUnit<2>>; // $ExpectType false
+type RadicandAcceptsPerfectCubes = Extends<{ a: 3; b: -3 }, RadicandUnit<3>>; // $ExpectType true
+type RadicandRejectsNonPerfectCubes = Extends<{ a: 3; b: 2 }, RadicandUnit<3>>; // $ExpectType false
 
 // IsSingleStringLiteral
 

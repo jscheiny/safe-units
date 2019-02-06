@@ -1,7 +1,7 @@
 import { IGenericMeasure, INumericOperations } from "./genericMeasure";
 import { createMeasureType, GenericMeasureType } from "./genericMeasureFactory";
 import { SpreadMeasureFunction, UnaryMeasureFunction, wrapSpreadFn, wrapUnaryFn } from "./genericMeasureUtils";
-import { IRadicandUnit, IUnit, NthRootUnit } from "./unitTypeArithmetic";
+import { NthRootUnit, RadicandUnit, Unit } from "./unitTypeArithmetic";
 import { cbrtUnit, sqrtUnit } from "./unitValueArithmetic";
 
 interface IMeasureStaticMethods {
@@ -12,8 +12,8 @@ interface IMeasureStaticMethods {
     round: UnaryMeasureFunction<number>;
     trunc: UnaryMeasureFunction<number>;
     hypot: SpreadMeasureFunction<number>;
-    sqrt<U extends IRadicandUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>>;
-    cbrt<U extends IRadicandUnit<3>>(x: Measure<U>): Measure<NthRootUnit<U, 3>>;
+    sqrt<U extends RadicandUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>>;
+    cbrt<U extends RadicandUnit<3>>(x: Measure<U>): Measure<NthRootUnit<U, 3>>;
 }
 
 const staticMethods: IMeasureStaticMethods = {
@@ -40,5 +40,5 @@ const numericOps: INumericOperations<number> = {
     format: x => `${x}`,
 };
 
-export type Measure<U extends IUnit> = IGenericMeasure<number, U>;
+export type Measure<U extends Unit> = IGenericMeasure<number, U>;
 export const Measure: GenericMeasureType<number, IMeasureStaticMethods> = createMeasureType(numericOps, staticMethods);

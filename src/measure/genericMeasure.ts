@@ -4,9 +4,9 @@ import {
     DivideUnits,
     DivisorUnit,
     ExponentiateUnit,
-    IUnit,
     MultiplicandUnit,
     MultiplyUnits,
+    Unit,
     UnitWithSymbols,
 } from "./unitTypeArithmetic";
 
@@ -33,7 +33,7 @@ export interface INumericOperations<N> {
 }
 
 /** A numeric value with a corresponding unit of measurement. */
-export interface IGenericMeasure<N, U extends IUnit> {
+export interface IGenericMeasure<N, U extends Unit> {
     /** The numeric value of this measure */
     readonly value: N;
     /** The unit of this measure */
@@ -137,7 +137,7 @@ export interface IGenericMeasure<N, U extends IUnit> {
      * @returns a new measure whose value and unit have been mapped
      */
     unsafeMap(fn: (value: N) => N): IGenericMeasure<N, U>;
-    unsafeMap<V extends IUnit>(
+    unsafeMap<V extends Unit>(
         valueMap: (value: N) => N,
         unitMap: (unit: UnitWithSymbols<U>) => UnitWithSymbols<V>,
     ): IGenericMeasure<N, V>;
