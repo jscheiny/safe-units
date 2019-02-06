@@ -95,6 +95,10 @@ describe("Number measures", () => {
             );
         });
 
+        it("pow", () => {
+            expect(Measure.pow(Measure.of(3, meters), 4)).toEqual(Measure.of(81, meters.toThe(4)));
+        });
+
         it("round", () => {
             expect(Measure.round(Measure.of(7.8, mps))).toEqual(Measure.of(8, mps));
         });
