@@ -1,19 +1,18 @@
 import { IGenericMeasure, INumericOperations } from "./genericMeasure";
 import { createMeasureType, GenericMeasureType } from "./genericMeasureFactory";
-import { SpreadMeasureFunction, UnaryMeasureFunction, wrapSpreadFn, wrapUnaryFn } from "./genericMeasureUtils";
-import { NthRootUnit, RadicandUnit, Unit } from "./unitTypeArithmetic";
-import { cbrtUnit, sqrtUnit } from "./unitValueArithmetic";
+import { NthRootFn, SpreadFn, UnaryFn, wrapRootFn, wrapSpreadFn, wrapUnaryFn } from "./genericMeasureUtils";
+import { Unit } from "./unitTypeArithmetic";
 
 interface IMeasureStaticMethods {
-    abs: UnaryMeasureFunction<number>;
-    ceil: UnaryMeasureFunction<number>;
-    floor: UnaryMeasureFunction<number>;
-    fround: UnaryMeasureFunction<number>;
-    round: UnaryMeasureFunction<number>;
-    trunc: UnaryMeasureFunction<number>;
-    hypot: SpreadMeasureFunction<number>;
-    sqrt<U extends RadicandUnit<2>>(x: Measure<U>): Measure<NthRootUnit<U, 2>>;
-    cbrt<U extends RadicandUnit<3>>(x: Measure<U>): Measure<NthRootUnit<U, 3>>;
+    abs: UnaryFn<number>;
+    ceil: UnaryFn<number>;
+    floor: UnaryFn<number>;
+    fround: UnaryFn<number>;
+    round: UnaryFn<number>;
+    trunc: UnaryFn<number>;
+    hypot: SpreadFn<number>;
+    sqrt: NthRootFn<number, 2>;
+    cbrt: NthRootFn<number, 3>;
 }
 
 const staticMethods: IMeasureStaticMethods = {
@@ -24,8 +23,8 @@ const staticMethods: IMeasureStaticMethods = {
     round: wrapUnaryFn(Math.round),
     trunc: wrapUnaryFn(Math.trunc),
     hypot: wrapSpreadFn(Math.hypot),
-    sqrt: x => x.unsafeMap(Math.sqrt, sqrtUnit),
-    cbrt: x => x.unsafeMap(Math.cbrt, cbrtUnit),
+    sqrt: wrapRootFn(Math.sqrt, 2),
+    cbrt: wrapRootFn(Math.cbrt, 3),
 };
 
 const numericOps: INumericOperations<number> = {

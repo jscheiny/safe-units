@@ -1,6 +1,5 @@
-import { AddendOf, MultiplicandOf, Exponent, ProductOf } from "../../src/exponent";
+import { AddendOf, MultiplicandOf, Exponent, ProductOf, SubtrahendOf } from "../../src/exponent";
 import { IsSame } from "./utils";
-import { SubtrahendOf } from "../../src/exponent/exponentArithmetic";
 
 type AddendOf3 = IsSame<-5 | -4 | -3 | -2 | -1 | 0 | 1 | 2, AddendOf<3>>; // $ExpectType true
 type AddendOf0 = AddendOf<0>; // $ExpectType Exponent

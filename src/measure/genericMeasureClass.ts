@@ -12,7 +12,7 @@ import {
 } from "./unitTypeArithmetic";
 import { divideUnits, exponentiateUnit, multiplyUnits } from "./unitValueArithmetic";
 
-export type GenericMeasureConstructor<N> = new <U extends Unit>(
+type GenericMeasureConstructor<N> = new <U extends Unit>(
     value: N,
     unit: UnitWithSymbols<U>,
     symbol?: string,
