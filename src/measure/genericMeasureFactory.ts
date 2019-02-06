@@ -1,7 +1,8 @@
 import { IGenericMeasure, INumericOperations } from "./genericMeasure";
 import { createMeasureClass } from "./genericMeasureClass";
 import { getGenericMeasureStaticMethods, IGenericMeasureStatic } from "./genericMeasureStatic";
-import { IsSingleStringLiteral, IUnit } from "./unitTypeArithmetic";
+import { IsSingleStringLiteral } from "./typeUtils";
+import { Unit } from "./unitTypeArithmetic";
 import { dimension } from "./unitValueArithmetic";
 
 type DimensionResult<N, D extends string> = true extends IsSingleStringLiteral<D>
@@ -35,7 +36,7 @@ interface IGenericMeasureFactory<N> {
      * @param symbol an optional unit symbol for this measure
      * @returns a measure of value number of quantities.
      */
-    of<U extends IUnit>(value: N, quantity: IGenericMeasure<N, U>, symbol?: string): IGenericMeasure<N, U>;
+    of<U extends Unit>(value: N, quantity: IGenericMeasure<N, U>, symbol?: string): IGenericMeasure<N, U>;
 }
 
 type GenericMeasureCommon<N> = IGenericMeasureFactory<N> & IGenericMeasureStatic<N>;
@@ -73,7 +74,7 @@ export function createMeasureType<N, S extends {} = {}>(
         dimensionless: value => new Measure(value, {}),
         dimension: <D extends string>(dim: D, symbol?: string) =>
             new Measure(num.one(), dimension(dim, symbol), symbol) as DimensionResult<N, D>,
-        of: <U extends IUnit>(value: N, quantity: IGenericMeasure<N, U>, symbol?: string) =>
+        of: <U extends Unit>(value: N, quantity: IGenericMeasure<N, U>, symbol?: string) =>
             new Measure(num.mult(value, quantity.value), quantity.unit, symbol),
     };
 

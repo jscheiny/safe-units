@@ -1,6 +1,6 @@
 import { IGenericMeasure } from "./genericMeasure";
 import { BinaryMeasureFunction, PrefixFunction, SpreadMeasureFunction } from "./genericMeasureUtils";
-import { DivideUnits, DivisorUnit, IUnit, MultiplicandUnit, MultiplyUnits } from "./unitTypeArithmetic";
+import { DivideUnits, DivisorUnit, MultiplicandUnit, MultiplyUnits, Unit } from "./unitTypeArithmetic";
 
 export interface IGenericMeasureStatic<N> {
     /** Sums a list of one or more measures, all of the same unit. */
@@ -13,19 +13,19 @@ export interface IGenericMeasureStatic<N> {
     max: SpreadMeasureFunction<N>;
 
     /** Static version of `left.plus(right)` */
-    add<U extends IUnit>(left: IGenericMeasure<N, U>, right: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
+    add<U extends Unit>(left: IGenericMeasure<N, U>, right: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
 
     /** Static version of `left.minus(right)` */
-    subtract<U extends IUnit>(left: IGenericMeasure<N, U>, right: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
+    subtract<U extends Unit>(left: IGenericMeasure<N, U>, right: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
 
     /** Static version of `left.times(right)` */
-    multiply<L extends IUnit, R extends MultiplicandUnit<L>>(
+    multiply<L extends Unit, R extends MultiplicandUnit<L>>(
         left: IGenericMeasure<N, L>,
         right: IGenericMeasure<N, R>,
     ): IGenericMeasure<N, MultiplyUnits<L, R>>;
 
     /** Static version of `left.div(right)` */
-    divide<L extends IUnit, R extends DivisorUnit<L>>(
+    divide<L extends Unit, R extends DivisorUnit<L>>(
         left: IGenericMeasure<N, L>,
         right: IGenericMeasure<N, R>,
     ): IGenericMeasure<N, DivideUnits<L, R>>;

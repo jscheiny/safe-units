@@ -5,21 +5,21 @@ import {
     DivideUnits,
     DivisorUnit,
     ExponentiateUnit,
-    IUnit,
     MultiplicandUnit,
     MultiplyUnits,
+    Unit,
     UnitWithSymbols,
 } from "./unitTypeArithmetic";
 import { divideUnits, exponentiateUnit, multiplyUnits } from "./unitValueArithmetic";
 
-export type GenericMeasureConstructor<N> = new <U extends IUnit>(
+export type GenericMeasureConstructor<N> = new <U extends Unit>(
     value: N,
     unit: UnitWithSymbols<U>,
     symbol?: string,
 ) => IGenericMeasure<N, U>;
 
 export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasureConstructor<N> {
-    class InternalMeasure<U extends IUnit> implements IGenericMeasure<N, U> {
+    class InternalMeasure<U extends Unit> implements IGenericMeasure<N, U> {
         public readonly symbol: string | undefined;
         public squared!: 2 extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, 2>> : never;
         public cubed!: 3 extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, 3>> : never;
@@ -76,7 +76,7 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
             return this.toThe(-1);
         }
 
-        public unsafeMap<V extends IUnit>(
+        public unsafeMap<V extends Unit>(
             valueMap: (value: N) => N,
             unitMap?: (unit: UnitWithSymbols<U>) => UnitWithSymbols<V>,
         ): IGenericMeasure<N, U | V> {
