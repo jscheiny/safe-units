@@ -19,7 +19,7 @@ type GenericMeasureConstructor<N> = new <U extends Unit>(
 ) => IGenericMeasure<N, U>;
 
 export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasureConstructor<N> {
-    class InternalMeasure<U extends Unit> implements IGenericMeasure<N, U> {
+    class Measure<U extends Unit> implements IGenericMeasure<N, U> {
         public readonly symbol: string | undefined;
         public squared!: 2 extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, 2>> : never;
         public cubed!: 3 extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, 3>> : never;
@@ -31,29 +31,29 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
         // Arithmetic
 
         public plus(other: IGenericMeasure<N, U>): IGenericMeasure<N, U> {
-            return new InternalMeasure(num.add(this.value, other.value), this.unit);
+            return new Measure(num.add(this.value, other.value), this.unit);
         }
 
         public minus(other: IGenericMeasure<N, U>): IGenericMeasure<N, U> {
-            return new InternalMeasure(num.sub(this.value, other.value), this.unit);
+            return new Measure(num.sub(this.value, other.value), this.unit);
         }
 
         public negate(): IGenericMeasure<N, U> {
-            return new InternalMeasure(num.neg(this.value), this.unit);
+            return new Measure(num.neg(this.value), this.unit);
         }
 
         public scale(value: N): IGenericMeasure<N, U> {
-            return new InternalMeasure(num.mult(this.value, value), this.unit);
+            return new Measure(num.mult(this.value, value), this.unit);
         }
 
         public times<V extends MultiplicandUnit<U>>(
             other: IGenericMeasure<N, V>,
         ): IGenericMeasure<N, MultiplyUnits<U, V>> {
-            return new InternalMeasure(num.mult(this.value, other.value), multiplyUnits(this.unit, other.unit));
+            return new Measure(num.mult(this.value, other.value), multiplyUnits(this.unit, other.unit));
         }
 
         public over<V extends DivisorUnit<U>>(other: IGenericMeasure<N, V>): IGenericMeasure<N, DivideUnits<U, V>> {
-            return new InternalMeasure(num.div(this.value, other.value), divideUnits(this.unit, other.unit));
+            return new Measure(num.div(this.value, other.value), divideUnits(this.unit, other.unit));
         }
 
         public per<V extends DivisorUnit<U>>(other: IGenericMeasure<N, V>): IGenericMeasure<N, DivideUnits<U, V>> {
@@ -65,7 +65,7 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
         }
 
         public toThe<E extends AllowedExponents<U>>(power: E): IGenericMeasure<N, ExponentiateUnit<U, E>> {
-            return new InternalMeasure(num.pow(this.value, power), exponentiateUnit(this.unit, power)) as any;
+            return new Measure(num.pow(this.value, power), exponentiateUnit(this.unit, power)) as any;
         }
 
         public inverse(): IGenericMeasure<N, ExponentiateUnit<U, -1>> {
@@ -81,7 +81,7 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
             unitMap?: (unit: UnitWithSymbols<U>) => UnitWithSymbols<V>,
         ): IGenericMeasure<N, U | V> {
             const newUnit = unitMap === undefined ? this.unit : unitMap(this.unit);
-            return new InternalMeasure<U | V>(valueMap(this.value), newUnit);
+            return new Measure<U | V>(valueMap(this.value), newUnit);
         }
 
         // Comparisons
@@ -129,21 +129,21 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
         }
 
         public withSymbol(symbol: string | undefined): IGenericMeasure<N, U> {
-            return new InternalMeasure(this.value, this.unit, symbol);
+            return new Measure(this.value, this.unit, symbol);
         }
 
         public clone(): IGenericMeasure<N, U> {
-            return new InternalMeasure(this.value, this.unit);
+            return new Measure(this.value, this.unit);
         }
     }
 
-    InternalMeasure.prototype.squared = function(): any {
+    Measure.prototype.squared = function(): any {
         return this.toThe(2);
     };
 
-    InternalMeasure.prototype.cubed = function(): any {
+    Measure.prototype.cubed = function(): any {
         return this.toThe(3);
     };
 
-    return InternalMeasure;
+    return Measure;
 }

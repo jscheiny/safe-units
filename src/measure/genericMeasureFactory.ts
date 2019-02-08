@@ -68,7 +68,7 @@ export function createMeasureType<N, S extends {} = {}>(
 ): GenericMeasureType<N, S> {
     const Measure = createMeasureClass(num);
 
-    const type: GenericMeasureCommon<N> = {
+    const common: GenericMeasureCommon<N> = {
         ...getGenericMeasureStaticMethods(),
         isMeasure: (value): value is IGenericMeasure<N, any> => value instanceof Measure,
         dimensionless: value => new Measure(value, {}),
@@ -80,6 +80,6 @@ export function createMeasureType<N, S extends {} = {}>(
 
     return {
         ...((staticMethods || {}) as any),
-        ...type,
+        ...common,
     };
 }

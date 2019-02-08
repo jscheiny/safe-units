@@ -3,7 +3,7 @@ import { genFileHeader, genImport, genUncurriedTypeName, getExponents, IOperator
 export function genOperatorTests(spec: IOperatorSpec): string {
     return [
         ...genFileHeader(false),
-        ...genImport([genUncurriedTypeName(spec)], "../../../src/exponent"),
+        ...genImport(genUncurriedTypeName(spec), "../../../src/exponent"),
         ...genTests(spec),
     ].join("\n");
 }
@@ -24,7 +24,7 @@ function genTest(spec: IOperatorSpec, left: number, right: number): string {
     const result = spec.compute(left, right);
     const typeName = `${spec.testTypeNamePrefix}Of${genValueName(left)}And${genValueName(right)}`;
     const testType = `${genUncurriedTypeName(spec, left, right)}`;
-    const expectedType = isExponent(result, spec) ? `${result}` : "ArithmeticError";
+    const expectedType = isExponent(result, spec) ? `${result}` : "never";
     return `type ${typeName} = ${testType}; // $ExpectType ${expectedType}`;
 }
 
