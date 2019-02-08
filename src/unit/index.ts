@@ -1,5 +1,4 @@
 import * as Imperial from "./imperial";
-import * as Quantity from "./quantities";
 import * as Trig from "./trig";
 import * as US from "./uscu";
 
@@ -10,4 +9,4 @@ export * from "./memory";
 export * from "./metric";
 export * from "./other";
 export * from "./quantities";
-export { Imperial, Quantity, Trig, US };
+export { Imperial, Trig, US };
