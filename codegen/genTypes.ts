@@ -1,13 +1,10 @@
 import { genFileHeader, genImport, genUncurriedTypeName, getExponents, IOperatorSpec, isExponent } from "./common";
 
-const ARITHMETIC_ERROR = "ArithmeticError";
-
 export function genOperatorTypes(spec: IOperatorSpec): string {
-    const exponents = getExponents(spec);
     return [
         ...genFileHeader(),
-        ...genImport(["ArithmeticError", "Exponent"], "./exponent"),
-        ...genUncurriedType(spec, exponents),
+        ...genImport("Exponent", "./exponent"),
+        ...genUncurriedType(spec, getExponents(spec)),
     ].join("\n");
 }
 
@@ -25,7 +22,7 @@ function genUncurriedType(spec: IOperatorSpec, exponents: number[]): string[] {
             lines.push(...genCurriedType(spec, exponents, left));
         }
     }
-    lines.push(indent(`: ${ARITHMETIC_ERROR};`));
+    lines.push(indent(`: never;`));
     lines.push("");
     return lines;
 }
@@ -38,7 +35,7 @@ function genCurriedType(spec: IOperatorSpec, exponents: number[], left: number):
             lines.push(indent(`R extends ${right} ? ${result} :`));
         }
     }
-    lines.push(indent(ARITHMETIC_ERROR));
+    lines.push(indent("never"));
     lines.push(")");
     return lines.map(indent).map(indent);
 }

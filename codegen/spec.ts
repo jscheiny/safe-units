@@ -33,7 +33,7 @@ export const codeGenSpec: ICodeGenSpec = {
             curriedTypeNamePrefix: "DividedBy",
             testTypeNamePrefix: "Quotient",
             specialCases: {
-                0: "(R extends 0 ? ArithmeticError : 0)",
+                0: "(R extends 0 ? never : 0)",
             },
             compute: (left, right) => left / right,
         },

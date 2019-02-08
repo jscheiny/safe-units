@@ -1,4 +1,4 @@
-/** Returns true if T represents a single string literal and not a union or the entire string type. */
+/** Returns true if T represents a single string literal and not a union or `string`. */
 export type IsSingleStringLiteral<T extends string> = string extends T
     ? false
     : IsSingleStringLiteralHelper<T> extends never ? true : false;
