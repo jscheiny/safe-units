@@ -40,7 +40,7 @@ cssRule("h2, h3", {
 });
 
 cssRule("body h1", {
-    color: "#A82A2A",
+    color: "#008075",
     margin: 0,
     paddingBottom: 20,
     paddingTop: 25,

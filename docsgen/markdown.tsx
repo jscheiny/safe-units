@@ -34,9 +34,9 @@ export const Markdown: MarkdownComponent = ({ root }) => {
             return <span dangerouslySetInnerHTML={{ __html: root.literal || "" }} />;
         case "link":
             return (
-                <a href={root.destination || ""}>
+                <Link href={root.destination || ""}>
                     <MarkdownChildren root={root} />
-                </a>
+                </Link>
             );
         case "image":
             return <img src={root.destination || ""} alt={root.title || ""} />;
@@ -142,5 +142,15 @@ const CodeBlock = component("code-block", "code", {
 });
 
 const CodeInline = component("code-line", "code", {
-    color: "#A82A2A",
+    color: "#00998C",
+});
+
+export const Link = component("link", "a", {
+    color: "#00B3A4",
+    textDecoration: "none",
+    $nest: {
+        "&:hover": {
+            textDecoration: "underline",
+        },
+    },
 });

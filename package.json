@@ -21,7 +21,7 @@
     "typings": "dist/index.d.ts",
     "scripts": {
         "build": "npm-run-all -s codegen compile:src",
-        "clean": "rimraf dist",
+        "clean": "rimraf dist codegen/dist docsgen/dist docs/build",
         "codegen": "npm-run-all -s compile:codegen node:codegen",
         "compile:codegen": "tsc -p codegen",
         "compile:docs": "tsc -p docsgen",

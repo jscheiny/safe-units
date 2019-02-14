@@ -43,7 +43,7 @@ export const Sidebar: React.FunctionComponent<ISidebarProps> = ({ pages, selecte
     );
 };
 
-const HOME_COLOR = "#A82A2A";
+const HOME_COLOR = "#008075";
 const LINK_COLOR = "#293742";
 
 const Container = component("sidebar", "div", {
@@ -81,10 +81,10 @@ const pageLink = style({
 
 const selectedPage = style({
     color: "#F5F8FA",
-    background: "#A82A2A",
+    background: HOME_COLOR,
     $nest: {
         "&:hover": {
-            background: "#A82A2A",
+            background: HOME_COLOR,
             color: "#CED9E0",
         },
     },

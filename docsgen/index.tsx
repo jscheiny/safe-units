@@ -16,7 +16,6 @@ const renderPageHtml = (title: string, body: string, inlineStyles: string, linke
         <style>${inlineStyles}</style>
         ${linkedStyles}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono" rel="stylesheet">
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
     </head>
     <body>${body}</body>
 </html>`;
