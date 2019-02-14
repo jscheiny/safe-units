@@ -4,27 +4,27 @@ import { NthRootUnit, RadicandUnit, Unit } from "./unitTypeArithmetic";
 import { nthRootUnit } from "./unitValueArithmetic";
 
 /** A function which applies a symbol prefix and multiplier to a given measure. */
-export type PrefixFn<N> = {
+export type PrefixFn<N = number> = {
     <U extends Unit>(measure: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
 };
 
 /** A function which transforms a single measure into another measure with the same unit. */
-export type UnaryFn<N> = {
+export type UnaryFn<N = number> = {
     <U extends Unit>(x: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
 };
 
 /** A function which takes the Rth root of a measure's value and unit. */
-export type NthRootFn<N, R extends NonZeroExponent> = {
+export type NthRootFn<R extends NonZeroExponent, N = number> = {
     <U extends RadicandUnit<R>>(x: IGenericMeasure<N, U>): IGenericMeasure<N, NthRootUnit<U, R>>;
 };
 
 /** A function which transforms two measures with same unit into a single measure with the same unit. */
-export type BinaryFn<N> = {
+export type BinaryFn<N = number> = {
     <U extends Unit>(left: IGenericMeasure<N, U>, right: IGenericMeasure<N, U>): IGenericMeasure<N, U>;
 };
 
 /** A function which transforms one or more measure with the same unit into a single measure with the same unit. */
-export type SpreadFn<N> = {
+export type SpreadFn<N = number> = {
     <U extends Unit>(first: IGenericMeasure<N, U>, ...rest: Array<IGenericMeasure<N, U>>): IGenericMeasure<N, U>;
 };
 
@@ -47,7 +47,7 @@ export function wrapUnaryFn<N>(fn: (x: N) => N): UnaryFn<N> {
  * @param n a compile time constant specifying which nth root the first parameter performs
  * @returns a function of measures which takes the nth root of the value and the unit.
  */
-export function wrapRootFn<N, R extends NonZeroExponent>(nthRoot: (x: N) => N, n: R): NthRootFn<N, R> {
+export function wrapRootFn<N, R extends NonZeroExponent>(nthRoot: (x: N) => N, n: R): NthRootFn<R, N> {
     return x => x.unsafeMap(nthRoot, unit => nthRootUnit(unit, n));
 }
 
