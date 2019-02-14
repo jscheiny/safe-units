@@ -3,6 +3,7 @@
 
 ### Build
 dist/
+build/
 coverage/
 *.pyc
 

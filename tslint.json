@@ -21,6 +21,7 @@
                 "order": "statics-first"
             }
         ],
+        "no-use-before-declare": false,
         "ordered-imports": true,
         "typedef": [
             true,
