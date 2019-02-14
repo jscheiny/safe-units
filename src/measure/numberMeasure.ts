@@ -4,15 +4,15 @@ import { NthRootFn, SpreadFn, UnaryFn, wrapRootFn, wrapSpreadFn, wrapUnaryFn } f
 import { Unit } from "./unitTypeArithmetic";
 
 interface IMeasureStaticMethods {
-    abs: UnaryFn<number>;
-    ceil: UnaryFn<number>;
-    floor: UnaryFn<number>;
-    fround: UnaryFn<number>;
-    round: UnaryFn<number>;
-    trunc: UnaryFn<number>;
-    hypot: SpreadFn<number>;
-    sqrt: NthRootFn<number, 2>;
-    cbrt: NthRootFn<number, 3>;
+    abs: UnaryFn;
+    ceil: UnaryFn;
+    floor: UnaryFn;
+    fround: UnaryFn;
+    round: UnaryFn;
+    trunc: UnaryFn;
+    hypot: SpreadFn;
+    sqrt: NthRootFn<2>;
+    cbrt: NthRootFn<3>;
 }
 
 const staticMethods: IMeasureStaticMethods = {

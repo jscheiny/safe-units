@@ -22,7 +22,7 @@ export const lumens: Quantity.LuminousFlux = candelas.times(steradians).withSymb
 export const luxes: Quantity.Illuminance = lumens.per(meters.squared()).withSymbol("lx");
 
 // HACKHACK: Explicitly type this so we can import PrefixFunction and avoid absolute paths in the generated typings.
-export const yotta: PrefixFn<number> = Measure.prefix("Y", 1e24);
+export const yotta: PrefixFn = Measure.prefix("Y", 1e24);
 export const zetta = Measure.prefix("Z", 1e21);
 export const exa = Measure.prefix("E", 1e18);
 export const peta = Measure.prefix("P", 1e15);

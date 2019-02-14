@@ -6,7 +6,7 @@ import { Memory } from "./quantities";
 export const bytes: Memory = Measure.of(8, bits, "B");
 
 // HACKHACK: Explicitly type this so we can import PrefixFunction and avoid absolute paths in the generated typings.
-export const kibi: PrefixFn<number> = Measure.prefix("Ki", 1 << 10);
+export const kibi: PrefixFn = Measure.prefix("Ki", 1 << 10);
 export const mebi = Measure.prefix("Mi", 1 << 20);
 export const gibi = Measure.prefix("Gi", 1 << 30);
 export const tebi = Measure.prefix("Ti", 1 << 40);
