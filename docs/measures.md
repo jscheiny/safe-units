@@ -1,8 +1,8 @@
 # Measures
 
-The `Measure` class provides the core of the functionality of Safe Units. A `Measure` is a value associated with a unit (e.g. 5 meters, 10 seconds). A `Measure` may be given a symbol to indicate that it itself represent some unit (for example, 0.3048 meters might be given the symbol `ft`). Measures are immutable and any operation on a measure returns a new measure.
+The `Measure` class provides the core of the functionality for Safe Units. A `Measure` is a value associated with a unit (e.g. 5 meters, 10 seconds). A `Measure` may be given a symbol to indicate that it itself represent some unit. For example, 0.3048 meters is one foot and therefore might be given the symbol `ft`. Measures are immutable and any operation on a measure returns a new measure.
 
-**Note:** The `Measure` class provides functionality for manipulating units with values represented by the JavaScript `number` type. For different numeric types see [Generic Measures](generic-measures.html).
+**Note:** The `Measure` class provides functionality for manipulating units with numeric values represented by the JavaScript `number` type. For different numeric types see [Generic Measures](generic-measures.html).
 
 ## Construction
 
@@ -60,15 +60,15 @@ Since `Measure` isn't technically a class, you can't check that a value is a mea
 Measure.prefix(prefix: string, multiplier: number): PrefixFn
 ```
 
-Creates a function which when given a measure applies a prefix to that measure's symbol and multiplies it by a given dimensionless value.
+Creates a function which, when given a measure, applies a prefix to that measure's symbol and multiplies it by a given dimensionless value.
 
 *Examples:*
 
 ```ts
 const kilo = Measure.prefix("k", 1000);
-const km = kilo(meters); // 1000 m
+const kilometers = kilo(meters); // 1000 m
 
-const distance = Measure.of(20, km); // 20000 m
+const distance = Measure.of(20, kilometers); // 20000 m
 distance.in(km) // 20 km
 ```
 
@@ -154,7 +154,7 @@ const force: Force = mass.times(acceleration); // 98 N
 const bad: Pressure = Measure.multiply(mass, acceleration);
 ```
 
-**Note:** There are limitations on what measures you may multiply and divide. See [Limitations](limitations.html).
+**Note:** There are limitations on what measures you may multiply together. See [Limitations](limitations.html).
 
 ### Division
 ```ts
@@ -176,6 +176,8 @@ const velocity: Velocity = distance.over(time); // 300 m*s
 // ERROR: A velocity quantity cannot be assigned to an acceleration quantity
 const bad: Acceleration = Measure.divide(distance, time);
 ```
+
+**Note:** There are limitations on what measures you may divide. See [Limitations](limitations.html).
 
 ### Scalar Multiplication
 
@@ -201,7 +203,7 @@ Measure<U>.squared(): Measure<ExponentiateUnit<U, 2>>
 Measure<U>.cubed(): Measure<ExponentiateUnit<U, 2>>
 ```
 
-The first two methods raise a given measures value and unit to a given exponent (within a limited range). The last two methods, `squared` and `cubed` convenience methods for `measure.toThe(2)` and `measure.toThe(3)` respectively.
+The first two methods raise a measure's value and unit to a given exponent (within a limited range). The last two methods, `squared` and `cubed`, are convenience methods for `measure.toThe(2)` and `measure.toThe(3)` respectively.
 
 *Examples:*
 
@@ -244,9 +246,7 @@ The `Measure` class contains a number of static methods from the JavaScript `Mat
 * `Measure.round`
 * `Measure.trunc`
 
-There is also a wrapper for `hypot` that takes in one or more measures all with the same unit and returns a single measure of that unit.
-
-Lastly, there are wrappers for `sqrt` and `cbrt`. However, not all units have valid roots and these functions will produce errors when given units that don't produce roots with integer exponents.
+There is also a wrapper for `Math.hypot` that takes in one or more measures all with the same unit and returns a single measure of that unit.
 
 *Examples:*
 
@@ -264,7 +264,7 @@ Measure.hypot(width, height); // 5 m
 
 ### Roots
 
-The `Measure` class also provides wrappers for `sqrt` and `cbrt` functions. However, not all units have valid roots and these functions will produce errors when given units that don't produce roots with integer exponents.
+The `Measure` class also provides wrappers for the `Math.sqrt` and `Math.cbrt` functions. However, not all units have valid roots and these functions will result in compile time errors when given units that don't produce roots with integer exponents.
 
 ```ts
 const area: Area = Measure.of(64, meters.squared());
@@ -288,7 +288,7 @@ Measure<U>.gte(other: Measure<U>): boolean;
 Measure<U>.gt(other: Measure<U>): boolean;
 ```
 
-Comparison methods between two measures. Measures are only comparable if they are of the same unit.
+Measures are only comparable if they are of the same unit.
 
 *Examples:*
 
@@ -320,7 +320,7 @@ const r2 = Measure.of(10, squareMeters);
 const r3 = Measure.divide(squareMeters, meters);
 ```
 
-Symbols are used in the converting other measures into strings as can be seen below.
+Symbols are used in converting other measures into strings as can be seen below.
 
 ### Formatting
 
@@ -329,13 +329,13 @@ Measure<U>.toString(): string;
 Measure<U>.in(unit: Measure<U>): string;
 ```
 
-The first method, `toString`, creates a string version of the unit, ignoring any [symbol](#symbols) information on that measure. The second method, `in`, will format a given unit as if its given in units of the second measure, assuming the second measure has a symbol. If not, this is equivalent to calling `toString()`.
+The first method, `toString`, creates a string version of the unit, ignoring any [symbol](#symbols) information on that measure. The second method, `in`, will format a given unit as if it is given in units of the second measure, assuming the second measure has a symbol. If not, this is equivalent to calling `toString()`.
 
 *Examples:*
 
 ```ts
 const kilometers = Measure.of(1000, meters, "km");
-// Could be written as: Measure.of(1000, meters).withSymbol("km")
+// Could also be written as: Measure.of(1000, meters).withSymbol("km")
 
 const distance = Measure.of(5, kilometers);
 console.log(distance.toString()); // 5000 m
@@ -347,7 +347,7 @@ console.log(force.toString()); // 30 kg * m * s^-2
 console.log(force.in(newtons)); // 30 N
 ```
 
-### Unsafe Transformations
+### Unsafe Mappings
 
 ```ts
 Measure<U>.unsafeMap(valueMap: (value: number) => number): Measure<U>;
@@ -394,7 +394,7 @@ rate.in(poundsPerSecond); // 1 £/s
 
 ## Function Wrappers
 
-It is often desirable to convert operations on numbers into operations on measures. Frequently these functions make no difference on the unit of a value. For example, suppose we want to make an absolute value function that operates on measures. We'd expect the function perserve the unit of the given measure. We can simply wrap an existing absolute value function using `wrapUnaryFn`:
+It is often desirable to convert operations on numbers into operations on measures. Frequently, these functions make no change on the unit of a value. For example, suppose we want to make an absolute value function that operates on measures. We'd expect the function perserve the unit of the input. We can simply wrap an existing absolute value function using `wrapUnaryFn`:
 
 ```ts
 const measureAbs = wrapUnaryFn(Math.abs);

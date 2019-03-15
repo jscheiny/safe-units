@@ -1,6 +1,6 @@
 # Defining Quantities
 
-We define a **quantity** as the type of a measurement. This includes things like length, time, force, velocity, and pressure. Safe Units contains many built in quantities so we can write typesafe code simply:
+We define a **quantity** as the type of a measurement. Length, time, force, velocity, and pressure are all examples of quantities. Safe Units contains many built in quantities so we can write unit safe code easily:
 
 ```ts
 import { Acceleration, Time, Velocity } from "safe-units";
