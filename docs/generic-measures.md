@@ -1,6 +1,6 @@
 # Generic Measures
 
-The default Safe Units `Measure` class is specifically designed around using measures where the underlying values are represented by the JavaScript `number` type. However, it wouldn't be unreasonable to want measures where the values have different requirements. For example, one might want measures with arbitrary precision or measures on the rational numbers. Creating such a measure class can be accomplished by using the `createMeasureType` function.
+The default `Measure` class is specifically designed around using measures where the underlying values are represented by the JavaScript `number` type. However, it may be desirable to want measures where the values have different numeric types. For example, one might want measures with arbitrary precision or measures on the rational numbers. Creating such a measure class can be accomplished by using the `createMeasureType` function.
 
 ## Example
 
