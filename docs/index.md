@@ -21,8 +21,8 @@ const error: Velocity = length.times(time);
 
 Safe units is written in TypeScript and should be consumed by TypeScript users to take full advantage of what it provides. In addition you will need the following:
 
-- TypeScript 2.9 or later
-- Strict null checks enabled for your project
+- [TypeScript](http://www.typescriptlang.org/) 2.9 or later
+- [Strict null checks](https://www.typescriptlang.org/docs/handbook/compiler-options.html) enabled for your project
 
 ## Installation
 

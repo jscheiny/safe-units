@@ -146,10 +146,11 @@ const CodeInline = component("code-line", "code", {
 });
 
 export const Link = component("link", "a", {
-    color: "#00B3A4",
+    color: "#BF8C0A",
     textDecoration: "none",
     $nest: {
         "&:hover": {
+            color: "#A67908",
             textDecoration: "underline",
         },
     },
