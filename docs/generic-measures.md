@@ -18,7 +18,7 @@ function wrap(value: number) {
 }
 ```
 
-Now we're going to create our own measure type that operates on `WrappedNumber`s, let's call it `WrappedMeasure`:
+Now we're going to create our own measure type that operates on `WrappedNumber` types, let's call it `WrappedMeasure`:
 
 ```ts
 import { createMeasureType, GenericMeasure, Unit } from "safe-units";
@@ -61,11 +61,11 @@ After we've defined the type of `WrappedMeasure` we now define the class itself 
 
 ##  Usage
 
-The returned `WrappedMeasure` now behaves just like `Measure` does except in the domain of wrapped numbers. This means we can call `WrappedMeasure.dimension` or `WrappedMeasure.of` just as expected. It's important to note that the provided quantities and units (`Length`, `Time`, `meters`, `seconds`, etc) will need to be redefined for other measure types as these types are all specific to `number`s.
+The returned `WrappedMeasure` now behaves just like `Measure` does except in the domain of wrapped numbers. This means we can call `WrappedMeasure.dimension` or `WrappedMeasure.of` just as expected. It's important to note that the provided quantities and units (`Length`, `Time`, `meters`, `seconds`, etc) will need to be redefined for other measure types as these types are all specific to `number`.
 
 ## Static Methods
 
-By default, generic measures come with a set of static methods that can be applied to measures of all numeric types. However, certain static methods may only make sense for a given numeric type. For example the `Measure.trunc` method exists because `Math.trunc` applies to `number`s. To add static methods to a generic measure type, simple pass an object as a second argument to `createMeasureType`:
+By default, generic measures come with a set of static methods that can be applied to measures of all numeric types. However, certain static methods may only make sense for a given numeric type. For example the `Measure.trunc` method exists because `Math.trunc` applies to `number` types. To add static methods to a generic measure type, simple pass an object as a second argument to `createMeasureType`:
 
 ```ts
 declare function foo(value: WrappedNumber): WrappedNumber;

@@ -106,4 +106,4 @@ const Velocity = Length.over(Time);
 type Velocity<N = number> = LiftMeasure<typeof Velocity, N>;
 ```
 
-This way, we can use `Velocity` to refer to the quantity on numbers, but also use `Velocity<WrappedNumber>` to operate on `WrappedMeasure`s.
+This way, we can use `Velocity` to refer to the quantity on numbers, but also use `Velocity<WrappedNumber>` to operate on `WrappedMeasure` types.
