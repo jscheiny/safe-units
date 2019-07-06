@@ -199,11 +199,13 @@ const doubledLong = t.times(Measure.dimensionless(2));
 Measure<U>.toThe<E>(exponent: E): Measure<ExponentiateUnit<U, E>>
 Measure.pow<U, E>(measure: Measure<U>, exponent: E): Measure<ExponentiateUnit<U, E>>
 
-Measure<U>.squared(): Measure<ExponentiateUnit<U, 2>>
-Measure<U>.cubed(): Measure<ExponentiateUnit<U, 2>>
+Measure<U>.squared(): Measure<ExponentiateUnit<U, "2">>
+Measure<U>.cubed(): Measure<ExponentiateUnit<U, "3">>
 ```
 
-The first two methods raise a measure's value and unit to a given exponent (within a limited range). The last two methods, `squared` and `cubed`, are convenience methods for `measure.toThe(2)` and `measure.toThe(3)` respectively.
+The first two methods raise a measure's value and unit to a given exponent (within a limited range). The last two methods, `squared` and `cubed`, are convenience methods for `measure.toThe("2")` and `measure.toThe("3")` respectively.
+
+Note that the exponents passed in are string literals and not numbers.
 
 *Examples:*
 
@@ -213,7 +215,7 @@ const side = Measure.of(10, meters);
 const area: Area = side.squared(); // 100 m^2
 const volume: Volume = side.cubed(); // 1000 m^3
 
-const s: Length = volume.toThe(-3); // 10 m
+const s: Length = volume.toThe("-3"); // 10 m
 ```
 
 **Note:** There are limitations on what measures you may exponentiate. See [Limitations](Limitations).
@@ -221,11 +223,11 @@ const s: Length = volume.toThe(-3); // 10 m
 ### Reciprocals
 
 ```ts
-Measure<U>.inverse(): Measure<ExponentiateUnit<U, -1>>
-Measure<U>.reciprocal(): Measure<ExponentiateUnit<U, -1>>
+Measure<U>.inverse(): Measure<ExponentiateUnit<U, "-1">>
+Measure<U>.reciprocal(): Measure<ExponentiateUnit<U, "-1">>
 ```
 
-Computes the reciprocal of the value and unit of the measure. Both methods are identical and equivalent to `measure.toThe(-1)`.
+Computes the reciprocal of the value and unit of the measure. Both methods are identical and equivalent to `measure.toThe("-1")`.
 
 *Examples:*
 
@@ -357,7 +359,7 @@ Measure<U>.unsafeMap<V>(
 ): Measure<V>;
 ```
 
-If only one argument is passed, performs a mapping on the value of a measure without affecting the unit of the measure. If both arguments are passed maps both the unit and value of a measure. This is generally used for internal purposes and should be avoided when possible. Instead consider using a [function wrapper](#function-wrappers).
+If only one argument is passed, performs a mapping on the value of a measure without affecting the unit of the measure. If both arguments are passed maps both the unit and value of a measure. This is generally used for internal purposes and should be avoided whenever possible. Instead consider using a [function wrapper](#function-wrappers).
 
 ## Representation
 

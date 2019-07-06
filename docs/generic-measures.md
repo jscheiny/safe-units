@@ -56,7 +56,7 @@ type Measure<U extends Unit> = IGenericMeasure<number, U>;
 After we've defined the type of `WrappedMeasure` we now define the class itself by calling `createMeasureType`. This function takes an object which let's the generic measure type know how to perform operations on our numeric type. Note that for this simple example, we generally just unwrap the value, perform the arithmetic operation and then wrap it back up. Most of these operations should be self-explanatory, however some require some further explanation:
 
 - `one`: A function with no arguments that simply returns the 1 value or multiplicative identity of your number system. This is used to construct base units whose values are implicitly one.
-- `pow`: This function is slightly different from the rest of the arithmetic operations in that it doesn't take to values of type `N`, instead its signature is: `pow: (base: N, power: Exponent) => N` where `Exponent` is the union of `-5 | -4 | ... | 4 | 5`. This is due to the computational limitations of the library that we need to be specific in the kinds of exponents we can handle.
+- `pow`: This function is slightly different from the rest of the arithmetic operations in that it doesn't take to values of type `N`, instead its signature is: `pow: (base: N, power: number) => N`. The `power` argument is a JavaScript `number` but will only ever be an integer between -5 and 5, inclusive. This is due to the computational limitations of the library that we need to be specific in the kinds of exponents we can handle.
 - `compare`: A function that returns a negative `number` if its first argument is less than its second, a positive `number` if its first argument is greater than its second, and `0` if the arguments are equal.
 
 ##  Usage
@@ -69,7 +69,7 @@ By default, generic measures come with a set of static methods that can be appli
 
 ```ts
 declare function foo(value: WrappedNumber): WrappedNumber;
-declare const mass: WrappedMeasure<{ mass: 1 }>;
+declare const mass: WrappedMeasure<{ mass: "1" }>;
 
 const WrappedMeasure = createMeasureType({ ... }, {
     foo: wrapUnaryFn(foo),

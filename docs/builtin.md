@@ -10,7 +10,7 @@ The built-in units include the standard set of SI base dimension and correspondi
 
 * `Length` / `meters`
 * `Mass` / `kilograms`
-* `Time` `seconds`
+* `Time` / `seconds`
 * `ElectricCurrent` / `amperes`
 * `Temperature` / `kelvin`
 * `AmountOfSubstance` / `moles`
