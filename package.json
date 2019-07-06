@@ -46,7 +46,7 @@
         "@types/node": "^8.10.16",
         "@types/react-dom": "^16.0.11",
         "commonmark": "^0.28.1",
-        "dtslint": "^0.3.0",
+        "dtslint": "^0.8.0",
         "highlight.js": "^9.14.2",
         "jest": "^22.4.3",
         "normalize.css": "^8.0.1",

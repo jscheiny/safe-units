@@ -9,7 +9,13 @@
         "noImplicitThis": true,
         "alwaysStrict": true,
         "noUnusedLocals": false,
-        "lib": ["es5"],
+        "skipLibCheck": true,
+        "target": "es5",
+        "lib": [
+            "es5",
+            "es2015",
+            "es2015.core"
+        ],
         "baseUrl": ".",
         "paths": { "safe-units": ["../../src"] }
     }

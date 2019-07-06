@@ -11,7 +11,7 @@ import {
 
 export function genOperatorTests(spec: IOperatorSpec): string {
     return [
-        ...genFileHeader(false),
+        ...genFileHeader(),
         ...genImport(genUncurriedTypeName(spec), "../../../src/exponent"),
         ...genTests(spec),
     ].join("\n");

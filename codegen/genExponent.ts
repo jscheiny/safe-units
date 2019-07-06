@@ -4,5 +4,5 @@ export function genExponentType(spec: ICommonSpec): string {
     const exponents = getExponents(spec)
         .map(exponent => exponent.type)
         .join(" | ");
-    return [...genFileHeader(false), `export type Exponent = ${exponents};`, ""].join("\n");
+    return [...genFileHeader(), `export type Exponent = ${exponents};`, ""].join("\n");
 }
