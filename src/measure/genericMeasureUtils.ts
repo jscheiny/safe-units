@@ -1,4 +1,4 @@
-import { NonZeroExponent } from "../exponent/exponentArithmetic";
+import { NonZeroExponent } from "../exponent";
 import { IGenericMeasure } from "./genericMeasure";
 import { NthRootUnit, RadicandUnit, Unit } from "./unitTypeArithmetic";
 import { nthRootUnit } from "./unitValueArithmetic";

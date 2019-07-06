@@ -1,43 +1,67 @@
-import { genFileHeader, genImport, genUncurriedTypeName, getExponents, IOperatorSpec, isExponent } from "./common";
+import {
+    genExponentName,
+    genFileHeader,
+    genImport,
+    genUncurriedTypeName,
+    getExponents,
+    IExponentSpec,
+    IOperatorSpec,
+    isExponent,
+} from "./common";
 
 export function genOperatorTypes(spec: IOperatorSpec): string {
+    const exponents = getExponents(spec);
     return [
         ...genFileHeader(),
         ...genImport("Exponent", "./exponent"),
-        ...genUncurriedType(spec, getExponents(spec)),
+        ...genUncurriedType(spec),
+        ...genUncurriedTable(spec, exponents),
+        ...genAllCurriedTables(spec, exponents),
     ].join("\n");
 }
 
-function genUncurriedType(spec: IOperatorSpec, exponents: number[]): string[] {
-    const lines = [`export type ${genUncurriedTypeName(spec, "L extends Exponent", "R extends Exponent")}`];
-    let first = true;
+function genUncurriedType(spec: IOperatorSpec): string[] {
+    const typeName = genUncurriedTypeName(spec, "L extends Exponent", "R extends Exponent");
+    const tableName = genUncurriedTableName(spec);
+    return [`export type ${typeName} = ${tableName}[L][R];`, ""];
+}
+
+function genUncurriedTable(spec: IOperatorSpec, exponents: IExponentSpec[]): string[] {
+    const name = genUncurriedTableName(spec);
+    const lines = [`interface ${name} {`];
     for (const left of exponents) {
-        const operator = first ? "=" : ":";
-        const prefix = indent(`${operator} L extends ${left} ?`);
-        first = false;
-        if (left in spec.specialCases) {
-            lines.push(`${prefix} ${spec.specialCases[left]}`);
-        } else {
-            lines.push(`${prefix}`);
-            lines.push(...genCurriedType(spec, exponents, left));
-        }
+        lines.push(indent(`${left.type}: ${genCurriedTableName(spec, left)};`));
     }
-    lines.push(indent(`: never;`));
-    lines.push("");
+    lines.push("}", "");
     return lines;
 }
 
-function genCurriedType(spec: IOperatorSpec, exponents: number[], left: number): string[] {
-    const lines = ["("];
-    for (const right of exponents) {
-        const result = spec.compute(left, right);
-        if (isExponent(result, spec)) {
-            lines.push(indent(`R extends ${right} ? ${result} :`));
-        }
+function genUncurriedTableName(spec: IOperatorSpec): string {
+    return `I${spec.uncurriedTypeNamePrefix}Table`;
+}
+
+function genAllCurriedTables(spec: IOperatorSpec, exponents: IExponentSpec[]): string[] {
+    const lines: string[] = [];
+    for (const left of exponents) {
+        lines.push(...genCurriedTable(spec, exponents, left));
     }
-    lines.push(indent("never"));
-    lines.push(")");
-    return lines.map(indent).map(indent);
+    return lines;
+}
+
+function genCurriedTable(spec: IOperatorSpec, exponents: IExponentSpec[], left: IExponentSpec): string[] {
+    const name = genCurriedTableName(spec, left);
+    const lines = [`interface ${name} {`];
+    for (const right of exponents) {
+        const result = spec.compute(left.value, right.value);
+        const value = isExponent(result, spec) ? `"${result}"` : "never";
+        lines.push(indent(`${right.type}: ${value};`));
+    }
+    lines.push("}", "");
+    return lines;
+}
+
+function genCurriedTableName(spec: IOperatorSpec, left: IExponentSpec): string {
+    return `I${spec.curriedTypeNamePrefix}${genExponentName(left)}Table`;
 }
 
 function indent(line: string): string {

@@ -1,4 +1,3 @@
-import { Exponent } from "../exponent";
 import {
     AllowedExponents,
     DivideUnits,
@@ -25,7 +24,7 @@ export interface INumericOperations<N> {
     /** Returns the quotient of two numbers of type N */
     div(left: N, right: N): N;
     /** Returns the base raised to the exponent for numbers of type N */
-    pow(base: N, exponent: Exponent): N;
+    pow(base: N, exponent: number): N;
     /** Compares two numbers returning a negative, zero, or positive value. */
     compare(left: N, right: N): number;
     /** Formats a number for display */
@@ -46,14 +45,14 @@ export interface IGenericMeasure<N, U extends Unit> {
      * this function will have type `never`.
      * @returns this measure multiplied by itself
      */
-    squared: 2 extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, 2>> : never;
+    squared: "2" extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, "2">> : never;
 
     /**
      * If this measure can be cubed, cubes it. If this measure cannot be cubed (due to exponent limitations), then
      * this function will have type `never`.
      * @returns this cube of this measure
      */
-    cubed: 3 extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, 3>> : never;
+    cubed: "3" extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, "3">> : never;
 
     /**
      * Raises this measure to a given power. If the result would give exponents outside of the allowable bounds, this
@@ -122,13 +121,13 @@ export interface IGenericMeasure<N, U extends Unit> {
      * Returns the reciprocal of this measure.
      * @returns the reciprocal of this measure with a recriprocal unit
      */
-    inverse(): IGenericMeasure<N, ExponentiateUnit<U, -1>>;
+    inverse(): IGenericMeasure<N, ExponentiateUnit<U, "-1">>;
 
     /**
      * Returns the reciprocal of this measure.
      * @returns the reciprocal of this measure with a recriprocal unit
      */
-    reciprocal(): IGenericMeasure<N, ExponentiateUnit<U, -1>>;
+    reciprocal(): IGenericMeasure<N, ExponentiateUnit<U, "-1">>;
 
     /**
      * Maps the value and possibly unit of this measure.

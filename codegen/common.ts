@@ -18,10 +18,15 @@ export interface IPartialOperatorSpec {
 
 export interface IOperatorSpec extends ICommonSpec, IPartialOperatorSpec {}
 
-export function getExponents({ minExponent, maxExponent }: ICommonSpec): number[] {
-    const exponents: number[] = [];
-    for (let exponent = minExponent; exponent <= maxExponent; exponent++) {
-        exponents.push(exponent);
+export interface IExponentSpec {
+    value: number;
+    type: string;
+}
+
+export function getExponents({ minExponent, maxExponent }: ICommonSpec): IExponentSpec[] {
+    const exponents: IExponentSpec[] = [];
+    for (let value = minExponent; value <= maxExponent; value++) {
+        exponents.push({ value, type: `"${value}"` });
     }
     return exponents;
 }
@@ -45,4 +50,12 @@ export function genImport(symbol: string, source: string): string[] {
 export function genUncurriedTypeName(spec: IOperatorSpec, left?: string | number, right?: string | number): string {
     const args = left !== undefined && right !== undefined ? `<${left}, ${right}>` : "";
     return `${spec.uncurriedTypeNamePrefix}Exponents${args}`;
+}
+
+export function genExponentName({ value }: IExponentSpec): string {
+    if (value === 0) {
+        return "Zero";
+    }
+    const sign = value < 0 ? "Neg" : "Pos";
+    return `${sign}${Math.abs(value)}`;
 }

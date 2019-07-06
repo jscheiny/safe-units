@@ -1,4 +1,13 @@
-import { genFileHeader, genImport, genUncurriedTypeName, getExponents, IOperatorSpec, isExponent } from "./common";
+import {
+    genExponentName,
+    genFileHeader,
+    genImport,
+    genUncurriedTypeName,
+    getExponents,
+    IExponentSpec,
+    IOperatorSpec,
+    isExponent,
+} from "./common";
 
 export function genOperatorTests(spec: IOperatorSpec): string {
     return [
@@ -20,18 +29,10 @@ function genTests(spec: IOperatorSpec): string[] {
     return lines;
 }
 
-function genTest(spec: IOperatorSpec, left: number, right: number): string {
-    const result = spec.compute(left, right);
-    const typeName = `${spec.testTypeNamePrefix}Of${genValueName(left)}And${genValueName(right)}`;
-    const testType = `${genUncurriedTypeName(spec, left, right)}`;
-    const expectedType = isExponent(result, spec) ? `${result}` : "never";
+function genTest(spec: IOperatorSpec, left: IExponentSpec, right: IExponentSpec): string {
+    const result = spec.compute(left.value, right.value);
+    const typeName = `${spec.testTypeNamePrefix}Of${genExponentName(left)}And${genExponentName(right)}`;
+    const testType = `${genUncurriedTypeName(spec, left.type, right.type)}`;
+    const expectedType = isExponent(result, spec) ? `"${result}"` : "never";
     return `type ${typeName} = ${testType}; // $ExpectType ${expectedType}`;
-}
-
-function genValueName(value: number): string {
-    if (value === 0) {
-        return "Zero";
-    }
-    const sign = value < 0 ? "Neg" : "Pos";
-    return `${sign}${Math.abs(value)}`;
 }

@@ -60,11 +60,11 @@ const Frequency = Time.inverse();
 
 /** 1 / s² */
 export type FrequencyDrift<N = number> = LiftMeasure<typeof FrequencyDrift, N>;
-const FrequencyDrift = Time.toThe(-2);
+const FrequencyDrift = Time.toThe("-2");
 
 /** 1 / m² */
 export type FuelEfficiency<N = number> = LiftMeasure<typeof FuelEfficiency, N>;
-const FuelEfficiency = Length.toThe(-2);
+const FuelEfficiency = Length.toThe("-2");
 
 /** 1 / m */
 export type Wavenumber<N = number> = LiftMeasure<typeof Wavenumber, N>;
