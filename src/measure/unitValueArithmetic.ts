@@ -1,9 +1,11 @@
 import { Exponent, NonZeroExponent } from "../exponent";
+import { addExponents, divideExponents, multiplyExponents } from "../exponent/exponentValueArithmetic";
 import {
     AllowedExponents,
     DivideUnits,
     DivisorUnit,
     ExponentiateUnit,
+    MultiplicandUnit,
     MultiplyUnits,
     NthRootUnit,
     RadicandUnit,
@@ -13,10 +15,10 @@ import {
 } from "./unitTypeArithmetic";
 
 export function dimension<Dim extends string>(dim: Dim, symbol?: string): UnitWithSymbols<{ [D in Dim]: "1" }> {
-    return { [dim]: [symbol || dim, 1] } as any;
+    return { [dim]: [symbol || dim, "1"] } as any;
 }
 
-export function multiplyUnits<L extends Unit, R extends Unit>(
+export function multiplyUnits<L extends Unit, R extends MultiplicandUnit<L>>(
     left: UnitWithSymbols<L>,
     right: UnitWithSymbols<R>,
 ): UnitWithSymbols<MultiplyUnits<L, R>> {
@@ -35,7 +37,7 @@ export function multiplyUnits<L extends Unit, R extends Unit>(
         const [, exponent] = symbolAndExponent;
         const resultValue: SymbolAndExponent | undefined = result[dimension];
         if (resultValue !== undefined) {
-            const newExponent = (resultValue[1] + exponent) as Exponent;
+            const newExponent = addExponents(resultValue[1], exponent);
             if (newExponent === "0") {
                 delete result[dimension];
             } else {
@@ -61,24 +63,25 @@ export function divideUnits<L extends Unit, R extends DivisorUnit<L>>(
     left: UnitWithSymbols<L>,
     right: UnitWithSymbols<R>,
 ): UnitWithSymbols<DivideUnits<L, R>> {
-    return multiplyUnits(left, exponentiateUnit(right, "-1")) as any;
+    const rightInverse = exponentiateUnit(right, "-1") as any;
+    return multiplyUnits(left, rightInverse) as any;
 }
 
 export function exponentiateUnit<U extends Unit, N extends AllowedExponents<U>>(
     unit: UnitWithSymbols<U>,
     power: N,
 ): UnitWithSymbols<ExponentiateUnit<U, N>> {
-    return expAndRootImpl(unit, exponent => parseInt(exponent, 10) * parseInt(power, 10));
+    return expAndRootImpl(unit, exponent => multiplyExponents(exponent, power));
 }
 
 export function nthRootUnit<U extends RadicandUnit<N>, N extends NonZeroExponent>(
     unit: UnitWithSymbols<U>,
     root: N,
 ): UnitWithSymbols<NthRootUnit<U, N>> {
-    return expAndRootImpl(unit, exponent => parseInt(exponent, 10) / parseInt(root, 10));
+    return expAndRootImpl(unit, exponent => divideExponents(exponent, root));
 }
 
-function expAndRootImpl(unit: UnitWithSymbols, updateExponent: (exp: Exponent) => number): any {
+function expAndRootImpl(unit: UnitWithSymbols, updateExponent: (exp: Exponent) => Exponent): any {
     const result: UnitWithSymbols = {};
     for (const dimension in unit) {
         const symbolAndExponent = unit[dimension];
@@ -86,7 +89,7 @@ function expAndRootImpl(unit: UnitWithSymbols, updateExponent: (exp: Exponent) =
             continue;
         }
         const [symbol, exponent] = symbolAndExponent;
-        const newExponent = `${updateExponent(exponent)}` as Exponent;
+        const newExponent = updateExponent(exponent);
         if (newExponent !== "0") {
             result[dimension] = [symbol, newExponent];
         }

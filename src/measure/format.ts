@@ -1,4 +1,4 @@
-import { Exponent } from "../exponent";
+import { getExponentValue, negateExponent } from "../exponent/exponentValueArithmetic";
 import { SymbolAndExponent, UnitWithSymbols } from "./unitTypeArithmetic";
 
 export function formatUnit(unit: UnitWithSymbols): string {
@@ -11,8 +11,8 @@ export function formatUnit(unit: UnitWithSymbols): string {
         return "";
     }
 
-    const positive = dimensions.filter(([_, dim]) => parseInt(dim, 10) > 0);
-    const negative = dimensions.filter(([_, dim]) => parseInt(dim, 10) < 0);
+    const positive = dimensions.filter(([_, dim]) => getExponentValue(dim) > 0);
+    const negative = dimensions.filter(([_, dim]) => getExponentValue(dim) < 0);
 
     if (positive.length === 0) {
         return formatDimensions(negative);
@@ -45,7 +45,7 @@ function formatDimensions(dimensions: SymbolAndExponent[]): string {
 }
 
 function negateDimension([symbol, exponent]: SymbolAndExponent): SymbolAndExponent {
-    return [symbol, `${-parseInt(exponent, 10)}` as Exponent];
+    return [symbol, negateExponent(exponent)];
 }
 
 function maybeParenthesize(text: string, parenthesize: boolean): string {

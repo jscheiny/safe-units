@@ -9,7 +9,7 @@ describe("Number measures", () => {
 
     describe("dimension", () => {
         it("should create dimensions with value 1", () => {
-            expect(Measure.dimension("foo", "f")).toEqual({ value: 1, unit: { foo: ["f", 1] }, symbol: "f" });
+            expect(Measure.dimension("foo", "f")).toEqual({ value: 1, unit: { foo: ["f", "1"] }, symbol: "f" });
         });
     });
 

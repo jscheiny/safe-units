@@ -1,4 +1,3 @@
-import { Exponent } from "../exponent";
 import {
     AllowedExponents,
     DivideUnits,
@@ -25,7 +24,7 @@ export interface INumericOperations<N> {
     /** Returns the quotient of two numbers of type N */
     div(left: N, right: N): N;
     /** Returns the base raised to the exponent for numbers of type N */
-    pow(base: N, exponent: Exponent): N;
+    pow(base: N, exponent: number): N;
     /** Compares two numbers returning a negative, zero, or positive value. */
     compare(left: N, right: N): number;
     /** Formats a number for display */

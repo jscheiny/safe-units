@@ -1,3 +1,4 @@
+import { getExponentValue } from "../exponent/exponentValueArithmetic";
 import { formatUnit } from "./format";
 import { IGenericMeasure, INumericOperations } from "./genericMeasure";
 import {
@@ -49,10 +50,12 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
         public times<V extends MultiplicandUnit<U>>(
             other: IGenericMeasure<N, V>,
         ): IGenericMeasure<N, MultiplyUnits<U, V>> {
+            // HACKHACK Need to cast as any to get around excessively deep type instantiation error
             return new Measure<any>(num.mult(this.value, other.value), multiplyUnits(this.unit, other.unit)) as any;
         }
 
         public over<V extends DivisorUnit<U>>(other: IGenericMeasure<N, V>): IGenericMeasure<N, DivideUnits<U, V>> {
+            // HACKHACK Need to cast as any to get around excessively deep type instantiation error
             return new Measure<any>(num.div(this.value, other.value), divideUnits(this.unit, other.unit)) as any;
         }
 
@@ -65,7 +68,7 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
         }
 
         public toThe<E extends AllowedExponents<U>>(power: E): IGenericMeasure<N, ExponentiateUnit<U, E>> {
-            return new Measure(num.pow(this.value, power), exponentiateUnit(this.unit, power)) as any;
+            return new Measure(num.pow(this.value, getExponentValue(power)), exponentiateUnit(this.unit, power));
         }
 
         public inverse(): IGenericMeasure<N, ExponentiateUnit<U, "-1">> {
