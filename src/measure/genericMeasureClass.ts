@@ -21,8 +21,8 @@ type GenericMeasureConstructor<N> = new <U extends Unit>(
 export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasureConstructor<N> {
     class Measure<U extends Unit> implements IGenericMeasure<N, U> {
         public readonly symbol: string | undefined;
-        public squared!: 2 extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, 2>> : never;
-        public cubed!: 3 extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, 3>> : never;
+        public squared!: "2" extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, "2">> : never;
+        public cubed!: "3" extends AllowedExponents<U> ? () => IGenericMeasure<N, ExponentiateUnit<U, "3">> : never;
 
         constructor(public readonly value: N, public readonly unit: UnitWithSymbols<U>, symbol?: string) {
             this.symbol = symbol;
@@ -49,11 +49,11 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
         public times<V extends MultiplicandUnit<U>>(
             other: IGenericMeasure<N, V>,
         ): IGenericMeasure<N, MultiplyUnits<U, V>> {
-            return new Measure(num.mult(this.value, other.value), multiplyUnits(this.unit, other.unit));
+            return new Measure<any>(num.mult(this.value, other.value), multiplyUnits(this.unit, other.unit)) as any;
         }
 
         public over<V extends DivisorUnit<U>>(other: IGenericMeasure<N, V>): IGenericMeasure<N, DivideUnits<U, V>> {
-            return new Measure(num.div(this.value, other.value), divideUnits(this.unit, other.unit));
+            return new Measure<any>(num.div(this.value, other.value), divideUnits(this.unit, other.unit)) as any;
         }
 
         public per<V extends DivisorUnit<U>>(other: IGenericMeasure<N, V>): IGenericMeasure<N, DivideUnits<U, V>> {
@@ -68,20 +68,20 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
             return new Measure(num.pow(this.value, power), exponentiateUnit(this.unit, power)) as any;
         }
 
-        public inverse(): IGenericMeasure<N, ExponentiateUnit<U, -1>> {
-            return this.toThe(-1);
+        public inverse(): IGenericMeasure<N, ExponentiateUnit<U, "-1">> {
+            return this.toThe("-1");
         }
 
-        public reciprocal(): IGenericMeasure<N, ExponentiateUnit<U, -1>> {
-            return this.toThe(-1);
+        public reciprocal(): IGenericMeasure<N, ExponentiateUnit<U, "-1">> {
+            return this.toThe("-1");
         }
 
         public unsafeMap<V extends Unit>(
             valueMap: (value: N) => N,
             unitMap?: (unit: UnitWithSymbols<U>) => UnitWithSymbols<V>,
-        ): IGenericMeasure<N, U | V> {
+        ): IGenericMeasure<N, V> {
             const newUnit = unitMap === undefined ? this.unit : unitMap(this.unit);
-            return new Measure<U | V>(valueMap(this.value), newUnit);
+            return new Measure<V>(valueMap(this.value), (newUnit as unknown) as UnitWithSymbols<V>);
         }
 
         // Comparisons
@@ -138,11 +138,11 @@ export function createMeasureClass<N>(num: INumericOperations<N>): GenericMeasur
     }
 
     Measure.prototype.squared = function(): any {
-        return this.toThe(2);
+        return this.toThe("2");
     };
 
     Measure.prototype.cubed = function(): any {
-        return this.toThe(3);
+        return this.toThe("3");
     };
 
     return Measure;

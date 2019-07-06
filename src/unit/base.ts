@@ -15,7 +15,7 @@ interface IBaseUnitsMap {
     bits: "memory";
 }
 
-export type BaseUnits<N> = { [U in keyof IBaseUnitsMap]: IGenericMeasure<N, { [K in IBaseUnitsMap[U]]: 1 }> };
+export type BaseUnits<N> = { [U in keyof IBaseUnitsMap]: IGenericMeasure<N, { [K in IBaseUnitsMap[U]]: "1" }> };
 
 export const createBaseUnits = <N>(MeasureType: GenericMeasureType<N, any>): BaseUnits<N> => ({
     meters: MeasureType.dimension("length", "m"),

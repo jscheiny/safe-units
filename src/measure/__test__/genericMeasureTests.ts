@@ -41,7 +41,7 @@ describe("Generic measures", () => {
             sub: (x, y) => x - y,
             mult: (x, y) => x * y,
             div: (x, y) => x / y,
-            pow: (x, y) => x ** y,
+            pow: (x, y) => x ** parseInt(y, 10),
             compare: (x, y) => x - y,
             format: x => `${x}`,
         };

@@ -11,8 +11,8 @@ interface IMeasureStaticMethods {
     round: UnaryFn;
     trunc: UnaryFn;
     hypot: SpreadFn;
-    sqrt: NthRootFn<2>;
-    cbrt: NthRootFn<3>;
+    sqrt: NthRootFn<"2">;
+    cbrt: NthRootFn<"3">;
 }
 
 const staticMethods: IMeasureStaticMethods = {
@@ -23,8 +23,8 @@ const staticMethods: IMeasureStaticMethods = {
     round: wrapUnaryFn(Math.round),
     trunc: wrapUnaryFn(Math.trunc),
     hypot: wrapSpreadFn(Math.hypot),
-    sqrt: wrapRootFn(Math.sqrt, 2),
-    cbrt: wrapRootFn(Math.cbrt, 3),
+    sqrt: wrapRootFn(Math.sqrt, "2"),
+    cbrt: wrapRootFn(Math.cbrt, "3"),
 };
 
 const numericOps: INumericOperations<number> = {
@@ -34,7 +34,7 @@ const numericOps: INumericOperations<number> = {
     sub: (x, y) => x - y,
     mult: (x, y) => x * y,
     div: (x, y) => x / y,
-    pow: (x, y) => x ** y,
+    pow: (x, y) => x ** parseInt(y, 10),
     compare: (x, y) => x - y,
     format: x => `${x}`,
 };

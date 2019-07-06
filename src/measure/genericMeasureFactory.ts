@@ -6,7 +6,7 @@ import { Unit } from "./unitTypeArithmetic";
 import { dimension } from "./unitValueArithmetic";
 
 type DimensionResult<N, D extends string> = true extends IsSingleStringLiteral<D>
-    ? IGenericMeasure<N, { [Dim in D]: 1 }>
+    ? IGenericMeasure<N, { [Dim in D]: "1" }>
     : never;
 
 /** The functions needed to construct a measure of a given numeric type */

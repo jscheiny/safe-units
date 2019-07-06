@@ -96,7 +96,7 @@ describe("Number measures", () => {
         });
 
         it("pow", () => {
-            expect(Measure.pow(Measure.of(3, meters), 4)).toEqual(Measure.of(81, meters.toThe(4)));
+            expect(Measure.pow(Measure.of(3, meters), "4")).toEqual(Measure.of(81, meters.toThe("4")));
         });
 
         it("round", () => {
@@ -160,8 +160,8 @@ describe("Number measures", () => {
 
             expect(value.inverse()).toEqual(Measure.of(0.1, meters.inverse()));
             expect(value.reciprocal()).toEqual(Measure.of(0.1, meters.inverse()));
-            expect(value.toThe(0)).toEqual(Measure.dimensionless(1));
-            expect(value.toThe(1)).toEqual(Measure.of(10, meters));
+            expect(value.toThe("0")).toEqual(Measure.dimensionless(1));
+            expect(value.toThe("1")).toEqual(Measure.of(10, meters));
             expect(value.squared()).toEqual(Measure.of(100, meters.squared()));
             expect(value.cubed()).toEqual(Measure.of(1000, meters.cubed()));
         });
@@ -255,8 +255,8 @@ describe("Number measures", () => {
 
         it("should format units with only negative exponents", () => {
             expectFormat(seconds.inverse(), "1 s^-1");
-            expectFormat(seconds.toThe(-2), "1 s^-2");
-            expectFormat(seconds.toThe(-2).times(meters.toThe(-3)), "1 m^-3 * s^-2");
+            expectFormat(seconds.toThe("-2"), "1 s^-2");
+            expectFormat(seconds.toThe("-2").times(meters.toThe("-3")), "1 m^-3 * s^-2");
         });
 
         it("should format units with positive exponents and one negative exponent", () => {

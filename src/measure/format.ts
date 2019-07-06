@@ -11,8 +11,8 @@ export function formatUnit(unit: UnitWithSymbols): string {
         return "";
     }
 
-    const positive = dimensions.filter(([_, dim]) => dim > 0);
-    const negative = dimensions.filter(([_, dim]) => dim < 0);
+    const positive = dimensions.filter(([_, dim]) => parseInt(dim, 10) > 0);
+    const negative = dimensions.filter(([_, dim]) => parseInt(dim, 10) < 0);
 
     if (positive.length === 0) {
         return formatDimensions(negative);
@@ -28,7 +28,7 @@ export function formatUnit(unit: UnitWithSymbols): string {
 }
 
 function isDimensionPresent(dimension: SymbolAndExponent | undefined): dimension is SymbolAndExponent {
-    return dimension !== undefined && dimension[1] !== 0;
+    return dimension !== undefined && dimension[1] !== "0";
 }
 
 function orderDimensions([leftSymbol]: SymbolAndExponent, [rightSymbol]: SymbolAndExponent): number {
@@ -38,14 +38,14 @@ function orderDimensions([leftSymbol]: SymbolAndExponent, [rightSymbol]: SymbolA
 function formatDimensions(dimensions: SymbolAndExponent[]): string {
     return dimensions
         .map(([symbol, exponent]) => {
-            const exponentStr = exponent !== 1 ? `^${exponent}` : "";
+            const exponentStr = exponent !== "1" ? `^${exponent}` : "";
             return `${symbol}${exponentStr}`;
         })
         .join(" * ");
 }
 
 function negateDimension([symbol, exponent]: SymbolAndExponent): SymbolAndExponent {
-    return [symbol, -exponent as Exponent];
+    return [symbol, `${-parseInt(exponent, 10)}` as Exponent];
 }
 
 function maybeParenthesize(text: string, parenthesize: boolean): string {
