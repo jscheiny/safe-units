@@ -38,6 +38,8 @@ cssRule("h1, h2, h3, h4, h5, h6", {
 
 cssRule("h2, h3", {
     marginLeft: -20,
+    marginTop: "2em",
+    marginBottom: "0.5em",
 });
 
 cssRule("body h1", {
