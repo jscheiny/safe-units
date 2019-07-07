@@ -21,6 +21,6 @@ export const liters: Volume = Measure.of(0.001, meters.cubed(), "L");
 export const speedOfLight: Velocity = Measure.of(299_792_458, meters.per(seconds), "C");
 
 // Pressure
-export const bars: Pressure = Measure.of(10_000, pascals, "bar");
+export const bars: Pressure = Measure.of(100_000, pascals, "bar");
 export const atmospheres: Pressure = Measure.of(101_325, pascals, "atm");
 export const torrs: Pressure = Measure.of(1 / 760, atmospheres, "Torr");
