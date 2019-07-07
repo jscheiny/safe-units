@@ -1,7 +1,7 @@
 import { Node } from "commonmark";
 import { highlight } from "highlight.js";
 import * as React from "react";
-import { createNodeId } from "./markdownUtils";
+import { createNodeId, getNodeText } from "./markdownUtils";
 import { component } from "./style";
 
 interface IMarkdownProps {
@@ -39,7 +39,7 @@ export const Markdown: MarkdownComponent = ({ root }) => {
                 </Link>
             );
         case "image":
-            return <img src={root.destination || ""} alt={root.title || ""} />;
+            return <img src={root.destination || ""} alt={getNodeText(root)} />;
         case "thematic_break":
             return <hr />;
         case "code_block":
