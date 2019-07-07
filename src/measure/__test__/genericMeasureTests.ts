@@ -1,4 +1,4 @@
-import { INumericOperations } from "../genericMeasure";
+import { NumericOperations } from "../genericMeasure";
 import { createMeasureType } from "../genericMeasureFactory";
 import { wrapBinaryFn, wrapReducerFn, wrapSpreadFn, wrapUnaryFn } from "../genericMeasureUtils";
 import { Measure } from "../numberMeasure";
@@ -34,7 +34,7 @@ describe("Generic measures", () => {
     });
 
     describe("static methods", () => {
-        const numericOps: INumericOperations<number> = {
+        const numericOps: NumericOperations<number> = {
             one: () => 1,
             neg: x => -x,
             add: (x, y) => x + y,

@@ -1,8 +1,8 @@
-import { ICodeGenSpec } from "./common";
+import { CodeGenSpec } from "./common";
 
 const maxExponent = 5;
 
-export const codeGenSpec: ICodeGenSpec = {
+export const codeGenSpec: CodeGenSpec = {
     minExponent: -maxExponent,
     maxExponent,
     operators: [

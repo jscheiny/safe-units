@@ -1,15 +1,15 @@
 import {
+    ExponentSpec,
     genExponentName,
     genFileHeader,
     genImport,
     genUncurriedTypeName,
     getExponents,
-    IExponentSpec,
-    IOperatorSpec,
     isExponent,
+    OperatorSpec,
 } from "./common";
 
-export function genOperatorTests(spec: IOperatorSpec): string {
+export function genOperatorTests(spec: OperatorSpec): string {
     return [
         ...genFileHeader(false),
         ...genImport(genUncurriedTypeName(spec), "../../../src/exponent"),
@@ -17,7 +17,7 @@ export function genOperatorTests(spec: IOperatorSpec): string {
     ].join("\n");
 }
 
-function genTests(spec: IOperatorSpec): string[] {
+function genTests(spec: OperatorSpec): string[] {
     const lines: string[] = [];
     const exponents = getExponents(spec);
     for (const left of exponents) {
@@ -29,7 +29,7 @@ function genTests(spec: IOperatorSpec): string[] {
     return lines;
 }
 
-function genTest(spec: IOperatorSpec, left: IExponentSpec, right: IExponentSpec): string {
+function genTest(spec: OperatorSpec, left: ExponentSpec, right: ExponentSpec): string {
     const result = spec.compute(left.value, right.value);
     const typeName = `${spec.testTypeNamePrefix}Of${genExponentName(left)}And${genExponentName(right)}`;
     const testType = `${genUncurriedTypeName(spec, left.type, right.type)}`;

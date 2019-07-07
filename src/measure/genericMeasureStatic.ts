@@ -1,4 +1,4 @@
-import { IGenericMeasure } from "./genericMeasure";
+import { GenericMeasure } from "./genericMeasure";
 import { BinaryFn, PrefixFn, SpreadFn } from "./genericMeasureUtils";
 import {
     AllowedExponents,
@@ -10,7 +10,7 @@ import {
     Unit,
 } from "./unitTypeArithmetic";
 
-export interface IGenericMeasureStatic<N> {
+export interface GenericMeasureStatic<N> {
     /** Sums a list of one or more measures, all of the same unit. */
     sum: SpreadFn<N>;
 
@@ -28,21 +28,21 @@ export interface IGenericMeasureStatic<N> {
 
     /** Static version of `left.times(right)` */
     multiply<L extends Unit, R extends MultiplicandUnit<L>>(
-        left: IGenericMeasure<N, L>,
-        right: IGenericMeasure<N, R>,
-    ): IGenericMeasure<N, MultiplyUnits<L, R>>;
+        left: GenericMeasure<N, L>,
+        right: GenericMeasure<N, R>,
+    ): GenericMeasure<N, MultiplyUnits<L, R>>;
 
     /** Static version of `left.div(right)` */
     divide<L extends Unit, R extends DivisorUnit<L>>(
-        left: IGenericMeasure<N, L>,
-        right: IGenericMeasure<N, R>,
-    ): IGenericMeasure<N, DivideUnits<L, R>>;
+        left: GenericMeasure<N, L>,
+        right: GenericMeasure<N, R>,
+    ): GenericMeasure<N, DivideUnits<L, R>>;
 
     /** Static version of `value.toThe(exp)` */
     pow<U extends Unit, E extends AllowedExponents<U>>(
-        value: IGenericMeasure<N, U>,
+        value: GenericMeasure<N, U>,
         exp: E,
-    ): IGenericMeasure<N, ExponentiateUnit<U, E>>;
+    ): GenericMeasure<N, ExponentiateUnit<U, E>>;
 
     /**
      * Creates a function that takes a measure and applies a symbol to its prefix and scales it by a given multiplier.
@@ -53,7 +53,7 @@ export interface IGenericMeasureStatic<N> {
     prefix(prefix: string, multiplier: N): PrefixFn<N>;
 }
 
-export const getGenericMeasureStaticMethods = <N>(): IGenericMeasureStatic<N> => ({
+export const getGenericMeasureStaticMethods = <N>(): GenericMeasureStatic<N> => ({
     sum: reduce((prev, curr) => prev.plus(curr)),
     min: reduce((min, curr) => (curr.lt(min) ? curr : min)),
     max: reduce((max, curr) => (curr.gt(max) ? curr : max)),

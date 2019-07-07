@@ -1,13 +1,13 @@
-export interface ICommonSpec {
+export interface CommonSpec {
     minExponent: number;
     maxExponent: number;
 }
 
-export interface ICodeGenSpec extends ICommonSpec {
-    operators: IPartialOperatorSpec[];
+export interface CodeGenSpec extends CommonSpec {
+    operators: PartialOperatorSpec[];
 }
 
-export interface IPartialOperatorSpec {
+export interface PartialOperatorSpec {
     fileNamePrefix: string;
     uncurriedTypeNamePrefix: string;
     curriedTypeNamePrefix: string;
@@ -16,22 +16,22 @@ export interface IPartialOperatorSpec {
     compute: (left: number, right: number) => number;
 }
 
-export interface IOperatorSpec extends ICommonSpec, IPartialOperatorSpec {}
+export interface OperatorSpec extends CommonSpec, PartialOperatorSpec {}
 
-export interface IExponentSpec {
+export interface ExponentSpec {
     value: number;
     type: string;
 }
 
-export function getExponents({ minExponent, maxExponent }: ICommonSpec): IExponentSpec[] {
-    const exponents: IExponentSpec[] = [];
+export function getExponents({ minExponent, maxExponent }: CommonSpec): ExponentSpec[] {
+    const exponents: ExponentSpec[] = [];
     for (let value = minExponent; value <= maxExponent; value++) {
         exponents.push({ value, type: `"${value}"` });
     }
     return exponents;
 }
 
-export function isExponent(exponent: number, { minExponent, maxExponent }: ICommonSpec): boolean {
+export function isExponent(exponent: number, { minExponent, maxExponent }: CommonSpec): boolean {
     return exponent >= minExponent && exponent <= maxExponent && exponent === Math.floor(exponent);
 }
 
@@ -47,12 +47,12 @@ export function genImport(symbol: string, source: string): string[] {
     return [`import { ${symbol} } from "${source}";`, ""];
 }
 
-export function genUncurriedTypeName(spec: IOperatorSpec, left?: string | number, right?: string | number): string {
+export function genUncurriedTypeName(spec: OperatorSpec, left?: string | number, right?: string | number): string {
     const args = left !== undefined && right !== undefined ? `<${left}, ${right}>` : "";
     return `${spec.uncurriedTypeNamePrefix}Exponents${args}`;
 }
 
-export function genExponentName({ value }: IExponentSpec): string {
+export function genExponentName({ value }: ExponentSpec): string {
     if (value === 0) {
         return "Zero";
     }

@@ -14,7 +14,7 @@
                 "trailingComma": "all"
             }
         ],
-        "interface-name": [true, "always-prefix"],
+        "interface-name": [true, "never-prefix"],
         "member-ordering": [
             true,
             {

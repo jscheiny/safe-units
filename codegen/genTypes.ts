@@ -1,15 +1,15 @@
 import {
+    ExponentSpec,
     genExponentName,
     genFileHeader,
     genImport,
     genUncurriedTypeName,
     getExponents,
-    IExponentSpec,
-    IOperatorSpec,
     isExponent,
+    OperatorSpec,
 } from "./common";
 
-export function genOperatorTypes(spec: IOperatorSpec): string {
+export function genOperatorTypes(spec: OperatorSpec): string {
     const exponents = getExponents(spec);
     return [
         ...genFileHeader(),
@@ -20,13 +20,13 @@ export function genOperatorTypes(spec: IOperatorSpec): string {
     ].join("\n");
 }
 
-function genUncurriedType(spec: IOperatorSpec): string[] {
+function genUncurriedType(spec: OperatorSpec): string[] {
     const typeName = genUncurriedTypeName(spec, "L extends Exponent", "R extends Exponent");
     const tableName = genUncurriedTableName(spec);
     return [`export type ${typeName} = ${tableName}[L][R];`, ""];
 }
 
-function genUncurriedTable(spec: IOperatorSpec, exponents: IExponentSpec[]): string[] {
+function genUncurriedTable(spec: OperatorSpec, exponents: ExponentSpec[]): string[] {
     const name = genUncurriedTableName(spec);
     const lines = [`interface ${name} {`];
     for (const left of exponents) {
@@ -36,11 +36,11 @@ function genUncurriedTable(spec: IOperatorSpec, exponents: IExponentSpec[]): str
     return lines;
 }
 
-function genUncurriedTableName(spec: IOperatorSpec): string {
+function genUncurriedTableName(spec: OperatorSpec): string {
     return `I${spec.uncurriedTypeNamePrefix}Table`;
 }
 
-function genAllCurriedTables(spec: IOperatorSpec, exponents: IExponentSpec[]): string[] {
+function genAllCurriedTables(spec: OperatorSpec, exponents: ExponentSpec[]): string[] {
     const lines: string[] = [];
     for (const left of exponents) {
         lines.push(...genCurriedTable(spec, exponents, left));
@@ -48,7 +48,7 @@ function genAllCurriedTables(spec: IOperatorSpec, exponents: IExponentSpec[]): s
     return lines;
 }
 
-function genCurriedTable(spec: IOperatorSpec, exponents: IExponentSpec[], left: IExponentSpec): string[] {
+function genCurriedTable(spec: OperatorSpec, exponents: ExponentSpec[], left: ExponentSpec): string[] {
     const name = genCurriedTableName(spec, left);
     const lines = [`interface ${name} {`];
     for (const right of exponents) {
@@ -60,7 +60,7 @@ function genCurriedTable(spec: IOperatorSpec, exponents: IExponentSpec[], left: 
     return lines;
 }
 
-function genCurriedTableName(spec: IOperatorSpec, left: IExponentSpec): string {
+function genCurriedTableName(spec: OperatorSpec, left: ExponentSpec): string {
     return `I${spec.curriedTypeNamePrefix}${genExponentName(left)}Table`;
 }
 

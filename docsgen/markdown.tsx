@@ -4,11 +4,11 @@ import * as React from "react";
 import { createNodeId, getNodeText } from "./markdownUtils";
 import { component } from "./style";
 
-interface IMarkdownProps {
+interface MarkdownProps {
     root: Node;
 }
 
-type MarkdownComponent = React.FunctionComponent<IMarkdownProps>;
+type MarkdownComponent = React.FunctionComponent<MarkdownProps>;
 
 export const Markdown: MarkdownComponent = ({ root }) => {
     switch (root.type) {

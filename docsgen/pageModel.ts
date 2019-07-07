@@ -5,7 +5,7 @@ import { createNodeId, getNodeText, nextStep, walkMarkdown } from "./markdownUti
 
 const parser = new Parser();
 
-export interface IPageSection {
+export interface PageSection {
     level: number;
     node: Node;
     id: string;
@@ -23,7 +23,7 @@ export class PageModel {
         public readonly name: string,
         public readonly root: Node,
         public readonly title: string,
-        public readonly sections: ReadonlyArray<IPageSection>,
+        public readonly sections: ReadonlyArray<PageSection>,
     ) {}
 
     public get path(): string {
@@ -48,8 +48,8 @@ function getTitle(root: Node): string {
     return getNodeText(maybeHeading.node);
 }
 
-function getSections(root: Node): IPageSection[] {
-    let sections: IPageSection[] = [];
+function getSections(root: Node): PageSection[] {
+    let sections: PageSection[] = [];
     walkMarkdown(root, node => {
         if (node.type === "heading" && node.level !== 1) {
             sections.push(getSection(node));
@@ -58,7 +58,7 @@ function getSections(root: Node): IPageSection[] {
     return sections;
 }
 
-function getSection(node: Node): IPageSection {
+function getSection(node: Node): PageSection {
     return {
         node,
         level: node.level,
