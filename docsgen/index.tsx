@@ -81,7 +81,7 @@ function buildLinkedStyles(inPath: string): string {
     return `<link rel="stylesheet" type="text/css" media="screen" href="styles/${name}" />`;
 }
 
-const linkedStyles = ["node_modules/highlight.js/styles/dracula.css", "node_modules/normalize.css/normalize.css"]
+const linkedStyles = ["docs/styles/highlight.css", "node_modules/normalize.css/normalize.css"]
     .map(buildLinkedStyles)
     .join("\n");
 
