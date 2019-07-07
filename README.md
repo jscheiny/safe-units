@@ -1,8 +1,8 @@
 # Safe Units
 
-[![Build Status](https://travis-ci.org/jscheiny/safe-units.svg?branch=master)](https://travis-ci.org/jscheiny/safe-units)
+[![Build Status](https://travis-ci.org/jscheiny/safe-units.svg?branch=master)](https://travis-ci.org/jscheiny/safe-units) [![NPM Version](https://img.shields.io/npm/v/safe-units.svg)](https://www.npmjs.com/package/safe-units) [![MIT License](https://img.shields.io/npm/l/safe-units.svg)](https://github.com/jscheiny/safe-units/blob/master/LICENSE)
 
-Safe Units is a type-safe units of measurement framework for performing dimensional analysis in TypeScript at compile time. Safe Units provides an implementation of an SI based unit system but is flexible enough to allow users to create their own unit systems which can be independent or can interoperate with the built-in units. This library  requires TypeScript 3.2 or higher.
+Safe Units is a type safe library for using units of measurement in TypeScript.  Safe Units provides an implementation of an SI based unit system but is flexible enough to allow users to create their own unit systems which can be independent or can interoperate with the built-in units. Users can also make unit systems for any numeric type they'd like not just the JavaScript `number` type. This library requires TypeScript 3.2 or higher.
 
 ```typescript
 import { Length, Measure, meters, seconds, Time, Velocity } from "safe-units";
@@ -15,7 +15,8 @@ console.log(length.toString());   // 30 m
 console.log(time.toString());     // 15 s
 console.log(velocity.toString()); // 2 m * s^-1
 
-const error: Velocity = length.times(time); // Error: A measure of m*s isn't assignable to a measure of m/s.
+const error: Velocity = length.times(time);
+// ERROR: A measure of m*s isn't assignable to a measure of m/s.
 ```
 
 ## Features
@@ -28,24 +29,45 @@ const error: Velocity = length.times(time); // Error: A measure of m*s isn't ass
 
 ⭐&nbsp; Long build times & cryptic error messages!
 
+## Prerequisites
+
+Safe units is written in TypeScript and should be consumed by TypeScript users to take full advantage of what it provides. In addition you will need the following:
+
+- [TypeScript](http://www.typescriptlang.org/) 3.2 or later
+- [Strict null checks](https://www.typescriptlang.org/docs/handbook/compiler-options.html) enabled for your project
+
+## Installation
+
+```
+npm install safe-units
+```
+
+or 
+
+```
+yarn add safe-units
+```
+
 ## Examples
 
-### Measure arithmetic
+### Unit arithmetic
 
 ```typescript
-import { Acceleration, Area, Force, Length, Mass, Measure, Pressure, Unit, Volume } from "safe-units";
+import { bars, kilograms, Measure, meters, milli, seconds } from "safe-units";
 
-const length: Length = Measure.of(30, Unit.feet);
-const width: Length = Measure.of(20, Unit.miles);
-const height: Length = Measure.of(10, Unit.meters);
-const area: Area = length.times(width);
-const squareSide: Length = Measure.sqrt(area);
-const volume: Volume = area.times(height);
-const perimeter: Length = length.scale(2).plus(width.scale(2));
-const mass: Mass = Measure.of(100, Unit.pounds);
-const force: Force = Measure.of(50, Unit.newtons);
-const acceleration: Acceleration = force.over(mass);
-const pressure: Pressure = force.over(area);
+const width = Measure.of(3, meters);
+const height = Measure.of(4, meters);
+const area = width.times(height).scale(0.5);
+const hypot = Measure.sqrt(width.squared().plus(height.squared())); // 5 m
+
+const mass = Measure.of(30, kilograms);
+const mps2 = meters.per(seconds.squared());
+const acceleration = Measure.of(9.8, mps2);
+
+const force = mass.times(acceleration); // 294 N
+const pressure = force.over(area); // 49 Pa
+const maxPressure = Measure.of(0.5, milli(bars)); // 0.5 mbar
+pressure.lt(maxPressure) // true
 ```
 
 ### Type errors
@@ -55,11 +77,18 @@ import { Force, Length, Measure, meters, seconds, Time } from "safe-units";
 
 const length: Length = Measure.of(10, meters);
 const time: Time = Measure.of(10, seconds);
-length.plus(time); // Error: Measures of different units cannot be added
-length.minus(time); // Error: Measures of different units cannot be subtracted
 
-const force: Force = length.over(time); // Error: Measure of m/s is not assignable to measure of kg*m/s^2
-const root = Measure.sqrt(length); // Error: Can't take sqrt of measure of m since it's not a perfect square
+length.plus(time);
+// ERROR: Measures of different units cannot be added
+
+length.minus(time);
+// ERROR: Measures of different units cannot be subtracted
+
+const force: Force = length.over(time);
+// ERROR: Measure of m/s is not assignable to measure of kg*m/s^2
+
+const root = Measure.sqrt(length);
+// ERROR: Can't take sqrt of measure of m since it's not a perfect square
 ```
 
 ### Naming units
@@ -73,11 +102,11 @@ console.log(Measure.of(8, furlongs).in(miles)); // 1 mi
 console.log(Measure.of(1, miles).in(furlongs)); // 8 fur
 
 const fortnights = Measure.of(14, days, "ftn");
-const megaFurlongsPerMicroFornight = mega(furlongs)
+const megaFurlongsPerMicroFortnight = mega(furlongs)
     .per(micro(fortnights))
     .withSymbol("Mfur/µftn");
 
-console.log(speedOfLight.in(megaFurlongsPerMicroFornight)); // 1.8026174997852542 Mfur/µftn
+console.log(speedOfLight.in(megaFurlongsPerMicroFortnight)); // 1.8026174997852542 Mfur/µftn
 ```
 
 ### Deriving quantities
@@ -98,25 +127,25 @@ console.log(jerk.toString()); // 4.9 m * s^-3
 ### Defining dimensions
 
 ```typescript
-import { Area, Measure, seconds, Time } from "safe-units";
+import { Area, Measure, minutes, seconds, Time } from "safe-units";
 
-const bits = Measure.dimension("data", "b");
+const frames = Measure.dimension("frames");
 
-type Data = typeof bits;
-const Data = bits;
+const Frames = frames;
+type Frames = typeof frames;
 
-const DataRate = Data.over(Time);
-type DataRate = typeof DataRate;
+const FrameRate = Frames.over(Time);
+type FrameRate = typeof FrameRate;
 
-const DataDensity = Data.over(Area);
-type DataDensity = typeof DataDensity;
+const fps: FrameRate = frames.per(seconds).withSymbol("fps");
 
-const bytes: Data = Measure.of(8, bits, "B");
-const memory: Data = Measure.of(1024, bytes);
-const rate: DataRate = memory.over(Measure.of(10, seconds));
+const minFrameRate = Measure.of(60, fps);
 
-console.log(memory.in(bytes)); // 1024 B
-console.log(rate.toString()); // 819.2 b * s^-1
+const measuredFrames = Measure.of(8000, frames);
+const elapsedTime = Measure.of(2, minutes);
+const measuredFps: FrameRate = measuredFrames.over(elapsedTime);
 
-const density: DataDensity = rate; // Error: Cannot assign measure of type b/s to measure of type b/s^2
+if (measuredFps.lt(minFrameRate)) {
+    // Optimize
+}
 ```

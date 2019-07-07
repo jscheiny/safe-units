@@ -14,9 +14,9 @@ If two units will multiply or divide together to create an exponent out of range
 const a = Measure.of(1, meters.cubed());
 const b = Measure.of(1, meters.toThe("-3"));
 const product = a.times(a);
-//                      ~  Error: The result would have unit m^6
+//                      ~  ERROR: The result would have unit m^6
 const quotient = a.over(b);
-//                      ~  Error: The result would have unit m^-6
+//                      ~  ERROR: The result would have unit m^-6
 ```
 
 ## Exponentiation
@@ -26,9 +26,9 @@ The `squared` and `cubed` methods of measure will fail when applied to measures 
 ```ts
 const m = Measure.of(30, meters.cubed());
 const a = m.squared();
-//        ~~~~~~~~~~~  Error: squared has type never
+//        ~~~~~~~~~~~  ERROR: squared has type never
 const b = m.cubed();
-//        ~~~~~~~~~    Error: cubed has type never
+//        ~~~~~~~~~    ERROR: cubed has type never
 const c = m.toThe("3");
-//                ~~~  Error: m cannot be cubed so "3" is an invalid argument
+//                ~~~  ERROR: m cannot be cubed so "3" is an invalid argument
 ```
