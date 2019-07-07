@@ -2,7 +2,7 @@
 
 While users can define their own unit system (see [Defining Quantities](defining-quantities.html)), Safe Units also comes with a large collection of built-in quantities and units based on the SI unit system.
 
-All quantities provided are generic, of the form `type Quantity<N = number>` so all will default to using `number` as the numeric type but may be passed another numeric type.
+All quantities provided are generic, of the form `type Quantity<N = number>` so all quantity types will default to using `number` as the numeric type but may be passed another numeric type.
 
 ## Base Units
 

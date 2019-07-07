@@ -23,8 +23,9 @@ export function component<Tag extends keyof JSX.IntrinsicElements>(
 }
 
 cssRule("body", {
-    fontFamily: "'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif",
+    fontFamily: `"Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif`,
     fontSize: 16,
+    lineHeight: 1.5,
 });
 
 cssRule("body pre, body code", {
@@ -40,7 +41,7 @@ cssRule("h2, h3", {
 });
 
 cssRule("body h1", {
-    color: "#008075",
+    color: "#6272a4",
     margin: 0,
     paddingBottom: 20,
     paddingTop: 25,

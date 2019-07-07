@@ -36,14 +36,14 @@ export const Sidebar: React.FunctionComponent<ISidebarProps> = ({ pages, selecte
     return (
         <Container>
             {links}
-            <PageLink className={homeLink} href="https://github.com/jscheiny/safe-units">
-                View on github
+            <PageLink className={selectedPage} href="https://github.com/jscheiny/safe-units">
+                <GithubIcon src="images/github-icon.png" /> View on github
             </PageLink>
         </Container>
     );
 };
 
-const HOME_COLOR = "#008075";
+const HOME_COLOR = "#6272a4";
 const LINK_COLOR = "#293742";
 
 const Container = component("sidebar", "div", {
@@ -64,6 +64,8 @@ const PageLink = component("page-link", "a", {
     padding: "5px 10px",
     background: "#E1E8ED",
     fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
     $nest: {
         "&:hover": {
             background: "#BFCCD6",
@@ -120,4 +122,10 @@ const LinkSection = component("links", "div", {
             marginTop: 20,
         },
     },
+});
+
+const GithubIcon = component("links", "img", {
+    width: 14,
+    height: 14,
+    marginRight: 5,
 });

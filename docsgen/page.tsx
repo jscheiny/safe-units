@@ -49,16 +49,17 @@ const Contents = component("contents", "div", {
     flex: "1 1 auto",
     position: "relative",
     background: "#EBF1F5",
-    boxShadow: "inset 15px 0 20px -20px #182026",
+    boxShadow: "inset 15px 0 30px -30px #182026",
 });
 
 const Body = component("body", "div", {
     maxWidth: 800,
-    margin: "0 25px 25px 45px",
+    margin: "0 25px 25px 55px",
 });
 
 const EndMatter = component("end-matter", "div", {
     borderTop: "1px solid #BFCCD6",
+    textAlign: "center",
     marginTop: 20,
     paddingTop: 20,
     fontSize: 14,
@@ -66,7 +67,6 @@ const EndMatter = component("end-matter", "div", {
 
 const License = component("license", "div", {
     marginTop: 20,
-    textAlign: "center",
     color: "#738694",
     textShadow: "0 1px 0 white",
     fontSize: 12,

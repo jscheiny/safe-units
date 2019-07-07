@@ -1,5 +1,7 @@
 # Safe Units
 
+[![Build Status](https://travis-ci.org/jscheiny/safe-units.svg?branch=master)](https://travis-ci.org/jscheiny/safe-units) [![NPM Version](https://img.shields.io/npm/v/safe-units.svg)](https://www.npmjs.com/package/safe-units) [![MIT License](https://img.shields.io/npm/l/safe-units.svg)](https://github.com/jscheiny/safe-units/blob/master/LICENSE)
+
 Safe Units is a library for using units of measurement in TypeScript in a type safe manner. Check it out on [github](https://github.com/jscheiny/safe-units). Safe Units provides an implementation of an SI based unit system but is flexible enough to allow users to create their own unit systems which can be independent or can interoperate with the built-in units. Users can also make unit systems for any numeric type they'd like not just the JavaScript `number` type. This library makes heavy use of conditional types and thus requires TypeScript 2.9 or higher.
 
 ```ts
