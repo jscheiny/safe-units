@@ -23,7 +23,7 @@ Now we're going to create our own measure type that operates on `WrappedNumber` 
 ```ts
 import { createMeasureType, GenericMeasure, Unit } from "safe-units";
 
-type WrappedMeasure<U extends Unit> = IGenericMeasure<WrappedNumber, U>;
+type WrappedMeasure<U extends Unit> = GenericMeasure<WrappedNumber, U>;
 const WrappedMeasure = createMeasureType({
     one: () => wrap(1),
     neg: x => wrap(-x),
@@ -44,13 +44,13 @@ We can then use this class just as we would use `Measure`, except anywhere we'd 
 Let's deconstruct this example to explain what's going on. First we start with this type definition:
 
 ```ts
-type WrappedMeasure<U extends Unit> = IGenericMeasure<WrappedNumber, U>;
+type WrappedMeasure<U extends Unit> = GenericMeasure<WrappedNumber, U>;
 ```
 
 This line isn't strictly necessary, but it is often useful to have our `WrappedMeasure` available as a type. The next line `const WrappedMeasure = ...` creates a value for wrapped measures. Having a type for the measure is useful for writing generic functions on wrapped measures. All this line does is bind the numeric type of `GenericMeasure`. Similarly, the `Measure` type has the following definition:
 
 ```ts
-type Measure<U extends Unit> = IGenericMeasure<number, U>;
+type Measure<U extends Unit> = GenericMeasure<number, U>;
 ```
 
 After we've defined the type of `WrappedMeasure` we now define the class itself by calling `createMeasureType`. This function takes an object which let's the generic measure type know how to perform operations on our numeric type. Note that for this simple example, we generally just unwrap the value, perform the arithmetic operation and then wrap it back up. Most of these operations should be self-explanatory, however some require some further explanation:

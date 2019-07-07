@@ -1,9 +1,9 @@
-import { IGenericMeasure, INumericOperations } from "./genericMeasure";
+import { GenericMeasure, NumericOperations } from "./genericMeasure";
 import { createMeasureType, GenericMeasureType } from "./genericMeasureFactory";
 import { NthRootFn, SpreadFn, UnaryFn, wrapRootFn, wrapSpreadFn, wrapUnaryFn } from "./genericMeasureUtils";
 import { Unit } from "./unitTypeArithmetic";
 
-interface IMeasureStaticMethods {
+interface MeasureStaticMethods {
     abs: UnaryFn;
     ceil: UnaryFn;
     floor: UnaryFn;
@@ -15,7 +15,7 @@ interface IMeasureStaticMethods {
     cbrt: NthRootFn<"3">;
 }
 
-const staticMethods: IMeasureStaticMethods = {
+const staticMethods: MeasureStaticMethods = {
     abs: wrapUnaryFn(Math.abs),
     ceil: wrapUnaryFn(Math.ceil),
     floor: wrapUnaryFn(Math.floor),
@@ -27,7 +27,7 @@ const staticMethods: IMeasureStaticMethods = {
     cbrt: wrapRootFn(Math.cbrt, "3"),
 };
 
-const numericOps: INumericOperations<number> = {
+const numericOps: NumericOperations<number> = {
     one: () => 1,
     neg: x => -x,
     add: (x, y) => x + y,
@@ -39,5 +39,5 @@ const numericOps: INumericOperations<number> = {
     format: x => `${x}`,
 };
 
-export type Measure<U extends Unit> = IGenericMeasure<number, U>;
-export const Measure: GenericMeasureType<number, IMeasureStaticMethods> = createMeasureType(numericOps, staticMethods);
+export type Measure<U extends Unit> = GenericMeasure<number, U>;
+export const Measure: GenericMeasureType<number, MeasureStaticMethods> = createMeasureType(numericOps, staticMethods);

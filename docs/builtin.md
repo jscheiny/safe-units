@@ -30,7 +30,7 @@ The base units are only provided for `number` measures, but users can create the
 
 ```ts
 type SpecialNumber = /* ... */;
-const numericOps: INumericOperations<SpecialNumber> = {/* ... */};
+const numericOps: NumericOperations<SpecialNumber> = {/* ... */};
 const SpecialMeasure = createMeasureType(numericOps);
 const {
     meters,

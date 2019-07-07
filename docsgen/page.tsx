@@ -4,12 +4,12 @@ import { PageModel } from "./pageModel";
 import { Sidebar } from "./sidebar";
 import { component } from "./style";
 
-interface IPageProps {
+interface PageProps {
     pages: PageModel[];
     pageIndex: number;
 }
 
-export const Page: React.FunctionComponent<IPageProps> = ({ pages, pageIndex }) => {
+export const Page: React.FunctionComponent<PageProps> = ({ pages, pageIndex }) => {
     const page = pages[pageIndex];
     const year = new Date().getFullYear();
     return (

@@ -4,12 +4,12 @@ import { MarkdownChildren } from "./markdown";
 import { PageModel } from "./pageModel";
 import { component, styles } from "./style";
 
-interface ISidebarProps {
+interface SidebarProps {
     pages: PageModel[];
     selectedIndex: number;
 }
 
-export const Sidebar: React.FunctionComponent<ISidebarProps> = ({ pages, selectedIndex }) => {
+export const Sidebar: React.FunctionComponent<SidebarProps> = ({ pages, selectedIndex }) => {
     const pageSections = pages[selectedIndex].sections.filter(({ level }) => level <= 3).map(({ id, node, level }) => {
         const className = classes(level === 2 && section, level === 3 && subsection);
         return (

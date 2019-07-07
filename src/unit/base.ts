@@ -1,8 +1,8 @@
-import { IGenericMeasure } from "../measure/genericMeasure";
+import { GenericMeasure } from "../measure/genericMeasure";
 import { GenericMeasureType } from "../measure/genericMeasureFactory";
 import { Measure } from "../measure/numberMeasure";
 
-interface IBaseUnitsMap {
+interface BaseUnitsMap {
     meters: "length";
     kilograms: "mass";
     seconds: "time";
@@ -15,7 +15,7 @@ interface IBaseUnitsMap {
     bits: "memory";
 }
 
-export type BaseUnits<N> = { [U in keyof IBaseUnitsMap]: IGenericMeasure<N, { [K in IBaseUnitsMap[U]]: "1" }> };
+export type BaseUnits<N> = { [U in keyof BaseUnitsMap]: GenericMeasure<N, { [K in BaseUnitsMap[U]]: "1" }> };
 
 export const createBaseUnits = <N>(MeasureType: GenericMeasureType<N, any>): BaseUnits<N> => ({
     meters: MeasureType.dimension("length", "m"),
