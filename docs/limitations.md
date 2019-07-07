@@ -1,6 +1,6 @@
 # Limitations
 
-Since Safe Units is typesafe, it must compute units at compile time. Due to some technical limitations of what you can do with types in TypeScript, there is one major limitation to this library: The exponents for dimensions of your units are limited to integers between -5 and 5, inclusive. (However, under the hood these are represented by string literals between `"-5"` and `"5"`). This means that you can not represent a value of 30 m<sup>6</sup> in this library (though, why would you?).
+Since Safe Units is typesafe, it must compute units at compile time. Due to some technical limitations of what you can do with types in TypeScript, there is one major limitation to this library: The exponents for dimensions of your units are limited to integers between -5 and 5, inclusive. (However, under the hood these are represented by string literals between `"-5"` and `"5"`). This means that you can not represent a value of 30 m⁶ in this library (though, why would you?).
 
 In the research I've conducted for this library I cannot find any instances in which it would be useful to use units with such extreme exponents. If you're aware of any such use cases, please [file an issue](https://github.com/jscheiny/safe-units/issues/new) to discuss it.
 

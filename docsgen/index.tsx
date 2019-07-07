@@ -20,7 +20,8 @@ const renderPageHtml = (title: string, body: string, inlineStyles: string, linke
     <body>${body}</body>
 </html>`;
 
-const buildDir = join("docs", "build");
+const docsDir = "docs";
+const buildDir = join(docsDir, "build");
 if (!existsSync(buildDir)) {
     mkdirSync(buildDir);
 }
@@ -28,6 +29,13 @@ if (!existsSync(buildDir)) {
 const stylesDir = join(buildDir, "styles");
 if (!existsSync(stylesDir)) {
     mkdirSync(stylesDir);
+}
+
+const imagesContextPath = "images";
+const imagesInDir = join(docsDir, imagesContextPath);
+const imagesOutDir = join(buildDir, imagesContextPath);
+if (!existsSync(imagesOutDir)) {
+    mkdirSync(imagesOutDir);
 }
 
 const pages = readdirSync("docs")
@@ -73,9 +81,15 @@ function buildLinkedStyles(inPath: string): string {
     return `<link rel="stylesheet" type="text/css" media="screen" href="styles/${name}" />`;
 }
 
-const linkedStyles = ["node_modules/highlight.js/styles/monokai.css", "node_modules/normalize.css/normalize.css"]
+const linkedStyles = ["node_modules/highlight.js/styles/dracula.css", "node_modules/normalize.css/normalize.css"]
     .map(buildLinkedStyles)
     .join("\n");
+
+readdirSync(imagesInDir).forEach(path => {
+    const inPath = join(imagesInDir, path);
+    const outPath = join(imagesOutDir, path);
+    copyFileSync(inPath, outPath);
+});
 
 pages.sort(orderBy(order));
 pages.forEach((page, index) => {

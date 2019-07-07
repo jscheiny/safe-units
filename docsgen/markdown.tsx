@@ -139,18 +139,24 @@ function getHeadingTag(level: number): keyof JSX.IntrinsicElements {
 
 const CodeBlock = component("code-block", "code", {
     borderRadius: 3,
+    $nest: {
+        "&&": {
+            padding: 20,
+        },
+    },
 });
 
-const CodeInline = component("code-line", "code", {
-    color: "#00998C",
+const CodeInline = component("code-inline", "code", {
+    color: "#6272a4",
+    fontSize: 18,
 });
 
 export const Link = component("link", "a", {
-    color: "#BF8C0A",
+    color: "#008075",
     textDecoration: "none",
     $nest: {
         "&:hover": {
-            color: "#A67908",
+            color: "#00B3A4",
             textDecoration: "underline",
         },
     },
