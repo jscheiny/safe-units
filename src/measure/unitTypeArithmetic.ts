@@ -15,6 +15,8 @@ export type Unit = {
     [dimension: string]: Exponent | undefined;
 };
 
+export type Dimension<Dim extends string> = { [D in Dim]: "1" };
+
 export type UnitWithSymbols<U extends Unit = Unit> = { [D in keyof U]+?: [string, NonNullable<U[D]>] };
 export type SymbolAndExponent = [string, Exponent];
 

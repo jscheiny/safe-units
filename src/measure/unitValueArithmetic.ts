@@ -2,6 +2,7 @@ import { Exponent, NonZeroExponent } from "../exponent";
 import { addExponents, divideExponents, multiplyExponents } from "../exponent/exponentValueArithmetic";
 import {
     AllowedExponents,
+    Dimension,
     DivideUnits,
     DivisorUnit,
     ExponentiateUnit,
@@ -14,7 +15,7 @@ import {
     UnitWithSymbols,
 } from "./unitTypeArithmetic";
 
-export function dimension<Dim extends string>(dim: Dim, symbol?: string): UnitWithSymbols<{ [D in Dim]: "1" }> {
+export function dimension<D extends string>(dim: D, symbol?: string): UnitWithSymbols<Dimension<D>> {
     return { [dim]: [symbol || dim, "1"] } as any;
 }
 

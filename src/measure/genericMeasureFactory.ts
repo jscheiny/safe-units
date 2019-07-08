@@ -2,11 +2,11 @@ import { GenericMeasure, NumericOperations } from "./genericMeasure";
 import { createMeasureClass } from "./genericMeasureClass";
 import { GenericMeasureStatic, getGenericMeasureStaticMethods } from "./genericMeasureStatic";
 import { IsSingleStringLiteral } from "./typeUtils";
-import { Unit } from "./unitTypeArithmetic";
+import { Dimension, Unit } from "./unitTypeArithmetic";
 import { dimension } from "./unitValueArithmetic";
 
 type DimensionResult<N, D extends string> = true extends IsSingleStringLiteral<D>
-    ? GenericMeasure<N, { [Dim in D]: "1" }>
+    ? GenericMeasure<N, Dimension<D>>
     : never;
 
 /** The functions needed to construct a measure of a given numeric type */
