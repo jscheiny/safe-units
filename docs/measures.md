@@ -1,6 +1,6 @@
 # Measures
 
-The `Measure` class provides the core of the functionality for Safe Units. A `Measure` is a value associated with a unit (e.g. 5 meters, 10 seconds). A `Measure` may be given a symbol to indicate that it itself represent some unit. For example, 0.3048 meters is one foot and therefore might be given the symbol `ft`. Measures are immutable and any operation on a measure returns a new measure.
+The `Measure` class provides the core of the functionality for Safe Units. A `Measure` is a value associated with a unit (e.g. 5 meters, 10 seconds). A `Measure` may be given a symbol to indicate that it itself represents some unit. For example, 0.3048 meters is one foot and therefore might be given the symbol `ft`. Measures are immutable and any operation on a measure returns a new measure.
 
 **Note:** The `Measure` class provides functionality for manipulating units with numeric values represented by the JavaScript `number` type. For different numeric types see [Generic Measures](generic-measures.html).
 
@@ -11,7 +11,7 @@ The `Measure` class provides the core of the functionality for Safe Units. A `Me
 Measure.of<U>(value: number, quantity: Measure<U>, symbol?: string): Measure<U>
 ```
 
-Creates a measure that is a scalar multiple of a given measure. An optional symbol maybe provided to name the resulting measure. 
+Creates a measure that is a scalar multiple of a given measure. An optional symbol may be provided to name the resulting measure.
 
 *Examples:*
 
@@ -392,7 +392,7 @@ const poundsPerSecond: CashFlowRate = pounds.per(seconds).withSymbol("£/s");
 profit.in(pounds); // 60 £
 elapsed.in(minutes); // 1 min
 rate.in(poundsPerSecond); // 1 £/s
-``` 
+```
 
 ## Function Wrappers
 
