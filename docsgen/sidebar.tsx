@@ -37,7 +37,7 @@ export const Sidebar: React.FunctionComponent<SidebarProps> = ({ pages, selected
         <Container>
             {links}
             <PageLink className={selectedPage} href="https://github.com/jscheiny/safe-units">
-                <GithubIcon src="images/github-icon.png" /> View on github
+                <GithubIcon src="images/github-icon.png" /> View on GitHub
             </PageLink>
         </Container>
     );
