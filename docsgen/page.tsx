@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, Markdown } from "./markdown";
 import { PageModel } from "./pageModel";
 import { Sidebar } from "./sidebar";
-import { component } from "./style";
+import { component, mobile } from "./style";
 
 interface PageProps {
     pages: PageModel[];
@@ -37,25 +37,40 @@ export const Page: React.FunctionComponent<PageProps> = ({ pages, pageIndex }) =
     );
 };
 
-const Container = component("page", "div", {
-    display: "flex",
-    flexDirection: "row",
-    height: "100vh",
-    width: "100vw",
-});
+const Container = component(
+    "page",
+    "div",
+    {
+        display: "flex",
+        flexDirection: "row",
+        height: "100vh",
+        width: "100vw",
+    },
+    mobile({ flexDirection: "column", overflow: "auto" }),
+);
 
-const Contents = component("contents", "div", {
-    overflow: "auto",
-    flex: "1 1 auto",
-    position: "relative",
-    background: "#EBF1F5",
-    boxShadow: "inset 15px 0 30px -30px #182026",
-});
+const Contents = component(
+    "contents",
+    "div",
+    {
+        flex: "1 1 auto",
+        overflow: "auto",
+        position: "relative",
+        background: "#EBF1F5",
+        boxShadow: "inset 15px 0 30px -30px #182026",
+    },
+    mobile({ overflow: "visible", boxShadow: "inset 0 15px 30px -30px #182026" }),
+);
 
-const Body = component("body", "div", {
-    maxWidth: 800,
-    margin: "0 25px 25px 55px",
-});
+const Body = component(
+    "body",
+    "div",
+    {
+        maxWidth: 800,
+        margin: "0 25px 25px 55px",
+    },
+    mobile({ margin: "0 25px 25px 25px" }),
+);
 
 const EndMatter = component("end-matter", "div", {
     borderTop: "1px solid #BFCCD6",
