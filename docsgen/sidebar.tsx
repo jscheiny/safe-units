@@ -63,20 +63,25 @@ const link = styles({
     textDecoration: "none",
 });
 
-const PageLink = component("page-link", "a", {
-    ...link,
-    margin: "5px 0",
-    padding: "5px 10px",
-    background: "#E1E8ED",
-    fontWeight: "bold",
-    display: "flex",
-    alignItems: "center",
-    $nest: {
-        "&:hover": {
-            background: "#BFCCD6",
+const PageLink = component(
+    "page-link",
+    "a",
+    {
+        ...link,
+        margin: "5px 0",
+        padding: "5px 10px",
+        background: "#E1E8ED",
+        fontWeight: "bold",
+        display: "flex",
+        alignItems: "center",
+        $nest: {
+            "&:hover": {
+                background: "#BFCCD6",
+            },
         },
     },
-});
+    mobile({ display: "block" }),
+);
 
 const homeLink = style({
     color: HOME_COLOR,

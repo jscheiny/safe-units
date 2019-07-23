@@ -46,7 +46,7 @@ const Container = component(
         height: "100vh",
         width: "100vw",
     },
-    mobile({ flexDirection: "column", overflow: "auto" }),
+    mobile({ display: "block", overflow: "auto" }),
 );
 
 const Contents = component(
