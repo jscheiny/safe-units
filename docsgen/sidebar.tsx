@@ -2,7 +2,7 @@ import * as React from "react";
 import { classes, style } from "typestyle";
 import { MarkdownChildren } from "./markdown";
 import { PageModel } from "./pageModel";
-import { component, styles } from "./style";
+import { component, mobile, styles } from "./style";
 
 interface SidebarProps {
     pages: PageModel[];
@@ -46,11 +46,16 @@ export const Sidebar: React.FunctionComponent<SidebarProps> = ({ pages, selected
 const HOME_COLOR = "#6272a4";
 const LINK_COLOR = "#293742";
 
-const Container = component("sidebar", "div", {
-    minWidth: 250,
-    overflow: "auto",
-    fontSize: 14,
-});
+const Container = component(
+    "sidebar",
+    "div",
+    {
+        minWidth: 250,
+        fontSize: 14,
+        overflow: "auto",
+    },
+    mobile({ overflow: "visible" }),
+);
 
 const link = styles({
     display: "block",
@@ -92,15 +97,20 @@ const selectedPage = style({
     },
 });
 
-const SectionLink = component("section-link", "a", {
-    ...link,
-    color: LINK_COLOR,
-    $nest: {
-        "&:hover": {
-            background: "#E1E8ED",
+const SectionLink = component(
+    "section-link",
+    "a",
+    {
+        ...link,
+        color: LINK_COLOR,
+        $nest: {
+            "&:hover": {
+                background: "#E1E8ED",
+            },
         },
     },
-});
+    mobile({ display: "none" }),
+);
 
 const section = style({
     $debugName: "section",
@@ -113,16 +123,30 @@ const subsection = style({
     color: "#5C7080",
 });
 
-const LinkSection = component("links", "div", {
-    $nest: {
-        "&:last-child": {
-            marginBottom: 20,
-        },
-        "&:first-child": {
-            marginTop: 20,
+const LinkSection = component(
+    "links",
+    "div",
+    {
+        $nest: {
+            "&:last-child": {
+                marginBottom: 20,
+            },
+            "&:first-child": {
+                marginTop: 20,
+            },
         },
     },
-});
+    mobile({
+        $nest: {
+            "&:last-child": {
+                marginBottom: 0,
+            },
+            "&:first-child": {
+                marginTop: 0,
+            },
+        },
+    }),
+);
 
 const GithubIcon = component("links", "img", {
     width: 14,
