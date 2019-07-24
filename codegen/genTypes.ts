@@ -37,7 +37,7 @@ function genUncurriedTable(spec: OperatorSpec, exponents: ExponentSpec[]): strin
 }
 
 function genUncurriedTableName(spec: OperatorSpec): string {
-    return `I${spec.uncurriedTypeNamePrefix}Table`;
+    return `${spec.uncurriedTypeNamePrefix}Table`;
 }
 
 function genAllCurriedTables(spec: OperatorSpec, exponents: ExponentSpec[]): string[] {
@@ -61,7 +61,7 @@ function genCurriedTable(spec: OperatorSpec, exponents: ExponentSpec[], left: Ex
 }
 
 function genCurriedTableName(spec: OperatorSpec, left: ExponentSpec): string {
-    return `I${spec.curriedTypeNamePrefix}${genExponentName(left)}Table`;
+    return `${spec.curriedTypeNamePrefix}${genExponentName(left)}Table`;
 }
 
 function indent(line: string): string {
