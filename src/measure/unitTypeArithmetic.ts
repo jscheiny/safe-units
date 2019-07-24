@@ -68,8 +68,8 @@ export type RadicandUnit<N extends Exponent> = {
 // Utility types
 
 /** Makes a unit pretty in intellisense views.  */
-// `ExponentiateUnit<U, 1>` is a noop that seems to accomplish this but is slow to compile and we should see if there's
-// a workaround.
+// `ExponentiateUnit<U, "1">` is a noop that seems to accomplish this but is slow to compile and we should see if
+// there's a workaround.
 type CleanUnit<U extends Unit> = ExponentiateUnit<StripZeroes<U>, "1">;
 
 /** Removes all zero exponent dimensions from a dimension vector */
