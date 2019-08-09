@@ -1,3 +1,4 @@
+import { MeasureFormatter } from "../genericMeasure";
 import { Measure } from "../numberMeasure";
 
 describe("Number measures", () => {
@@ -236,9 +237,10 @@ describe("Number measures", () => {
     });
 
     describe("formatting", () => {
-        function expectFormat(unit: Measure<any>, formatted: string): void {
-            expect(unit.toString()).toBe(formatted);
+        function expectFormat(unit: Measure<any>, formatted: string, formatter?: MeasureFormatter<number>): void {
+            expect(unit.toString(formatter)).toBe(formatted);
         }
+
         it("should format dimensionless units", () => {
             expectFormat(Measure.dimensionless(10), "10");
         });
@@ -317,6 +319,44 @@ describe("Number measures", () => {
             expect(m.toString()).toBe("1 meter");
             expect(Measure.of(1, m.per(s)).toString()).toBe("1 meter / second");
             expect(Measure.of(1, m.squared().per(s.squared())).toString()).toBe("1 meter^2 / second^2");
+        });
+
+        it("should use a custom formatter for values if provided", () => {
+            expectFormat(Measure.of(3.14159, meters), "3.14 m", {
+                formatValue: value => value.toPrecision(3),
+            });
+        });
+
+        it("should use a custom formatter for units if provided", () => {
+            expectFormat(Measure.of(3.14159, meters), "3.14159 meters", {
+                formatUnit: () => "meters",
+            });
+        });
+
+        it("should use both custom formatters if provided", () => {
+            expectFormat(Measure.of(3.14159, meters), "3.142 meters", {
+                formatValue: value => value.toPrecision(4),
+                formatUnit: () => "meters",
+            });
+        });
+
+        it("should not use a custom formatter for units when expressing in terms of another measure", () => {
+            const glorbs = Measure.of(100, meters, "glb");
+            expect(
+                Measure.of(20, glorbs).in(glorbs, {
+                    formatValue: value => value.toExponential(),
+                    formatUnit: () => "glorbs",
+                }),
+            ).toBe("2e+1 glb");
+        });
+
+        it("should use a custom formatter for units when expressing in terms of another unit with no symbol", () => {
+            const glorbs = Measure.of(100, meters);
+            expect(
+                Measure.of(20, glorbs).in(glorbs, {
+                    formatUnit: () => "glorbs",
+                }),
+            ).toBe("2000 glorbs");
         });
     });
 
