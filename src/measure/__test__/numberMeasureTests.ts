@@ -304,13 +304,13 @@ describe("Number measures", () => {
         });
 
         it("should format measures as other measures with symbols", () => {
-            const glorbs = Measure.of(100, meters, "glb");
-            expect(Measure.of(1000, meters).in(glorbs)).toBe("10 glb");
+            const kilometers = Measure.of(1000, meters, "km");
+            expect(Measure.of(10000, meters).in(kilometers)).toBe("10 km");
         });
 
         it("should use normal formatting if the other measure has no symbol", () => {
-            const glorbs = Measure.of(100, meters);
-            expect(Measure.of(1000, meters).in(glorbs)).toBe("1000 m");
+            const kilometers = Measure.of(1000, meters);
+            expect(Measure.of(1000, meters).in(kilometers)).toBe("1000 m");
         });
 
         it("should use base unit symbols to format when available", () => {
@@ -341,22 +341,22 @@ describe("Number measures", () => {
         });
 
         it("should not use a custom formatter for units when expressing in terms of another measure", () => {
-            const glorbs = Measure.of(100, meters, "glb");
+            const kilometers = Measure.of(1000, meters, "km");
             expect(
-                Measure.of(20, glorbs).in(glorbs, {
+                Measure.of(20, kilometers).in(kilometers, {
                     formatValue: value => value.toExponential(),
-                    formatUnit: () => "glorbs",
+                    formatUnit: () => "kilometers",
                 }),
-            ).toBe("2e+1 glb");
+            ).toBe("2e+1 km");
         });
 
         it("should use a custom formatter for units when expressing in terms of another unit with no symbol", () => {
-            const glorbs = Measure.of(100, meters);
+            const kilometers = Measure.of(1000, meters);
             expect(
-                Measure.of(20, glorbs).in(glorbs, {
-                    formatUnit: () => "glorbs",
+                Measure.of(20, kilometers).in(kilometers, {
+                    formatUnit: () => "meters",
                 }),
-            ).toBe("2000 glorbs");
+            ).toBe("20000 meters");
         });
     });
 
