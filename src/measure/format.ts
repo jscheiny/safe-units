@@ -1,7 +1,7 @@
 import { getExponentValue, negateExponent } from "../exponent/exponentValueArithmetic";
 import { SymbolAndExponent, UnitWithSymbols } from "./unitTypeArithmetic";
 
-export function formatUnit(unit: UnitWithSymbols): string {
+export function defaultFormatUnit(unit: UnitWithSymbols): string {
     const dimensions = Object.keys(unit)
         .map(dimension => unit[dimension])
         .filter(isDimensionPresent)
