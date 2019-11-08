@@ -134,19 +134,30 @@ squareMeters.symbol; <span class="hljs-comment">// "sq. m"</span>
 <span class="hljs-keyword">const</span> r1 = squareMeters.scale(<span class="hljs-number">2</span>);
 <span class="hljs-keyword">const</span> r2 = Measure.of(<span class="hljs-number">10</span>, squareMeters);
 <span class="hljs-keyword">const</span> r3 = Measure.divide(squareMeters, meters);
-</code></pre><p>Symbols are used in converting other measures into strings as can be seen below.</p><h3 id="formatting">Formatting</h3><pre><code class="hljs typescript code-block_fcjziqk">Measure&lt;U&gt;.toString(): <span class="hljs-built_in">string</span>;
-Measure&lt;U&gt;.in(unit: Measure&lt;U&gt;): <span class="hljs-built_in">string</span>;
-</code></pre><p>The first method, <code class="code-inline_fji86su">toString</code>, creates a string version of the unit, ignoring any <a class="link_f5wbv6l" href="#symbols">symbol</a> information on that measure. The second method, <code class="code-inline_fji86su">in</code>, will format a given unit as if it is given in units of the second measure, assuming the second measure has a symbol. If not, this is equivalent to calling <code class="code-inline_fji86su">toString()</code>.</p><p><em>Examples:</em></p><pre><code class="hljs typescript code-block_fcjziqk"><span class="hljs-keyword">const</span> kilometers = Measure.of(<span class="hljs-number">1000</span>, meters, <span class="hljs-string">"km"</span>);
+</code></pre><p>Symbols are used in converting other measures into strings as can be seen below.</p><h3 id="formatting">Formatting</h3><pre><code class="hljs typescript code-block_fcjziqk">Measure&lt;U&gt;.toString(formatter?: MeasureFormatter): <span class="hljs-built_in">string</span>;
+Measure&lt;U&gt;.in(unit: Measure&lt;U&gt;, formatter?: MeasureFormatter): <span class="hljs-built_in">string</span>;
+</code></pre><p>The first method, <code class="code-inline_fji86su">toString</code>, creates a string version of the unit, ignoring any <a class="link_f5wbv6l" href="#symbols">symbol</a> information on that measure. The second method, <code class="code-inline_fji86su">in</code>, will format a given unit as if it is given in units of the second measure, assuming the second measure has a symbol. If not, this is equivalent to calling <code class="code-inline_fji86su">toString()</code>.</p><p>Both methods may optionally be passed a formatter which has the following interface:</p><pre><code class="hljs typescript code-block_fcjziqk"><span class="hljs-keyword">interface</span> MeasureFormatter {
+    formatValue?: <span class="hljs-function">(<span class="hljs-params">value: <span class="hljs-built_in">number</span></span>) =&gt;</span> <span class="hljs-built_in">string</span>;
+    formatUnit?: <span class="hljs-function">(<span class="hljs-params">unit: UnitWithSymbols</span>) =&gt;</span> <span class="hljs-built_in">string</span>;
+}
+</code></pre><p>The <code class="code-inline_fji86su">formatValue</code> function, if provided, will be applied to customize the formatting of the numeric value of the measure in the resulting string. The <code class="code-inline_fji86su">formatUnit</code>, if provided, will be passed the unit of the measure in order to customize how that is formatted. When calling the <code class="code-inline_fji86su">Measure.in</code> method, the <code class="code-inline_fji86su">formatUnit</code> function will only be used if the unit being used to express the measure has no symbol.</p><p><em>Examples:</em></p><pre><code class="hljs typescript code-block_fcjziqk"><span class="hljs-keyword">const</span> kilometers = Measure.of(<span class="hljs-number">1000</span>, meters, <span class="hljs-string">"km"</span>);
 <span class="hljs-comment">// Could also be written as: Measure.of(1000, meters).withSymbol("km")</span>
 
 <span class="hljs-keyword">const</span> distance = Measure.of(<span class="hljs-number">5</span>, kilometers);
 <span class="hljs-built_in">console</span>.log(distance.toString()); <span class="hljs-comment">// 5000 m</span>
 <span class="hljs-built_in">console</span>.log(distance.in(kilometers)); <span class="hljs-comment">// 5 km</span>
 <span class="hljs-built_in">console</span>.log(kilometers.in(kilometers)); <span class="hljs-comment">// 1 km</span>
+<span class="hljs-built_in">console</span>.log(distance.toString({
+   formatValue: <span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x.toExponential(),
+   formatUnit: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-string">"meters"</span>,
+})); <span class="hljs-comment">// 5e+3 meters</span>
 
 <span class="hljs-keyword">const</span> force = Measure.of(<span class="hljs-number">30</span>, newtons);
 <span class="hljs-built_in">console</span>.log(force.toString()); <span class="hljs-comment">// 30 kg * m * s^-2</span>
 <span class="hljs-built_in">console</span>.log(force.in(newtons)); <span class="hljs-comment">// 30 N</span>
+<span class="hljs-built_in">console</span>.log(force.in(newtons, {
+   formatValue: <span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x.toPrecision(<span class="hljs-number">5</span>),
+})); <span class="hljs-comment">// 30.000 N</span>
 </code></pre><h3 id="unsafe-mappings">Unsafe Mappings</h3><pre><code class="hljs typescript code-block_fcjziqk">Measure&lt;U&gt;.unsafeMap(valueMap: <span class="hljs-function">(<span class="hljs-params">value: <span class="hljs-built_in">number</span></span>) =&gt;</span> <span class="hljs-built_in">number</span>): Measure&lt;U&gt;;
 Measure&lt;U&gt;.unsafeMap&lt;V&gt;(
    valueMap: <span class="hljs-function">(<span class="hljs-params">value: <span class="hljs-built_in">number</span></span>) =&gt;</span> <span class="hljs-built_in">number</span>,
