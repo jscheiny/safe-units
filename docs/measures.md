@@ -327,11 +327,22 @@ Symbols are used in converting other measures into strings as can be seen below.
 ### Formatting
 
 ```ts
-Measure<U>.toString(): string;
-Measure<U>.in(unit: Measure<U>): string;
+Measure<U>.toString(formatter?: MeasureFormatter): string;
+Measure<U>.in(unit: Measure<U>, formatter?: MeasureFormatter): string;
 ```
 
 The first method, `toString`, creates a string version of the unit, ignoring any [symbol](#symbols) information on that measure. The second method, `in`, will format a given unit as if it is given in units of the second measure, assuming the second measure has a symbol. If not, this is equivalent to calling `toString()`.
+
+Both methods may optionally be passed a formatter which has the following interface:
+
+```ts
+interface MeasureFormatter {
+    formatValue?: (value: number) => string;
+    formatUnit?: (unit: UnitWithSymbols) => string;
+}
+```
+
+The `formatValue` function, if provided, will be applied to customize the formatting of the numeric value of the measure in the resulting string. The `formatUnit`, if provided, will be passed the unit of the measure in order to customize how that is formatted. When calling the `Measure.in` method, the `formatUnit` function will only be used if the unit being used to express the measure has no symbol.
 
 *Examples:*
 
@@ -343,10 +354,17 @@ const distance = Measure.of(5, kilometers);
 console.log(distance.toString()); // 5000 m
 console.log(distance.in(kilometers)); // 5 km
 console.log(kilometers.in(kilometers)); // 1 km
+console.log(distance.toString({
+   formatValue: x => x.toExponential(),
+   formatUnit: () => "meters",
+})); // 5e+3 meters
 
 const force = Measure.of(30, newtons);
 console.log(force.toString()); // 30 kg * m * s^-2
 console.log(force.in(newtons)); // 30 N
+console.log(force.in(newtons, {
+   formatValue: x => x.toPrecision(5),
+})); // 30.000 N
 ```
 
 ### Unsafe Mappings

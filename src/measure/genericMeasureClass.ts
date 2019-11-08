@@ -1,6 +1,6 @@
 import { getExponentValue } from "../exponent/exponentValueArithmetic";
-import { formatUnit } from "./format";
-import { GenericMeasure, NumericOperations } from "./genericMeasure";
+import { defaultFormatUnit } from "./format";
+import { GenericMeasure, MeasureFormatter, NumericOperations } from "./genericMeasure";
 import {
     AllowedExponents,
     DivideUnits,
@@ -20,6 +20,20 @@ type GenericMeasureConstructor<N> = new <U extends Unit>(
 ) => GenericMeasure<N, U>;
 
 export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasureConstructor<N> {
+    function getFormatter(formatter: MeasureFormatter<N> | undefined): Required<MeasureFormatter<N>> {
+        if (formatter === undefined) {
+            return {
+                formatValue: num.format,
+                formatUnit: defaultFormatUnit,
+            };
+        } else {
+            return {
+                formatValue: formatter.formatValue || num.format,
+                formatUnit: formatter.formatUnit || defaultFormatUnit,
+            };
+        }
+    }
+
     class Measure<U extends Unit> implements GenericMeasure<N, U> {
         public readonly symbol: string | undefined;
         public squared!: "2" extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, "2">> : never;
@@ -119,15 +133,17 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
 
         // Formatting
 
-        public toString(): string {
-            return `${num.format(this.value)} ${formatUnit(this.unit)}`.trimRight();
+        public toString(formatter?: MeasureFormatter<N>): string {
+            const { formatValue, formatUnit } = getFormatter(formatter);
+            return `${formatValue(this.value)} ${formatUnit(this.unit)}`.trimRight();
         }
 
-        public in(unit: GenericMeasure<N, U>): string {
+        public in(unit: GenericMeasure<N, U>, formatter?: MeasureFormatter<N>): string {
             if (unit.symbol === undefined) {
-                return this.toString();
+                return this.toString(formatter);
             }
-            const value = num.format(num.div(this.value, unit.value));
+            const { formatValue } = getFormatter(formatter);
+            const value = formatValue(num.div(this.value, unit.value));
             return `${value} ${unit.symbol}`;
         }
 

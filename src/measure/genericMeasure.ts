@@ -9,6 +9,11 @@ import {
     UnitWithSymbols,
 } from "./unitTypeArithmetic";
 
+export interface MeasureFormatter<N> {
+    formatValue?: (value: N) => string;
+    formatUnit?: (unit: UnitWithSymbols) => string;
+}
+
 /** The set of numeric operations required to fully represent a `GenericMeasure` for a given numeric type */
 export interface NumericOperations<N> {
     /** Returns the multiplicative identity for numbers of type N */
@@ -189,7 +194,7 @@ export interface GenericMeasure<N, U extends Unit> {
      * Formats the value and the unit.
      * @returns a string representation of measure
      */
-    toString(): string;
+    toString(formatter?: MeasureFormatter<N>): string;
 
     /**
      * Formats this measure as a product of another unit. If the given unit has a symbol, this will format as a number
@@ -197,7 +202,7 @@ export interface GenericMeasure<N, U extends Unit> {
      * @param a unit to be used to represent this measure
      * @returns a string representation of measure
      */
-    in(unit: GenericMeasure<N, U>): string;
+    in(unit: GenericMeasure<N, U>, formatter?: MeasureFormatter<N>): string;
 
     /**
      * Adds a symbol to this measure.
