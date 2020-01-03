@@ -61,7 +61,7 @@ export type NthRootUnit<U extends RadicandUnit<N>, N extends NonZeroExponent> = 
     : { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> };
 
 /** A type that is assignable from all units whose Nth root does not produce an error. */
-export type RadicandUnit<N extends Exponent> = {
+export type RadicandUnit<N extends NonZeroExponent> = {
     [dimension: string]: ProductOf<N> | undefined;
 };
 

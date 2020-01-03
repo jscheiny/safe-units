@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.1
+
+- Fixed an issue where the taking roots would allow zero as the exponent parameter.
+
 ## v1.1.0
 
 - Added a custom formatter argument that can be passed into the `Measure.in` and `Measure.toString` methods.
