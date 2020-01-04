@@ -1,10 +1,10 @@
 import { AddExponents } from "./generated/addition";
 import { DivideExponents } from "./generated/division";
-import { Exponent, MaxExponent } from "./generated/exponent";
+import { Exponent, MinExponent } from "./generated/exponent";
 import { MultiplyExponents } from "./generated/multiplication";
 
 export type PositiveExponent = Exclude<NonNegativeExponent, "0">;
-type NonNegativeExponent = AddExponents<Exponent, MaxExponent>;
+type NonNegativeExponent = SubtractExponents<Exponent, MinExponent>;
 
 export type SubtractExponents<L extends Exponent, R extends Exponent> = AddExponents<L, Negative<R>>;
 
