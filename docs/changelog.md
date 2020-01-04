@@ -2,7 +2,7 @@
 
 ## v1.1.1
 
-- Fixed an issue where the taking roots would allow zero as the exponent parameter.
+- Fixed an issue where the taking roots would allow non-positive values as the exponent parameter.
 
 ## v1.1.0
 
