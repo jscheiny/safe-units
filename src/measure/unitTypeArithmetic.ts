@@ -5,7 +5,7 @@ import {
     Exponent,
     MultiplicandOf,
     MultiplyExponents,
-    NonZeroExponent,
+    PositiveExponent,
     ProductOf,
     SubtractExponents,
     SubtrahendOf,
@@ -56,12 +56,12 @@ type NonAllowedExponents<U extends Unit> = {
 // Roots
 
 /** Returns the nth root of a unit. This is the inverse scalar multiple of the dimension vector. */
-export type NthRootUnit<U extends RadicandUnit<N>, N extends NonZeroExponent> = 1 extends N
+export type NthRootUnit<U extends RadicandUnit<N>, N extends PositiveExponent> = 1 extends N
     ? U
     : { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> };
 
 /** A type that is assignable from all units whose Nth root does not produce an error. */
-export type RadicandUnit<N extends NonZeroExponent> = {
+export type RadicandUnit<N extends PositiveExponent> = {
     [dimension: string]: ProductOf<N> | undefined;
 };
 
