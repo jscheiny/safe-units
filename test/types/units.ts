@@ -47,6 +47,8 @@ type AllowedSmallExponents = IsSame<"-1" | "0" | "1", AllowedExponents<{ a: "3";
 
 type SquareRooting = NthRootUnit<{ a: "4"; b: "-2" }, "2">; // $ExpectType { a: "2"; b: "-1"; }
 type CubeRooting = NthRootUnit<{ a: "3"; b: "-3" }, "3">; // $ExpectType { a: "1"; b: "-1"; }
+type NthRootRejectsZero = NthRootUnit<{ a: "0" }, "0">; // $ExpectError
+type NthRootRejectsNegative = NthRootUnit<{ a: "1" }, "-1">; // $ExpectError
 
 // RadicandUnit
 
@@ -54,6 +56,7 @@ type RadicandAcceptsPerfectSquares = Extends<{ a: "2"; b: "-4"; c: "0" }, Radica
 type RadicandRejectsNonPerfectSquares = Extends<{ a: "2"; b: "1" }, RadicandUnit<"2">>; // $ExpectType false
 type RadicandAcceptsPerfectCubes = Extends<{ a: "3"; b: "-3" }, RadicandUnit<"3">>; // $ExpectType true
 type RadicandRejectsNonPerfectCubes = Extends<{ a: "3"; b: "2" }, RadicandUnit<"3">>; // $ExpectType false
+type RadicandRejectsZero = RadicandUnit<"0">; // $ExpectError
 
 // IsSingleStringLiteral
 

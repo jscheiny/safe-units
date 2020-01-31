@@ -1,4 +1,4 @@
-import { NonZeroExponent } from "../exponent";
+import { PositiveExponent } from "../exponent";
 import { GenericMeasure } from "./genericMeasure";
 import { NthRootUnit, RadicandUnit, Unit } from "./unitTypeArithmetic";
 import { nthRootUnit } from "./unitValueArithmetic";
@@ -14,7 +14,7 @@ export type UnaryFn<N = number> = {
 };
 
 /** A function which takes the Rth root of a measure's value and unit. */
-export type NthRootFn<R extends NonZeroExponent, N = number> = {
+export type NthRootFn<R extends PositiveExponent, N = number> = {
     <U extends RadicandUnit<R>>(x: GenericMeasure<N, U>): GenericMeasure<N, NthRootUnit<U, R>>;
 };
 
@@ -47,7 +47,7 @@ export function wrapUnaryFn<N>(fn: (x: N) => N): UnaryFn<N> {
  * @param n a compile time constant specifying which nth root the first parameter performs
  * @returns a function of measures which takes the nth root of the value and the unit.
  */
-export function wrapRootFn<N, R extends NonZeroExponent>(nthRoot: (x: N) => N, n: R): NthRootFn<R, N> {
+export function wrapRootFn<N, R extends PositiveExponent>(nthRoot: (x: N) => N, n: R): NthRootFn<R, N> {
     return x => x.unsafeMap(nthRoot, unit => nthRootUnit(unit, n));
 }
 

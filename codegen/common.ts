@@ -26,9 +26,13 @@ export interface ExponentSpec {
 export function getExponents({ minExponent, maxExponent }: CommonSpec): ExponentSpec[] {
     const exponents: ExponentSpec[] = [];
     for (let value = minExponent; value <= maxExponent; value++) {
-        exponents.push({ value, type: `"${value}"` });
+        exponents.push(getExponent(value));
     }
     return exponents;
+}
+
+export function getExponent(value: number): ExponentSpec {
+    return { value, type: `"${value}"` };
 }
 
 export function isExponent(exponent: number, { minExponent, maxExponent }: CommonSpec): boolean {
