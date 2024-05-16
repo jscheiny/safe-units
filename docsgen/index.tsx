@@ -28,7 +28,7 @@ if (!existsSync(buildDir)) {
 
 const stylesDir = join(buildDir, "styles");
 if (!existsSync(stylesDir)) {
-    mkdirSync(stylesDir);
+    mkdirSync(stylesDirx);
 }
 
 const imagesContextPath = "images";
