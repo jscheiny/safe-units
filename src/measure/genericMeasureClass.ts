@@ -39,7 +39,11 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
         public squared!: "2" extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, "2">> : never;
         public cubed!: "3" extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, "3">> : never;
 
-        constructor(public readonly value: N, public readonly unit: UnitWithSymbols<U>, symbol?: string) {
+        constructor(
+            public readonly value: N,
+            public readonly unit: UnitWithSymbols<U>,
+            symbol?: string,
+        ) {
             this.symbol = symbol;
         }
 
@@ -82,7 +86,7 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
         }
 
         public toThe<E extends AllowedExponents<U>>(power: E): GenericMeasure<N, ExponentiateUnit<U, E>> {
-            return new Measure(num.pow(this.value, getExponentValue(power)), exponentiateUnit(this.unit, power));
+            return new Measure(num.pow(this.value, getExponentValue(power)), exponentiateUnit(this.unit, power) as any);
         }
 
         public inverse(): GenericMeasure<N, ExponentiateUnit<U, "-1">> {
@@ -98,7 +102,7 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
             unitMap?: (unit: UnitWithSymbols<U>) => UnitWithSymbols<V>,
         ): GenericMeasure<N, V> {
             const newUnit = unitMap === undefined ? this.unit : unitMap(this.unit);
-            return new Measure<V>(valueMap(this.value), (newUnit as unknown) as UnitWithSymbols<V>);
+            return new Measure<V>(valueMap(this.value), newUnit as unknown as UnitWithSymbols<V>);
         }
 
         // Comparisons
@@ -156,11 +160,11 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
         }
     }
 
-    Measure.prototype.squared = function(): any {
+    Measure.prototype.squared = function (): any {
         return this.toThe("2");
     };
 
-    Measure.prototype.cubed = function(): any {
+    Measure.prototype.cubed = function (): any {
         return this.toThe("3");
     };
 

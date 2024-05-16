@@ -220,6 +220,5 @@ export interface GenericMeasure<N, U extends Unit> {
  * const metersPerSecond = meters.per(seconds);
  * type Velocity<N> = LiftMeasure<typeof metersPerSecond, N>;
  */
-export type LiftMeasure<M extends GenericMeasure<any, any>, N> = M extends GenericMeasure<any, infer U>
-    ? GenericMeasure<N, U>
-    : never;
+export type LiftMeasure<M extends GenericMeasure<any, any>, N> =
+    M extends GenericMeasure<any, infer U> ? GenericMeasure<N, U> : never;

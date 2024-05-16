@@ -30,15 +30,5 @@ export const createBaseUnits = <N>(MeasureType: GenericMeasureType<N, any>): Bas
     bits: MeasureType.dimension("memory", "b"),
 });
 
-export const {
-    meters,
-    kilograms,
-    seconds,
-    amperes,
-    kelvin,
-    moles,
-    candelas,
-    radians,
-    steradians,
-    bits,
-} = createBaseUnits(Measure);
+export const { meters, kilograms, seconds, amperes, kelvin, moles, candelas, radians, steradians, bits } =
+    createBaseUnits(Measure);

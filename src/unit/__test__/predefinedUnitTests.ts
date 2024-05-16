@@ -19,10 +19,8 @@ describe("Predefined units", () => {
                 wrappedCallback(value, name);
             } else {
                 for (const subName in value) {
-                    if (value.hasOwnProperty(subName)) {
-                        const unit = value[subName];
-                        wrappedCallback(unit, subName);
-                    }
+                    const unit = value[subName];
+                    wrappedCallback(unit, subName);
                 }
             }
         });

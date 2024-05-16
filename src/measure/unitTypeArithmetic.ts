@@ -21,9 +21,9 @@ export type SymbolAndExponent = [string, Exponent];
 // Multiplication
 
 /** Returns the product of two units. This is the sum of two dimension vectors. */
-export type MultiplyUnits<L extends Unit, R extends Unit> = CleanUnit<
-    { [Dim in keyof L | keyof R]: AddExponents<GetExponent<L, Dim>, GetExponent<R, Dim>> }
->;
+export type MultiplyUnits<L extends Unit, R extends Unit> = CleanUnit<{
+    [Dim in keyof L | keyof R]: AddExponents<CoerceExponent<GetExponent<L, Dim>>, CoerceExponent<GetExponent<R, Dim>>>;
+}>;
 
 /** A type that is assignable from all units that can be multiplied by U without producing an error. */
 export type MultiplicandUnit<U extends Unit> = Partial<{ [D in keyof U]: AddendOf<CleanExponent<U[D]>> }> & Unit;
@@ -31,9 +31,12 @@ export type MultiplicandUnit<U extends Unit> = Partial<{ [D in keyof U]: AddendO
 // Division
 
 /** Returns the quotient of two units. This is the difference of two dimension vectors. */
-export type DivideUnits<L extends Unit, R extends DivisorUnit<L>> = CleanUnit<
-    { [Dim in keyof L | keyof R]: SubtractExponents<GetExponent<L, Dim>, GetExponent<R, Dim>> }
->;
+export type DivideUnits<L extends Unit, R extends DivisorUnit<L>> = CleanUnit<{
+    [Dim in keyof L | keyof R]: SubtractExponents<
+        CoerceExponent<GetExponent<L, Dim>>,
+        CoerceExponent<GetExponent<R, Dim>>
+    >;
+}>;
 
 /** A type that is assignable from all units that U can be divided by without producing an error. */
 export type DivisorUnit<U extends Unit> = Partial<{ [D in keyof U]: SubtrahendOf<CleanExponent<U[D]>> }> & Unit;
@@ -43,14 +46,14 @@ export type DivisorUnit<U extends Unit> = Partial<{ [D in keyof U]: SubtrahendOf
 /** Returns the unit raised to a power. This is the scalar multiple of the dimension vector. */
 export type ExponentiateUnit<U extends Unit, N extends Exponent> = "0" extends N
     ? {}
-    : { [Dim in keyof U]: MultiplyExponents<GetExponent<U, Dim>, N> };
+    : { [Dim in keyof U]: MultiplyExponents<CoerceExponent<GetExponent<U, Dim>>, N> };
 
 /** Returns the union of exponents to which a given unit is allowed to be raised.  */
 export type AllowedExponents<U extends Unit> = Exclude<Exponent, NonAllowedExponents<U>> | "-1" | "0" | "1";
 
 /** Returns the union of exponents that raising and exponent to would produce an error. */
 type NonAllowedExponents<U extends Unit> = {
-    [Dim in keyof U]: undefined extends U[Dim] ? never : Exclude<Exponent, MultiplicandOf<NonNullable<U[Dim]>>>
+    [Dim in keyof U]: undefined extends U[Dim] ? never : Exclude<Exponent, MultiplicandOf<NonNullable<U[Dim]>>>;
 }[keyof U];
 
 // Roots
@@ -58,7 +61,7 @@ type NonAllowedExponents<U extends Unit> = {
 /** Returns the nth root of a unit. This is the inverse scalar multiple of the dimension vector. */
 export type NthRootUnit<U extends RadicandUnit<N>, N extends PositiveExponent> = 1 extends N
     ? U
-    : { [Dim in keyof U]: DivideExponents<GetExponent<U, Dim>, N> };
+    : { [Dim in keyof U]: DivideExponents<CoerceExponent<GetExponent<U, Dim>>, N> };
 
 /** A type that is assignable from all units whose Nth root does not produce an error. */
 export type RadicandUnit<N extends PositiveExponent> = {
@@ -82,3 +85,5 @@ type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]> exten
 type GetExponent<U extends Unit, D> = D extends keyof U ? NonNullable<U[D]> : "0";
 
 type CleanExponent<E extends undefined | Exponent> = undefined extends E ? "0" : NonNullable<E>;
+
+type CoerceExponent<E> = E extends Exponent ? E : "0";

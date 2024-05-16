@@ -14,7 +14,7 @@ export interface PageSection {
 export class PageModel {
     public static from(path: string): PageModel {
         const name = basename(path, ".md");
-        const source = readFileSync(path, "UTF8");
+        const source = readFileSync(path, "utf-8");
         const root = parser.parse(source);
         return new PageModel(name, root, getTitle(root), getSections(root));
     }
@@ -49,7 +49,7 @@ function getTitle(root: Node): string {
 }
 
 function getSections(root: Node): PageSection[] {
-    let sections: PageSection[] = [];
+    const sections: PageSection[] = [];
     walkMarkdown(root, node => {
         if (node.type === "heading" && node.level !== 1) {
             sections.push(getSection(node));
