@@ -271,11 +271,7 @@ describe("Number measures", () => {
             expectFormat(meters.per(seconds.times(kilograms)), "1 m / (kg * s)");
             expectFormat(meters.squared().per(seconds.squared().times(kilograms)), "1 m^2 / (kg * s^2)");
             expectFormat(
-                meters
-                    .cubed()
-                    .times(kilograms)
-                    .per(kilograms.cubed())
-                    .per(seconds.squared()),
+                meters.cubed().times(kilograms).per(kilograms.cubed()).per(seconds.squared()),
                 "1 m^3 / (kg^2 * s^2)",
             );
         });
@@ -291,16 +287,8 @@ describe("Number measures", () => {
         });
 
         it("should not format using symbol even if present", () => {
-            expect(
-                Measure.of(5, meters.squared())
-                    .withSymbol("m2")
-                    .toString(),
-            ).toBe("5 m^2");
-            expect(
-                Measure.dimensionless(0)
-                    .withSymbol("rad")
-                    .toString(),
-            ).toBe("0");
+            expect(Measure.of(5, meters.squared()).withSymbol("m2").toString()).toBe("5 m^2");
+            expect(Measure.dimensionless(0).withSymbol("rad").toString()).toBe("0");
         });
 
         it("should format measures as other measures with symbols", () => {

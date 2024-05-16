@@ -1,5 +1,5 @@
 import { Node } from "commonmark";
-import { highlight } from "highlight.js";
+import highlight from "highlight.js";
 import * as React from "react";
 import { createNodeId, getNodeText } from "./markdownUtils";
 import { component } from "./style";
@@ -14,7 +14,7 @@ export const Markdown: MarkdownComponent = ({ root }) => {
     switch (root.type) {
         case "document":
             return <MarkdownChildren root={root} />;
-        case "paragraph":
+        case "paragraph": {
             const children = <MarkdownChildren root={root} />;
             const grandparent = root.parent ? root.parent.parent : null;
             if (grandparent !== null && grandparent.type === "list" && grandparent.listTight) {
@@ -22,6 +22,7 @@ export const Markdown: MarkdownComponent = ({ root }) => {
             } else {
                 return <p>{children}</p>;
             }
+        }
         case "text":
             return <>{root.literal}</>;
         case "heading":
@@ -29,26 +30,27 @@ export const Markdown: MarkdownComponent = ({ root }) => {
         case "linebreak":
             return <br />;
         case "html_inline":
-            return <span dangerouslySetInnerHTML={{ __html: root.literal || "" }} />;
+            return <span dangerouslySetInnerHTML={{ __html: root.literal ?? "" }} />;
         case "html_block":
-            return <span dangerouslySetInnerHTML={{ __html: root.literal || "" }} />;
+            return <span dangerouslySetInnerHTML={{ __html: root.literal ?? "" }} />;
         case "link":
             return (
-                <Link href={root.destination || ""}>
+                <Link href={root.destination ?? ""}>
                     <MarkdownChildren root={root} />
                 </Link>
             );
         case "image":
-            return <img src={root.destination || ""} alt={getNodeText(root)} />;
+            return <img src={root.destination ?? ""} alt={getNodeText(root)} />;
         case "thematic_break":
             return <hr />;
-        case "code_block":
-            const highlightedCode = highlight("typescript", root.literal || "", true).value;
+        case "code_block": {
+            const highlightedCode = highlight.highlight(root.literal ?? "", { language: "typescript" }).value;
             return (
                 <pre>
                     <CodeBlock className="hljs typescript" dangerouslySetInnerHTML={{ __html: highlightedCode }} />
                 </pre>
             );
+        }
         case "code":
             return <CodeInline>{root.literal}</CodeInline>;
         case "softbreak":
@@ -59,9 +61,10 @@ export const Markdown: MarkdownComponent = ({ root }) => {
         case "custom_block":
             // TODO Handle this
             return null;
-        default:
+        default: {
             const tag = getTag(root.type, root);
             return React.createElement(tag, {}, <MarkdownChildren root={root} />);
+        }
     }
 };
 
