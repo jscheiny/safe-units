@@ -1,66 +1,79 @@
-import {
-    Acceleration,
-    Area,
-    GenericMeasure,
-    kilograms,
-    Length,
-    Measure,
-    meters,
-    newtons,
-    seconds,
-    Volume,
-} from "safe-units";
+import { GenericMeasure, Measure, Unit, amperes, coulombs, Length } from "safe-units";
 import { value, expectTrue } from "utils";
+import { UnitSystem } from "../src/measure/unitSystem";
+
+const Basis = {
+    length: "m",
+    mass: "kg",
+    time: "s",
+} as const;
+
+type Basis = typeof Basis;
+interface TestUnitSystem extends Basis {}
+
+const unitSystem = UnitSystem.from<TestUnitSystem>(Basis);
+
+type TestMeasure<U extends Unit<Basis>> = GenericMeasure<number, TestUnitSystem, Readonly<U>>;
 
 // Valid usages
 
-expectTrue(value(Measure.dimension("x")).hasType<GenericMeasure<number, { x: 1 }>>());
+expectTrue(value(Measure.dimension(unitSystem, "length")).hasType<TestMeasure<{ length: 1; mass: 0; time: 0 }>>());
 
-expectTrue(value(meters).hasType<GenericMeasure<number, { length: 1 }>>());
-expectTrue(value(seconds).hasType<GenericMeasure<number, { time: 1 }>>());
-expectTrue(value(newtons).hasType<GenericMeasure<number, { length: 1; mass: 1; time: -2 }>>());
+const meters = Measure.dimension(unitSystem, "length");
+expectTrue(value(meters).hasType<TestMeasure<{ length: 1; mass: 0; time: 0 }>>());
 
-const a = newtons.over(kilograms);
-expectTrue(value(a).hasType<GenericMeasure<number, { length: 1; time: -2 }>>());
-const accel: Acceleration = a;
-expectTrue(value(accel).hasType<GenericMeasure<number, { length: 1; time: -2 }>>());
+const seconds = Measure.dimension(unitSystem, "time");
+expectTrue(value(seconds).hasType<TestMeasure<{ length: 0; mass: 0; time: 1 }>>());
+
+const kilograms = Measure.dimension(unitSystem, "mass");
+const newtons = kilograms.times(meters.per(seconds.squared()));
+expectTrue(value(newtons).hasType<TestMeasure<{ length: 1; mass: 1; time: -2 }>>());
+
+const acceleration = newtons.over(kilograms);
+expectTrue(value(acceleration).hasType<TestMeasure<{ length: 1; mass: 0; time: -2 }>>());
 
 const absement = meters.times(seconds);
-expectTrue(value(absement).hasType<GenericMeasure<number, { length: 1; time: 1 }>>());
+expectTrue(value(absement).hasType<TestMeasure<{ length: 1; mass: 0; time: 1 }>>());
+
 const velocity = meters.over(seconds);
-expectTrue(value(velocity).hasType<GenericMeasure<number, { length: 1; time: -1 }>>());
+expectTrue(value(velocity).hasType<TestMeasure<{ length: 1; mass: 0; time: -1 }>>());
 
-expectTrue(value(meters.plus(meters)).hasType<GenericMeasure<number, { length: 1 }>>());
-expectTrue(value(meters.minus(meters)).hasType<GenericMeasure<number, { length: 1 }>>());
-expectTrue(value(meters.negate()).hasType<GenericMeasure<number, { length: 1 }>>());
-expectTrue(value(meters.scale(2)).hasType<GenericMeasure<number, { length: 1 }>>());
+type TestLength = TestMeasure<{ length: 1; mass: 0; time: 0 }>;
+expectTrue(value(meters.plus(meters)).hasType<TestLength>());
+expectTrue(value(meters.minus(meters)).hasType<TestLength>());
+expectTrue(value(meters.negate()).hasType<TestLength>());
+expectTrue(value(meters.scale(2)).hasType<TestLength>());
 
-expectTrue(value(velocity.squared()).hasType<GenericMeasure<number, { length: 2; time: -2 }>>());
-expectTrue(value(absement.cubed()).hasType<GenericMeasure<number, { length: 3; time: 3 }>>());
-expectTrue(value(absement.inverse()).hasType<GenericMeasure<number, { length: -1; time: -1 }>>());
+expectTrue(value(velocity.squared()).hasType<TestMeasure<{ length: 2; mass: 0; time: -2 }>>());
+expectTrue(value(absement.cubed()).hasType<TestMeasure<{ length: 3; mass: 0; time: 3 }>>());
+expectTrue(value(absement.inverse()).hasType<TestMeasure<{ length: -1; mass: 0; time: -1 }>>());
 
-expectTrue(value(volume.times(volume)).hasType<GenericMeasure<number, { length: 6 }>>());
-expectTrue(value(volume.cubed().inverse()).hasType<GenericMeasure<number, { length: -9 }>>());
+const volume = meters.cubed();
+expectTrue(value(volume.times(volume)).hasType<TestMeasure<{ length: 6; mass: 0; time: 0 }>>());
+expectTrue(value(volume.cubed().inverse()).hasType<TestMeasure<{ length: -9; mass: 0; time: 0 }>>());
 
 // Error usages
 
-declare const volume: Volume;
-declare const area: Area;
-declare const length: Length;
-
-expectTrue(value(Measure.dimension("x" as "x" | "y")).hasType<never>());
-expectTrue(value(Measure.dimension("x" as string)).hasType<never>());
+const area = meters.squared();
+const length = meters;
 
 // @ts-expect-error Area and volume have different units and cannot be added
 volume.plus(area);
+
 // @ts-expect-error Area and volume have different units and cannot be subtracted
 area.minus(volume);
 
-// TODO(jscheinerman): This should be an error but is not because of structural typing
+// @ts-expect-error Velocity cannot be assigned to type length
 length.plus(velocity);
 
-// TODO(jscheinerman): This should be an error but is not because of structural typing
+// @ts-expect-error Velocity cannot be assigned to type length
 length.valueIn(velocity);
 
-// TODO(jscheinerman): This should be an error but is not because of structural typing
-export const test: Length = velocity;
+// @ts-expect-error Velocity cannot be assigned to type length
+export const test: TestLength = velocity;
+
+// @ts-expect-error Cannot sum amperes and columbs
+Measure.sum(Measure.of(3, amperes), Measure.of(5, coulombs));
+
+// @ts-expect-error Cannot convert across unit systems
+Length.plus(length);

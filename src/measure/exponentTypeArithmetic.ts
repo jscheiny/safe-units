@@ -1,9 +1,11 @@
 export type Negative<N> = N extends number
-    ? `${N}` extends `-${infer Pos extends number}`
-        ? Pos
-        : `-${N}` extends `${infer Neg extends number}`
-          ? Neg
-          : 0
+    ? 0 extends N
+        ? 0
+        : `${N}` extends `-${infer Pos extends number}`
+          ? Pos
+          : `-${N}` extends `${infer Neg extends number}`
+            ? Neg
+            : 0
     : never;
 
 export type AddIntegers<

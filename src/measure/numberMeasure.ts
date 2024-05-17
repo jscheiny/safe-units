@@ -35,5 +35,5 @@ const numericOps: NumericOperations<number> = {
     format: x => `${x}`,
 };
 
-export type Measure<U extends Unit> = GenericMeasure<number, U>;
+export type Measure<Basis, U extends Unit<Basis>> = GenericMeasure<number, Basis, U>;
 export const Measure: GenericMeasureType<number, MeasureStaticMethods> = createMeasureType(numericOps, staticMethods);

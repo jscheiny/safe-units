@@ -2,24 +2,26 @@ import { GenericMeasure } from "./genericMeasure";
 import { Unit } from "./unitTypeArithmetic";
 
 /** A function which applies a symbol prefix and multiplier to a given measure. */
-export type PrefixFn<N = number> = {
-    <U extends Unit>(measure: GenericMeasure<N, U>): GenericMeasure<N, U>;
-};
+export type PrefixFn<N = number> = <Basis, U extends Unit<Basis>>(
+    measure: GenericMeasure<N, Basis, U>,
+) => GenericMeasure<N, Basis, U>;
 
 /** A function which transforms a single measure into another measure with the same unit. */
-export type UnaryFn<N = number> = {
-    <U extends Unit>(x: GenericMeasure<N, U>): GenericMeasure<N, U>;
-};
+export type UnaryFn<N = number> = <Basis, U extends Unit<Basis>>(
+    x: GenericMeasure<N, Basis, U>,
+) => GenericMeasure<N, Basis, U>;
 
 /** A function which transforms two measures with same unit into a single measure with the same unit. */
-export type BinaryFn<N = number> = {
-    <U extends Unit>(left: GenericMeasure<N, U>, right: GenericMeasure<N, U>): GenericMeasure<N, U>;
-};
+export type BinaryFn<N = number> = <Basis, U extends Unit<any>>(
+    left: GenericMeasure<N, Basis, U>,
+    right: GenericMeasure<N, Basis, U>,
+) => GenericMeasure<N, Basis, U>;
 
 /** A function which transforms one or more measure with the same unit into a single measure with the same unit. */
-export type SpreadFn<N = number> = {
-    <U extends Unit>(first: GenericMeasure<N, U>, ...rest: Array<GenericMeasure<N, U>>): GenericMeasure<N, U>;
-};
+export type SpreadFn<N = number> = <Basis, U extends Unit<Basis>>(
+    first: GenericMeasure<N, Basis, U>,
+    ...rest: Array<GenericMeasure<N, Basis, U>>
+) => GenericMeasure<N, Basis, U>;
 
 /**
  * Converts a unary function of unitless numbers into a function of measures. This assumes that the underlying

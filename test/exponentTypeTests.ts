@@ -1,7 +1,13 @@
 import { Equal, Expect } from "utils";
-import { AddIntegers, SubtractIntegers } from "../src/measure/exponentTypeArithmetic";
+import { AddIntegers, Negative, SubtractIntegers } from "../src/measure/exponentTypeArithmetic";
 
 export type TestCases = [
+    // Negation
+    Expect<Equal<Negative<1>, -1>>,
+    Expect<Equal<Negative<10>, -10>>,
+    Expect<Equal<Negative<-5>, 5>>,
+    Expect<Equal<Negative<0>, 0>>,
+
     // Addition
     Expect<Equal<AddIntegers<0, 4>, 4>>,
     Expect<Equal<AddIntegers<4, 0>, 4>>,

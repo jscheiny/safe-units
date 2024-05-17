@@ -1,17 +1,13 @@
 import { GenericMeasure, NumericOperations } from "./genericMeasure";
 import { createMeasureClass } from "./genericMeasureClass";
 import { GenericMeasureStatic, getGenericMeasureStaticMethods } from "./genericMeasureStatic";
-import { IsSingleStringLiteral } from "./typeUtils";
-import { Unit } from "./unitTypeArithmetic";
-import { dimension } from "./unitValueArithmetic";
-
-type DimensionResult<N, D extends string> =
-    true extends IsSingleStringLiteral<D> ? GenericMeasure<N, { [Dim in D]: 1 }> : never;
+import { UnitSystem } from "./unitSystem";
+import { DimensionUnit, DimensionlessUnit, Unit } from "./unitTypeArithmetic";
 
 /** The functions needed to construct a measure of a given numeric type */
 interface GenericMeasureFactory<N> {
     /** The constructor for this generic measure type, useful for doing `instanceof` checks. */
-    isMeasure(value: any): value is GenericMeasure<N, any>;
+    isMeasure(value: any): value is GenericMeasure<N, any, any>;
 
     /**
      * Creates a new dimension base unit.
@@ -19,14 +15,18 @@ interface GenericMeasureFactory<N> {
      * @param symbol the symbol of the base unit of the dimension (e.g. "m")
      * @returns A measure representing 1 base unit of the dimension (1 m)
      */
-    dimension<D extends string>(dim: D, symbol?: string): DimensionResult<N, D>;
+    dimension<Basis, Dimension extends keyof Basis>(
+        unitSystem: UnitSystem<Basis>,
+        dimension: Dimension,
+        symbol?: string,
+    ): GenericMeasure<N, Basis, DimensionUnit<Basis, Dimension>>;
 
     /**
      * Creates a dimensionless measure.
      * @param value the value of the measure
      * @returns a measure with no dimensions
      */
-    dimensionless(value: N): GenericMeasure<N, {}>;
+    dimensionless<Basis>(unitSystem: UnitSystem<Basis>, value: N): GenericMeasure<N, Basis, DimensionlessUnit<Basis>>;
 
     /**
      * Creates a measure as a multiple of another measure.
@@ -35,11 +35,14 @@ interface GenericMeasureFactory<N> {
      * @param symbol an optional unit symbol for this measure
      * @returns a measure of value number of quantities.
      */
-    of<U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string): GenericMeasure<N, U>;
+    of<Basis, U extends Unit<Basis>>(
+        value: N,
+        quantity: GenericMeasure<N, Basis, U>,
+        symbol?: string,
+    ): GenericMeasure<N, Basis, U>;
 }
 
 type GenericMeasureCommon<N> = GenericMeasureFactory<N> & GenericMeasureStatic<N>;
-type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>;
 
 /**
  * A complete measure type for a given numeric type. This consists of:
@@ -65,16 +68,21 @@ export function createMeasureType<N, S extends {} = {}>(
     num: NumericOperations<N>,
     staticMethods?: S,
 ): GenericMeasureType<N, S> {
-    const Measure = createMeasureClass(num);
+    const { createMeasure, isMeasure } = createMeasureClass(num);
 
     const common: GenericMeasureCommon<N> = {
         ...getGenericMeasureStaticMethods(),
-        isMeasure: (value): value is GenericMeasure<N, any> => value instanceof Measure,
-        dimensionless: value => new Measure(value, {}),
-        dimension: <D extends string>(dim: D, symbol?: string) =>
-            new Measure(num.one(), dimension(dim, symbol), symbol) as DimensionResult<N, D>,
-        of: <U extends Unit>(value: N, quantity: GenericMeasure<N, U>, symbol?: string) =>
-            new Measure(num.mult(value, quantity.value), quantity.unit, symbol),
+        isMeasure,
+        dimensionless: (unitSystem, value) => createMeasure(value, unitSystem.createDimensionlessUnit(), unitSystem),
+        dimension: (unitSystem, dimension, symbol) =>
+            createMeasure(
+                num.one(),
+                unitSystem.createDimensionUnit(dimension),
+                unitSystem,
+                symbol ?? unitSystem.getSymbol(dimension),
+            ),
+        of: (value, quantity, symbol) =>
+            createMeasure(num.mult(value, quantity.value), quantity.unit, quantity.unitSystem, symbol),
     };
 
     return {
