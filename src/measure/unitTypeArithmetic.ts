@@ -1,89 +1,34 @@
-import {
-    AddendOf,
-    AddExponents,
-    DivideExponents,
-    Exponent,
-    MultiplicandOf,
-    MultiplyExponents,
-    PositiveExponent,
-    ProductOf,
-    SubtractExponents,
-    SubtrahendOf,
-} from "../exponent";
+import { AddIntegers, Negative, SubtractIntegers } from "./exponentTypeArithmetic";
 
 export type Unit = {
-    [dimension: string]: Exponent | undefined;
+    [dimension: string]: number | undefined;
 };
 
 export type UnitWithSymbols<U extends Unit = Unit> = { [D in keyof U]+?: [string, NonNullable<U[D]>] };
-export type SymbolAndExponent = [string, Exponent];
+export type SymbolAndExponent = [string, number];
 
-// Multiplication
-
-/** Returns the product of two units. This is the sum of two dimension vectors. */
-export type MultiplyUnits<L extends Unit, R extends Unit> = CleanUnit<{
-    [Dim in keyof L | keyof R]: AddExponents<CoerceExponent<GetExponent<L, Dim>>, CoerceExponent<GetExponent<R, Dim>>>;
+export type MultiplyUnits<Left extends Unit, Right extends Unit> = StripZeros<{
+    [Dimension in keyof Left | keyof Right]: AddIntegers<GetExponent<Left, Dimension>, GetExponent<Right, Dimension>>;
 }>;
 
-/** A type that is assignable from all units that can be multiplied by U without producing an error. */
-export type MultiplicandUnit<U extends Unit> = Partial<{ [D in keyof U]: AddendOf<CleanExponent<U[D]>> }> & Unit;
+export type SquareUnit<U extends Unit> = MultiplyUnits<U, U>;
+export type CubeUnit<U extends Unit> = MultiplyUnits<SquareUnit<U>, U>;
 
-// Division
-
-/** Returns the quotient of two units. This is the difference of two dimension vectors. */
-export type DivideUnits<L extends Unit, R extends DivisorUnit<L>> = CleanUnit<{
-    [Dim in keyof L | keyof R]: SubtractExponents<
-        CoerceExponent<GetExponent<L, Dim>>,
-        CoerceExponent<GetExponent<R, Dim>>
+export type DivideUnits<Left extends Unit, Right extends Unit> = StripZeros<{
+    [Dimension in keyof Left | keyof Right]: SubtractIntegers<
+        GetExponent<Left, Dimension>,
+        GetExponent<Right, Dimension>
     >;
 }>;
 
-/** A type that is assignable from all units that U can be divided by without producing an error. */
-export type DivisorUnit<U extends Unit> = Partial<{ [D in keyof U]: SubtrahendOf<CleanExponent<U[D]>> }> & Unit;
+export type ReciprocalUnit<U extends Unit> = StripZeros<{
+    [Dimension in keyof U]: Negative<NonNullable<U[Dimension]>>;
+}>;
 
-// Exponentiation
+type GetExponent<U extends Unit, D> = D extends keyof U ? NonNullable<U[D]> : 0;
 
-/** Returns the unit raised to a power. This is the scalar multiple of the dimension vector. */
-export type ExponentiateUnit<U extends Unit, N extends Exponent> = "0" extends N
-    ? {}
-    : { [Dim in keyof U]: MultiplyExponents<CoerceExponent<GetExponent<U, Dim>>, N> };
+export type StripZeros<U extends Unit> = Identity<{
+    [K in keyof U as 0 extends U[K] ? never : K]: U[K];
+}>;
 
-/** Returns the union of exponents to which a given unit is allowed to be raised.  */
-export type AllowedExponents<U extends Unit> = Exclude<Exponent, NonAllowedExponents<U>> | "-1" | "0" | "1";
-
-/** Returns the union of exponents that raising and exponent to would produce an error. */
-type NonAllowedExponents<U extends Unit> = {
-    [Dim in keyof U]: undefined extends U[Dim] ? never : Exclude<Exponent, MultiplicandOf<NonNullable<U[Dim]>>>;
-}[keyof U];
-
-// Roots
-
-/** Returns the nth root of a unit. This is the inverse scalar multiple of the dimension vector. */
-export type NthRootUnit<U extends RadicandUnit<N>, N extends PositiveExponent> = 1 extends N
-    ? U
-    : { [Dim in keyof U]: DivideExponents<CoerceExponent<GetExponent<U, Dim>>, N> };
-
-/** A type that is assignable from all units whose Nth root does not produce an error. */
-export type RadicandUnit<N extends PositiveExponent> = {
-    [dimension: string]: ProductOf<N> | undefined;
-};
-
-// Utility types
-
-/** Makes a unit pretty in intellisense views.  */
-// `ExponentiateUnit<U, "1">` is a noop that seems to accomplish this but is slow to compile and we should see if
-// there's a workaround.
-type CleanUnit<U extends Unit> = ExponentiateUnit<StripZeroes<U>, "1">;
-
-/** Removes all zero exponent dimensions from a dimension vector */
-type StripZeroes<U extends Unit> = { [Dim in NonZeroKeys<U>]: U[Dim] };
-
-/** Gets the union of all dimensions of a unit with non zero or null exponents */
-type NonZeroKeys<U extends Unit> = { [Dim in keyof U]: NonNullable<U[Dim]> extends "0" ? never : Dim }[keyof U];
-
-/** Get the exponent at a given dimension of a unit, or 0 if that dimension is undefined */
-type GetExponent<U extends Unit, D> = D extends keyof U ? NonNullable<U[D]> : "0";
-
-type CleanExponent<E extends undefined | Exponent> = undefined extends E ? "0" : NonNullable<E>;
-
-type CoerceExponent<E> = E extends Exponent ? E : "0";
+type Identity<U extends Unit> = { [K in keyof U]: U[K] };

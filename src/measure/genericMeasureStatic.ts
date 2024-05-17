@@ -1,14 +1,6 @@
 import { GenericMeasure } from "./genericMeasure";
 import { BinaryFn, PrefixFn, SpreadFn } from "./genericMeasureUtils";
-import {
-    AllowedExponents,
-    DivideUnits,
-    DivisorUnit,
-    ExponentiateUnit,
-    MultiplicandUnit,
-    MultiplyUnits,
-    Unit,
-} from "./unitTypeArithmetic";
+import { DivideUnits, MultiplyUnits, Unit } from "./unitTypeArithmetic";
 
 export interface GenericMeasureStatic<N> {
     /** Sums a list of one or more measures, all of the same unit. */
@@ -27,22 +19,16 @@ export interface GenericMeasureStatic<N> {
     subtract: BinaryFn<N>;
 
     /** Static version of `left.times(right)` */
-    multiply<L extends Unit, R extends MultiplicandUnit<L>>(
-        left: GenericMeasure<N, L>,
-        right: GenericMeasure<N, R>,
-    ): GenericMeasure<N, MultiplyUnits<L, R>>;
+    multiply<Left extends Unit, Right extends Unit>(
+        left: GenericMeasure<N, Left>,
+        right: GenericMeasure<N, Right>,
+    ): GenericMeasure<N, MultiplyUnits<Left, Right>>;
 
     /** Static version of `left.div(right)` */
-    divide<L extends Unit, R extends DivisorUnit<L>>(
-        left: GenericMeasure<N, L>,
-        right: GenericMeasure<N, R>,
-    ): GenericMeasure<N, DivideUnits<L, R>>;
-
-    /** Static version of `value.toThe(exp)` */
-    pow<U extends Unit, E extends AllowedExponents<U>>(
-        value: GenericMeasure<N, U>,
-        exp: E,
-    ): GenericMeasure<N, ExponentiateUnit<U, E>>;
+    divide<Left extends Unit, Right extends Unit>(
+        left: GenericMeasure<N, Left>,
+        right: GenericMeasure<N, Right>,
+    ): GenericMeasure<N, DivideUnits<Left, Right>>;
 
     /**
      * Creates a function that takes a measure and applies a symbol to its prefix and scales it by a given multiplier.
@@ -61,7 +47,6 @@ export const getGenericMeasureStaticMethods = <N>(): GenericMeasureStatic<N> => 
     subtract: (left, right) => left.minus(right),
     multiply: (left, right) => left.times(right),
     divide: (left, right) => left.over(right),
-    pow: (value, exp) => value.toThe(exp),
     prefix: (prefix, multiplier) => {
         return measure => {
             const { symbol } = measure;
