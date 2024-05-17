@@ -194,6 +194,14 @@ export interface GenericMeasure<N, U extends Unit> {
     in(unit: GenericMeasure<N, U>, formatter?: MeasureFormatter<N>): string;
 
     /**
+     * Returns the value of this measure as a product of another unit. This can be used to quickly convert a measure to
+     * that unit and extract its underlying value.
+     * @param unit a measure of the same unit to convert this measure into
+     * @returns the numeric value of this unit expressed in the given unit
+     */
+    valueIn(unit: GenericMeasure<N, U>): N;
+
+    /**
      * Adds a symbol to this measure.
      * @param symbol the symbol of the unit represented by this measure
      */

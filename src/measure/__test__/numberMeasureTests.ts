@@ -287,6 +287,12 @@ describe("Number measures", () => {
             expect(Measure.of(1000, meters).in(kilometers)).toBe("1000 m");
         });
 
+        it("should get value in another unit", () => {
+            const kilometers = Measure.of(1000, meters);
+            expect(Measure.of(2000, meters).valueIn(kilometers)).toBe(2);
+            expect(Measure.of(500, meters).valueIn(kilometers)).toBe(0.5);
+        });
+
         it("should use base unit symbols to format when available", () => {
             const m = Measure.dimension("test-length", "meter");
             const s = Measure.dimension("test-time", "second");

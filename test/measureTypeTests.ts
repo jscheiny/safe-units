@@ -58,3 +58,9 @@ area.minus(volume);
 
 // TODO(jscheinerman): This should be an error but is not because of structural typing
 length.plus(velocity);
+
+// TODO(jscheinerman): This should be an error but is not because of structural typing
+length.valueIn(velocity);
+
+// TODO(jscheinerman): This should be an error but is not because of structural typing
+export const test: Length = velocity;
