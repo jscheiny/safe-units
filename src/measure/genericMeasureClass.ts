@@ -1,23 +1,19 @@
 import { defaultFormatUnit } from "./format";
 import { GenericMeasure, MeasureFormatter, NumericOperations } from "./genericMeasure";
-import {
-    DivideUnits,
-    MultiplyUnits,
-    ReciprocalUnit,
-    SquareUnit,
-    Unit,
-    CubeUnit,
-    UnitWithSymbols,
-} from "./unitTypeArithmetic";
-import { divideUnits, multiplyUnits, reciprocalUnit } from "./unitValueArithmetic";
+import { UnitSystem } from "./unitSystem";
+import { DivideUnits, MultiplyUnits, ReciprocalUnit, SquareUnit, Unit, CubeUnit } from "./unitTypeArithmetic";
 
-type GenericMeasureConstructor<N> = new <U extends Unit>(
-    value: N,
-    unit: UnitWithSymbols<U>,
-    symbol?: string,
-) => GenericMeasure<N, U>;
+interface GenericMeasureClass<N> {
+    createMeasure: <Basis, U extends Unit<Basis>>(
+        value: N,
+        unit: U,
+        unitSystem: UnitSystem<Basis>,
+        symbol?: string,
+    ) => GenericMeasure<N, Basis, U>;
+    isMeasure: (value: unknown) => value is GenericMeasure<N, any, any>;
+}
 
-export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasureConstructor<N> {
+export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasureClass<N> {
     function getFormatter(formatter: MeasureFormatter<N> | undefined): Required<MeasureFormatter<N>> {
         if (formatter === undefined) {
             return {
@@ -32,102 +28,115 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
         }
     }
 
-    class Measure<U extends Unit> implements GenericMeasure<N, U> {
-        public readonly symbol: string | undefined;
-
+    class Measure<Basis, U extends Unit<Basis>> implements GenericMeasure<N, Basis, U> {
         constructor(
             public readonly value: N,
-            public readonly unit: UnitWithSymbols<U>,
-            symbol?: string,
-        ) {
-            this.symbol = symbol;
-        }
+            public readonly unit: U,
+            public readonly unitSystem: UnitSystem<Basis>,
+            public readonly symbol?: string,
+        ) {}
 
         // Arithmetic
 
-        public plus(other: GenericMeasure<N, U>): GenericMeasure<N, U> {
-            return new Measure(num.add(this.value, other.value), this.unit);
+        public plus(other: GenericMeasure<N, Basis, U>): GenericMeasure<N, Basis, U> {
+            return new Measure(num.add(this.value, other.value), this.unit, this.unitSystem);
         }
 
-        public minus(other: GenericMeasure<N, U>): GenericMeasure<N, U> {
-            return new Measure(num.sub(this.value, other.value), this.unit);
+        public minus(other: GenericMeasure<N, Basis, U>): GenericMeasure<N, Basis, U> {
+            return new Measure(num.sub(this.value, other.value), this.unit, this.unitSystem);
         }
 
-        public negate(): GenericMeasure<N, U> {
-            return new Measure(num.neg(this.value), this.unit);
+        public negate(): GenericMeasure<N, Basis, U> {
+            return new Measure(num.neg(this.value), this.unit, this.unitSystem);
         }
 
-        public scale(value: N): GenericMeasure<N, U> {
-            return new Measure(num.mult(this.value, value), this.unit);
+        public scale(value: N): GenericMeasure<N, Basis, U> {
+            return new Measure(num.mult(this.value, value), this.unit, this.unitSystem);
         }
 
-        public times<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, MultiplyUnits<U, V>> {
-            return new Measure(num.mult(this.value, other.value), multiplyUnits(this.unit, other.unit));
+        public times<V extends Unit<Basis>>(
+            other: GenericMeasure<N, Basis, V>,
+        ): GenericMeasure<N, Basis, MultiplyUnits<Basis, U, V>> {
+            return new Measure(
+                num.mult(this.value, other.value),
+                this.unitSystem.multiply(this.unit, other.unit),
+                this.unitSystem,
+            );
         }
 
-        public over<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>> {
-            return new Measure(num.div(this.value, other.value), divideUnits(this.unit, other.unit));
+        public over<V extends Unit<Basis>>(
+            other: GenericMeasure<N, Basis, V>,
+        ): GenericMeasure<N, Basis, DivideUnits<Basis, U, V>> {
+            return new Measure(
+                num.div(this.value, other.value),
+                this.unitSystem.divide(this.unit, other.unit),
+                this.unitSystem,
+            );
         }
 
-        public per<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>> {
+        public per<V extends Unit<Basis>>(
+            other: GenericMeasure<N, Basis, V>,
+        ): GenericMeasure<N, Basis, DivideUnits<Basis, U, V>> {
             return this.over(other);
         }
 
-        public div<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>> {
+        public div<V extends Unit<Basis>>(
+            other: GenericMeasure<N, Basis, V>,
+        ): GenericMeasure<N, Basis, DivideUnits<Basis, U, V>> {
             return this.over(other);
         }
 
-        public squared(): GenericMeasure<N, SquareUnit<U>> {
-            return this.times(this as GenericMeasure<N, U>);
+        public squared(): GenericMeasure<N, Basis, SquareUnit<Basis, U>> {
+            return this.times(this as GenericMeasure<N, Basis, U>);
         }
 
-        public cubed(): GenericMeasure<N, CubeUnit<U>> {
-            return this.squared().times(this as GenericMeasure<N, U>);
+        public cubed(): GenericMeasure<N, Basis, CubeUnit<Basis, U>> {
+            return this.squared().times(this as GenericMeasure<N, Basis, U>);
         }
 
-        public inverse(): GenericMeasure<N, ReciprocalUnit<U>> {
+        public inverse(): GenericMeasure<N, Basis, ReciprocalUnit<Basis, U>> {
             return this.reciprocal();
         }
 
-        public reciprocal(): GenericMeasure<N, ReciprocalUnit<U>> {
-            return new Measure(num.reciprocal(this.value), reciprocalUnit(this.unit));
+        public reciprocal(): GenericMeasure<N, Basis, ReciprocalUnit<Basis, U>> {
+            return new Measure(num.reciprocal(this.value), this.unitSystem.reciprocal(this.unit), this.unitSystem);
         }
 
-        public unsafeMap<V extends Unit>(
+        public unsafeMap<V extends Unit<Basis>>(
             valueMap: (value: N) => N,
-            unitMap?: (unit: UnitWithSymbols<U>) => UnitWithSymbols<V>,
-        ): GenericMeasure<N, V> {
+            unitMap?: (unit: U) => V,
+        ): GenericMeasure<N, Basis, V> {
             const newUnit = unitMap?.(this.unit) ?? this.unit;
-            return new Measure<V>(valueMap(this.value), newUnit as unknown as UnitWithSymbols<V>);
+            return new Measure<Basis, V>(valueMap(this.value), newUnit as V, this.unitSystem);
         }
 
         // Comparisons
 
-        public compare(other: GenericMeasure<N, U>): number {
+        public compare(other: GenericMeasure<N, Basis, U>): number {
             return num.compare(this.value, other.value);
         }
 
-        public lt(other: GenericMeasure<N, U>): boolean {
+        public lt(other: GenericMeasure<N, Basis, U>): boolean {
             return this.compare(other) < 0;
         }
 
-        public lte(other: GenericMeasure<N, U>): boolean {
+        public lte(other: GenericMeasure<N, Basis, U>): boolean {
             return this.compare(other) <= 0;
         }
 
-        public eq(other: GenericMeasure<N, U>): boolean {
+        public eq(other: GenericMeasure<N, Basis, U>): boolean {
             return this.compare(other) === 0;
         }
 
-        public neq(other: GenericMeasure<N, U>): boolean {
+        public neq(other: GenericMeasure<N, Basis, U>): boolean {
             return this.compare(other) !== 0;
         }
 
-        public gte(other: GenericMeasure<N, U>): boolean {
+        public gte(other: GenericMeasure<N, Basis, U>): boolean {
             return this.compare(other) >= 0;
         }
 
-        public gt(other: GenericMeasure<N, U>): boolean {
+        public gt(other: GenericMeasure<N, Basis, U>): boolean {
             return this.compare(other) > 0;
         }
 
@@ -135,10 +144,10 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
 
         public toString(formatter?: MeasureFormatter<N>): string {
             const { formatValue, formatUnit } = getFormatter(formatter);
-            return `${formatValue(this.value)} ${formatUnit(this.unit)}`.trimRight();
+            return `${formatValue(this.value)} ${formatUnit(this.unit, this.unitSystem)}`.trimRight();
         }
 
-        public in(unit: GenericMeasure<N, U>, formatter?: MeasureFormatter<N>): string {
+        public in(unit: GenericMeasure<N, Basis, U>, formatter?: MeasureFormatter<N>): string {
             if (unit.symbol === undefined) {
                 return this.toString(formatter);
             }
@@ -147,18 +156,21 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
             return `${value} ${unit.symbol}`;
         }
 
-        public valueIn(unit: GenericMeasure<N, U>): N {
+        public valueIn(unit: GenericMeasure<N, Basis, U>): N {
             return num.div(this.value, unit.value);
         }
 
-        public withSymbol(symbol: string | undefined): GenericMeasure<N, U> {
-            return new Measure(this.value, this.unit, symbol);
+        public withSymbol(symbol: string | undefined): GenericMeasure<N, Basis, U> {
+            return new Measure(this.value, this.unit, this.unitSystem, symbol);
         }
 
-        public clone(): GenericMeasure<N, U> {
-            return new Measure(this.value, this.unit);
+        public clone(): GenericMeasure<N, Basis, U> {
+            return new Measure(this.value, this.unit, this.unitSystem);
         }
     }
 
-    return Measure;
+    return {
+        createMeasure: (value, unit, unitSystem, symbol) => new Measure(value, unit, unitSystem, symbol),
+        isMeasure: (value): value is GenericMeasure<N, any, any> => value instanceof Measure,
+    };
 }

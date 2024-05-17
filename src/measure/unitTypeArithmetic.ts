@@ -1,34 +1,29 @@
 import { AddIntegers, Negative, SubtractIntegers } from "./exponentTypeArithmetic";
 
-export type Unit = {
-    [dimension: string]: number | undefined;
-};
+export type Unit<Basis> = Readonly<Record<keyof Basis, number>>;
 
-export type UnitWithSymbols<U extends Unit = Unit> = { [D in keyof U]+?: [string, NonNullable<U[D]>] };
-export type SymbolAndExponent = [string, number];
+export type DimensionlessUnit<Basis> = Record<keyof Basis, 0>;
 
-export type MultiplyUnits<Left extends Unit, Right extends Unit> = StripZeros<{
-    [Dimension in keyof Left | keyof Right]: AddIntegers<GetExponent<Left, Dimension>, GetExponent<Right, Dimension>>;
+export type DimensionUnit<Basis, Dim extends keyof Basis> = Identity<{
+    [Dimension in keyof Basis]: Dim extends Dimension ? 1 : 0;
 }>;
 
-export type SquareUnit<U extends Unit> = MultiplyUnits<U, U>;
-export type CubeUnit<U extends Unit> = MultiplyUnits<SquareUnit<U>, U>;
-
-export type DivideUnits<Left extends Unit, Right extends Unit> = StripZeros<{
-    [Dimension in keyof Left | keyof Right]: SubtractIntegers<
-        GetExponent<Left, Dimension>,
-        GetExponent<Right, Dimension>
-    >;
+export type MultiplyUnits<Basis, Left extends Unit<Basis>, Right extends Unit<Basis>> = Identity<{
+    [Dimension in keyof Basis]: AddIntegers<Left[Dimension], Right[Dimension]>;
 }>;
 
-export type ReciprocalUnit<U extends Unit> = StripZeros<{
-    [Dimension in keyof U]: Negative<NonNullable<U[Dimension]>>;
+export type SquareUnit<Basis, U extends Unit<Basis>> = MultiplyUnits<Basis, U, U>;
+
+export type CubeUnit<Basis, U extends Unit<Basis>> = MultiplyUnits<Basis, SquareUnit<Basis, U>, U>;
+
+export type DivideUnits<Basis, Left extends Unit<Basis>, Right extends Unit<Basis>> = Identity<{
+    [Dimension in keyof Basis]: SubtractIntegers<Left[Dimension], Right[Dimension]>;
 }>;
 
-type GetExponent<U extends Unit, D> = D extends keyof U ? NonNullable<U[D]> : 0;
-
-export type StripZeros<U extends Unit> = Identity<{
-    [K in keyof U as 0 extends U[K] ? never : K]: U[K];
+export type ReciprocalUnit<Basis, U extends Unit<Basis>> = Identity<{
+    [Dimension in keyof Basis]: Negative<U[Dimension]>;
 }>;
 
-type Identity<U extends Unit> = { [K in keyof U]: U[K] };
+type Identity<U extends Unit<any>> = Readonly<{
+    [K in keyof U]: U[K];
+}>;
