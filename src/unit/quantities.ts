@@ -1,12 +1,13 @@
 import { GenericMeasure, LiftMeasure } from "../measure/genericMeasure";
 import { Measure } from "../measure/numberMeasure";
+import { DimensionlessUnit } from "../measure/unitTypeArithmetic";
 import * as Base from "./base";
 
 // Dimensionless
 
 /** A measure without any unit */
-export type Dimensionless<N = number> = LiftMeasure<typeof Dimensionless, N>;
-export const Dimensionless: GenericMeasure<number, {}> = Measure.dimensionless(1);
+export type Dimensionless<N = number> = GenericMeasure<N, Base.MetricSystem, DimensionlessUnit<Base.MetricSystem>>;
+export const Dimensionless: Dimensionless = Measure.dimensionless(Base.MetricSystem, 1);
 
 // Base units
 
@@ -60,11 +61,11 @@ export const Frequency = Time.inverse();
 
 /** 1 / s² */
 export type FrequencyDrift<N = number> = LiftMeasure<typeof FrequencyDrift, N>;
-export const FrequencyDrift = Time.toThe("-2");
+export const FrequencyDrift = Time.inverse().squared();
 
 /** 1 / m² */
 export type FuelEfficiency<N = number> = LiftMeasure<typeof FuelEfficiency, N>;
-export const FuelEfficiency = Length.toThe("-2");
+export const FuelEfficiency = Length.inverse().squared();
 
 /** 1 / m */
 export type Wavenumber<N = number> = LiftMeasure<typeof Wavenumber, N>;

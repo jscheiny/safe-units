@@ -2,10 +2,16 @@ import { NumericOperations } from "../genericMeasure";
 import { createMeasureType } from "../genericMeasureFactory";
 import { wrapBinaryFn, wrapReducerFn, wrapSpreadFn, wrapUnaryFn } from "../genericMeasureUtils";
 import { Measure } from "../numberMeasure";
+import { UnitSystem } from "../unitSystem";
 
 describe("Generic measures", () => {
+    const unitSystem = UnitSystem.from({
+        length: "m",
+        mass: "kg",
+    });
+
     describe("function wrappers", () => {
-        const meters = Measure.dimension("L", "m");
+        const meters = Measure.dimension(unitSystem, "length", "m");
         const add = (left: number, right: number) => left + right;
 
         it("unary wrapper", () => {
@@ -41,7 +47,7 @@ describe("Generic measures", () => {
             sub: (x, y) => x - y,
             mult: (x, y) => x * y,
             div: (x, y) => x / y,
-            pow: (x, y) => x ** y,
+            reciprocal: x => 1 / x,
             compare: (x, y) => x - y,
             format: x => `${x}`,
         };

@@ -2,7 +2,7 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "jsx": "react",
-        "outDir": "./dist",
+        "outDir": "../dist/docsgen",
         "lib": [
             "dom",
             "esnext",

@@ -1,23 +1,15 @@
 import { GenericMeasure } from "./genericMeasure";
 import { BinaryFn, PrefixFn, SpreadFn } from "./genericMeasureUtils";
-import {
-    AllowedExponents,
-    DivideUnits,
-    DivisorUnit,
-    ExponentiateUnit,
-    MultiplicandUnit,
-    MultiplyUnits,
-    Unit,
-} from "./unitTypeArithmetic";
+import { DivideUnits, MultiplyUnits, Unit } from "./unitTypeArithmetic";
 
 export interface GenericMeasureStatic<N> {
-    /** Sums a list of one or more measures, all of the same unit. */
+    // /** Sums a list of one or more measures, all of the same unit. */
     sum: SpreadFn<N>;
 
-    /** Returns the smallest of a list of one or more measures. */
+    // /** Returns the smallest of a list of one or more measures. */
     min: SpreadFn<N>;
 
-    /** Returns the largest of a list of one or more measures. */
+    // /** Returns the largest of a list of one or more measures. */
     max: SpreadFn<N>;
 
     /** Static version of `left.plus(right)` */
@@ -27,22 +19,16 @@ export interface GenericMeasureStatic<N> {
     subtract: BinaryFn<N>;
 
     /** Static version of `left.times(right)` */
-    multiply<L extends Unit, R extends MultiplicandUnit<L>>(
-        left: GenericMeasure<N, L>,
-        right: GenericMeasure<N, R>,
-    ): GenericMeasure<N, MultiplyUnits<L, R>>;
+    multiply<Basis, Left extends Unit<Basis>, Right extends Unit<Basis>>(
+        left: GenericMeasure<N, Basis, Left>,
+        right: GenericMeasure<N, Basis, Right>,
+    ): GenericMeasure<N, Basis, MultiplyUnits<Basis, Left, Right>>;
 
     /** Static version of `left.div(right)` */
-    divide<L extends Unit, R extends DivisorUnit<L>>(
-        left: GenericMeasure<N, L>,
-        right: GenericMeasure<N, R>,
-    ): GenericMeasure<N, DivideUnits<L, R>>;
-
-    /** Static version of `value.toThe(exp)` */
-    pow<U extends Unit, E extends AllowedExponents<U>>(
-        value: GenericMeasure<N, U>,
-        exp: E,
-    ): GenericMeasure<N, ExponentiateUnit<U, E>>;
+    divide<Basis, Left extends Unit<Basis>, Right extends Unit<Basis>>(
+        left: GenericMeasure<N, Basis, Left>,
+        right: GenericMeasure<N, Basis, Right>,
+    ): GenericMeasure<N, Basis, DivideUnits<Basis, Left, Right>>;
 
     /**
      * Creates a function that takes a measure and applies a symbol to its prefix and scales it by a given multiplier.
@@ -53,23 +39,32 @@ export interface GenericMeasureStatic<N> {
     prefix(prefix: string, multiplier: N): PrefixFn<N>;
 }
 
-export const getGenericMeasureStaticMethods = <N>(): GenericMeasureStatic<N> => ({
-    sum: reduce((prev, curr) => prev.plus(curr)),
-    min: reduce((min, curr) => (curr.lt(min) ? curr : min)),
-    max: reduce((max, curr) => (curr.gt(max) ? curr : max)),
-    add: (left, right) => left.plus(right),
-    subtract: (left, right) => left.minus(right),
-    multiply: (left, right) => left.times(right),
-    divide: (left, right) => left.over(right),
-    pow: (value, exp) => value.toThe(exp),
-    prefix: (prefix, multiplier) => {
-        return measure => {
-            const { symbol } = measure;
-            return measure.scale(multiplier).withSymbol(symbol && `${prefix}${symbol}`);
-        };
-    },
-});
+export const getGenericMeasureStaticMethods = <N>(): GenericMeasureStatic<N> => {
+    const add: BinaryFn<N> = (left, right) => left.plus(right);
+    const min: BinaryFn<N> = (min, curr) => (curr.lt(min) ? curr : min);
+    const max: BinaryFn<N> = (max, curr) => (curr.gt(max) ? curr : max);
+    return {
+        sum: reduce(add as any),
+        min: reduce(min as any),
+        max: reduce(max as any),
+        add,
+        subtract: (left, right) => left.minus(right),
+        multiply: (left, right) => left.times(right),
+        divide: (left, right) => left.over(right),
+        prefix: (prefix, multiplier) => {
+            return measure => {
+                const { symbol } = measure;
+                return measure.scale(multiplier).withSymbol(symbol && `${prefix}${symbol}`);
+            };
+        },
+    };
+};
 
-function reduce<N>(fn: BinaryFn<N>): SpreadFn<N> {
+export function reduce<N>(
+    fn: <Basis, U extends Unit<Basis>>(
+        left: GenericMeasure<N, Basis, U>,
+        right: GenericMeasure<N, Basis, U>,
+    ) => GenericMeasure<N, any, U>,
+): SpreadFn<N> {
     return (first, ...rest) => rest.reduce(fn, first);
 }

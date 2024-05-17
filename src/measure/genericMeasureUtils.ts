@@ -1,32 +1,27 @@
-import { PositiveExponent } from "../exponent";
 import { GenericMeasure } from "./genericMeasure";
-import { NthRootUnit, RadicandUnit, Unit } from "./unitTypeArithmetic";
-import { nthRootUnit } from "./unitValueArithmetic";
+import { Unit } from "./unitTypeArithmetic";
 
 /** A function which applies a symbol prefix and multiplier to a given measure. */
-export type PrefixFn<N = number> = {
-    <U extends Unit>(measure: GenericMeasure<N, U>): GenericMeasure<N, U>;
-};
+export type PrefixFn<N = number> = <Basis, U extends Unit<Basis>>(
+    measure: GenericMeasure<N, Basis, U>,
+) => GenericMeasure<N, Basis, U>;
 
 /** A function which transforms a single measure into another measure with the same unit. */
-export type UnaryFn<N = number> = {
-    <U extends Unit>(x: GenericMeasure<N, U>): GenericMeasure<N, U>;
-};
-
-/** A function which takes the Rth root of a measure's value and unit. */
-export type NthRootFn<R extends PositiveExponent, N = number> = {
-    <U extends RadicandUnit<R>>(x: GenericMeasure<N, U>): GenericMeasure<N, NthRootUnit<U, R>>;
-};
+export type UnaryFn<N = number> = <Basis, U extends Unit<Basis>>(
+    x: GenericMeasure<N, Basis, U>,
+) => GenericMeasure<N, Basis, U>;
 
 /** A function which transforms two measures with same unit into a single measure with the same unit. */
-export type BinaryFn<N = number> = {
-    <U extends Unit>(left: GenericMeasure<N, U>, right: GenericMeasure<N, U>): GenericMeasure<N, U>;
-};
+export type BinaryFn<N = number> = <Basis, U extends Unit<any>>(
+    left: GenericMeasure<N, Basis, U>,
+    right: GenericMeasure<N, Basis, U>,
+) => GenericMeasure<N, Basis, U>;
 
 /** A function which transforms one or more measure with the same unit into a single measure with the same unit. */
-export type SpreadFn<N = number> = {
-    <U extends Unit>(first: GenericMeasure<N, U>, ...rest: Array<GenericMeasure<N, U>>): GenericMeasure<N, U>;
-};
+export type SpreadFn<N = number> = <Basis, U extends Unit<Basis>>(
+    first: GenericMeasure<N, Basis, U>,
+    ...rest: Array<GenericMeasure<N, Basis, U>>
+) => GenericMeasure<N, Basis, U>;
 
 /**
  * Converts a unary function of unitless numbers into a function of measures. This assumes that the underlying
@@ -37,18 +32,6 @@ export type SpreadFn<N = number> = {
  */
 export function wrapUnaryFn<N>(fn: (x: N) => N): UnaryFn<N> {
     return x => x.unsafeMap(fn);
-}
-
-/**
- * Converts a function that takes the nth root of a number type (for a specific n) into a function of measures. The `n`
- * parameter must be a constant which matches the root that the function takes (e.g. 2 for square root, 3 for cube
- * root).
- * @param nthRoot a function that takes a specific root of a numeric type
- * @param n a compile time constant specifying which nth root the first parameter performs
- * @returns a function of measures which takes the nth root of the value and the unit.
- */
-export function wrapRootFn<N, R extends PositiveExponent>(nthRoot: (x: N) => N, n: R): NthRootFn<R, N> {
-    return x => x.unsafeMap(nthRoot, unit => nthRootUnit(unit, n));
 }
 
 /**

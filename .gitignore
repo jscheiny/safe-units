@@ -14,5 +14,6 @@ yarn-error.log
 ### Editors
 .vscode/
 
-### Generated code
-generated/
+*.js
+*.js.map
+*.d.ts
