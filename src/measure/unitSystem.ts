@@ -9,7 +9,7 @@ import {
 
 type UnitSystemResult<Basis> = [Basis[keyof Basis]] extends [string]
     ? UnitSystem<Basis>
-    : `Dimension ${NonStringValuedKeys<Basis>} does not have a symbol`;
+    : `Dimension '${NonStringValuedKeys<Basis>}' does not have a valid symbol`;
 
 type NonStringValuedKeys<T> = keyof {
     [K in keyof T as [T[K]] extends [string] ? never : K]: K;
@@ -30,7 +30,16 @@ export class UnitSystem<Basis> implements UnitSystem<Basis> {
      *
      * @param symbols a map from dimension to the unit symbol for the base unit of that dimension.
      * @example
-     * interface MetricSystem extends UnitBasis<"length" | "time" | "mass" | ... > {}
+     * const MetricBasis = {
+     *     length: "m",
+     *     mass: "kg",
+     *     time: "s",
+     *     // ...
+     * } as const;
+     * type MetricBasis = typeof MetricBasis;
+     * // Use an interface to type the basis so that intellisense views are simpler.
+     * interface MetricSystem extends MetricBasis {}
+     *
      * // We pass the type parameter below even though it could be inferred.
      * const MetricSystem = UnitSystem.from<MetricSystem>({
      *     length: "m",

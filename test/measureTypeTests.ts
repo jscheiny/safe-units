@@ -77,3 +77,12 @@ Measure.sum(Measure.of(3, amperes), Measure.of(5, coulombs));
 
 // @ts-expect-error Cannot convert across unit systems
 Length.plus(length);
+
+// Unit system tests
+
+const validUnitSystem = UnitSystem.from({ length: "m", mass: "kg", time: "s" } as const);
+expectTrue(value(validUnitSystem).hasType<UnitSystem<{ length: "m"; mass: "kg"; time: "s" }>>());
+
+const errorBasis = { length: "m", mass: 3, time: "kg" };
+const errorUnitSystem = UnitSystem.from(errorBasis);
+expectTrue(value(errorUnitSystem).hasType<"Dimension 'mass' does not have a valid symbol">());
