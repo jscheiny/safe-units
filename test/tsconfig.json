@@ -1,0 +1,9 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "noEmit": true,
+        "lib": ["es5"],
+        "baseUrl": ".",
+        "paths": { "safe-units": ["../src"] }
+    }
+}

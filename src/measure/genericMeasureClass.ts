@@ -1,17 +1,15 @@
-import { getExponentValue } from "../exponent/exponentValueArithmetic";
 import { defaultFormatUnit } from "./format";
 import { GenericMeasure, MeasureFormatter, NumericOperations } from "./genericMeasure";
 import {
-    AllowedExponents,
     DivideUnits,
-    DivisorUnit,
-    ExponentiateUnit,
-    MultiplicandUnit,
     MultiplyUnits,
+    ReciprocalUnit,
+    SquareUnit,
     Unit,
+    CubeUnit,
     UnitWithSymbols,
 } from "./unitTypeArithmetic";
-import { divideUnits, exponentiateUnit, multiplyUnits } from "./unitValueArithmetic";
+import { divideUnits, multiplyUnits, reciprocalUnit } from "./unitValueArithmetic";
 
 type GenericMeasureConstructor<N> = new <U extends Unit>(
     value: N,
@@ -36,8 +34,6 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
 
     class Measure<U extends Unit> implements GenericMeasure<N, U> {
         public readonly symbol: string | undefined;
-        public squared!: "2" extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, "2">> : never;
-        public cubed!: "3" extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, "3">> : never;
 
         constructor(
             public readonly value: N,
@@ -65,43 +61,43 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
             return new Measure(num.mult(this.value, value), this.unit);
         }
 
-        public times<V extends MultiplicandUnit<U>>(
-            other: GenericMeasure<N, V>,
-        ): GenericMeasure<N, MultiplyUnits<U, V>> {
-            // HACKHACK Need to cast as any to get around excessively deep type instantiation error
-            return new Measure<any>(num.mult(this.value, other.value), multiplyUnits(this.unit, other.unit)) as any;
+        public times<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, MultiplyUnits<U, V>> {
+            return new Measure(num.mult(this.value, other.value), multiplyUnits(this.unit, other.unit));
         }
 
-        public over<V extends DivisorUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>> {
-            // HACKHACK Need to cast as any to get around excessively deep type instantiation error
-            return new Measure<any>(num.div(this.value, other.value), divideUnits(this.unit, other.unit)) as any;
+        public over<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>> {
+            return new Measure(num.div(this.value, other.value), divideUnits(this.unit, other.unit));
         }
 
-        public per<V extends DivisorUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>> {
+        public per<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>> {
             return this.over(other);
         }
 
-        public div<V extends DivisorUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>> {
+        public div<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>> {
             return this.over(other);
         }
 
-        public toThe<E extends AllowedExponents<U>>(power: E): GenericMeasure<N, ExponentiateUnit<U, E>> {
-            return new Measure(num.pow(this.value, getExponentValue(power)), exponentiateUnit(this.unit, power) as any);
+        public squared(): GenericMeasure<N, SquareUnit<U>> {
+            return this.times(this as GenericMeasure<N, U>);
         }
 
-        public inverse(): GenericMeasure<N, ExponentiateUnit<U, "-1">> {
-            return this.toThe("-1");
+        public cubed(): GenericMeasure<N, CubeUnit<U>> {
+            return this.squared().times(this as GenericMeasure<N, U>);
         }
 
-        public reciprocal(): GenericMeasure<N, ExponentiateUnit<U, "-1">> {
-            return this.toThe("-1");
+        public inverse(): GenericMeasure<N, ReciprocalUnit<U>> {
+            return this.reciprocal();
+        }
+
+        public reciprocal(): GenericMeasure<N, ReciprocalUnit<U>> {
+            return new Measure(num.reciprocal(this.value), reciprocalUnit(this.unit));
         }
 
         public unsafeMap<V extends Unit>(
             valueMap: (value: N) => N,
             unitMap?: (unit: UnitWithSymbols<U>) => UnitWithSymbols<V>,
         ): GenericMeasure<N, V> {
-            const newUnit = unitMap === undefined ? this.unit : unitMap(this.unit);
+            const newUnit = unitMap?.(this.unit) ?? this.unit;
             return new Measure<V>(valueMap(this.value), newUnit as unknown as UnitWithSymbols<V>);
         }
 
@@ -159,14 +155,6 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
             return new Measure(this.value, this.unit);
         }
     }
-
-    Measure.prototype.squared = function (): any {
-        return this.toThe("2");
-    };
-
-    Measure.prototype.cubed = function (): any {
-        return this.toThe("3");
-    };
 
     return Measure;
 }

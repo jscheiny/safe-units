@@ -1,10 +1,9 @@
 import {
-    AllowedExponents,
+    CubeUnit,
     DivideUnits,
-    DivisorUnit,
-    ExponentiateUnit,
-    MultiplicandUnit,
     MultiplyUnits,
+    ReciprocalUnit,
+    SquareUnit,
     Unit,
     UnitWithSymbols,
 } from "./unitTypeArithmetic";
@@ -28,8 +27,8 @@ export interface NumericOperations<N> {
     mult(left: N, right: N): N;
     /** Returns the quotient of two numbers of type N */
     div(left: N, right: N): N;
-    /** Returns the base raised to the exponent for numbers of type N */
-    pow(base: N, exponent: number): N;
+    /** Returns the reciprocal of the given number of type N */
+    reciprocal(value: N): N;
     /** Compares two numbers returning a negative, zero, or positive value. */
     compare(left: N, right: N): number;
     /** Formats a number for display */
@@ -44,28 +43,6 @@ export interface GenericMeasure<N, U extends Unit> {
     readonly unit: UnitWithSymbols<U>;
     /** The symbol of the unit this measure represents (e.g. 0.3048 m = 1 ft) */
     readonly symbol: string | undefined;
-
-    /**
-     * If this measure can be squared, squares it. If this measure is not squarable (due to exponent limitations), then
-     * this function will have type `never`.
-     * @returns this measure multiplied by itself
-     */
-    squared: "2" extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, "2">> : never;
-
-    /**
-     * If this measure can be cubed, cubes it. If this measure cannot be cubed (due to exponent limitations), then
-     * this function will have type `never`.
-     * @returns this cube of this measure
-     */
-    cubed: "3" extends AllowedExponents<U> ? () => GenericMeasure<N, ExponentiateUnit<U, "3">> : never;
-
-    /**
-     * Raises this measure to a given power. If the result would give exponents outside of the allowable bounds, this
-     * will return `never`.
-     * @param exponent the exponent to raise this measure to
-     * @returns this exponent to the given power
-     */
-    toThe<E extends AllowedExponents<U>>(exponent: E): GenericMeasure<N, ExponentiateUnit<U, E>>;
 
     /**
      * Adds this measure to another measure with the same unit.
@@ -97,42 +74,54 @@ export interface GenericMeasure<N, U extends Unit> {
     /**
      * Multiplies this measure with another measure.
      * @param other the value to multiply
-     * @returns the product measure with a unit thats the product of the units
+     * @returns the product measure with a unit that's the product of the units
      */
-    times<V extends MultiplicandUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, MultiplyUnits<U, V>>;
+    times<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, MultiplyUnits<U, V>>;
 
     /**
      * Divides this measure by another measure.
      * @param other the divisor
-     * @returns the quotient measure with a unit thats the quotient of the units
+     * @returns the quotient measure with a unit that's the quotient of the units
      */
-    over<V extends DivisorUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>>;
+    over<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>>;
 
     /**
      * Divides this measure by another measure.
      * @param other the divisor
-     * @returns the quotient measure with a unit thats the quotient of the units
+     * @returns the quotient measure with a unit that's the quotient of the units
      */
-    per<V extends DivisorUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>>;
+    per<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>>;
 
     /**
      * Divides this measure by another measure.
      * @param other the divisor
-     * @returns the quotient measure with a unit thats the quotient of the units
+     * @returns the quotient measure with a unit that's the quotient of the units
      */
-    div<V extends DivisorUnit<U>>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>>;
+    div<V extends Unit>(other: GenericMeasure<N, V>): GenericMeasure<N, DivideUnits<U, V>>;
+
+    /**
+     * Squares the measure.
+     * @returns this measure multiplied by itself
+     */
+    squared(): GenericMeasure<N, SquareUnit<U>>;
+
+    /**
+     * Cubes the measure.
+     * @returns this cube of this measure with a unit that's the cube of the unit
+     */
+    cubed(): GenericMeasure<N, CubeUnit<U>>;
 
     /**
      * Returns the reciprocal of this measure.
      * @returns the reciprocal of this measure with a recriprocal unit
      */
-    inverse(): GenericMeasure<N, ExponentiateUnit<U, "-1">>;
+    inverse(): GenericMeasure<N, ReciprocalUnit<U>>;
 
     /**
      * Returns the reciprocal of this measure.
      * @returns the reciprocal of this measure with a recriprocal unit
      */
-    reciprocal(): GenericMeasure<N, ExponentiateUnit<U, "-1">>;
+    reciprocal(): GenericMeasure<N, ReciprocalUnit<U>>;
 
     /**
      * Maps the value and possibly unit of this measure.

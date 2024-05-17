@@ -1,31 +1,24 @@
-import { Exponent, PositiveExponent } from "../exponent";
-import { addExponents, divideExponents, multiplyExponents } from "../exponent/exponentValueArithmetic";
 import {
-    AllowedExponents,
     DivideUnits,
-    DivisorUnit,
-    ExponentiateUnit,
-    MultiplicandUnit,
     MultiplyUnits,
-    NthRootUnit,
-    RadicandUnit,
+    ReciprocalUnit,
     SymbolAndExponent,
     Unit,
     UnitWithSymbols,
 } from "./unitTypeArithmetic";
 
-export function dimension<Dim extends string>(dim: Dim, symbol?: string): UnitWithSymbols<{ [D in Dim]: "1" }> {
-    return { [dim]: [symbol || dim, "1"] } as any;
+export function dimension<Dim extends string>(dim: Dim, symbol?: string): UnitWithSymbols<{ [D in Dim]: 1 }> {
+    return { [dim]: [symbol ?? dim, 1] } as any;
 }
 
-export function multiplyUnits<L extends Unit, R extends MultiplicandUnit<L>>(
-    left: UnitWithSymbols<L>,
-    right: UnitWithSymbols<R>,
-): UnitWithSymbols<MultiplyUnits<L, R>> {
+export function multiplyUnits<Left extends Unit, Right extends Unit>(
+    left: UnitWithSymbols<Left>,
+    right: UnitWithSymbols<Right>,
+): UnitWithSymbols<MultiplyUnits<Left, Right>> {
     const result: UnitWithSymbols = {};
     for (const dimension in left) {
         const symbolAndExponent = copySymbolAndExponent(left, dimension);
-        if (symbolAndExponent !== undefined && symbolAndExponent[1] !== "0") {
+        if (symbolAndExponent !== undefined && symbolAndExponent[1] !== 0) {
             result[dimension] = symbolAndExponent;
         }
     }
@@ -37,17 +30,24 @@ export function multiplyUnits<L extends Unit, R extends MultiplicandUnit<L>>(
         const [, exponent] = symbolAndExponent;
         const resultValue: SymbolAndExponent | undefined = result[dimension];
         if (resultValue !== undefined) {
-            const newExponent = addExponents(resultValue[1], exponent);
-            if (newExponent === "0") {
+            const newExponent = resultValue[1] + exponent;
+            if (newExponent === 0) {
                 delete result[dimension];
             } else {
                 resultValue[1] = newExponent;
             }
-        } else if (exponent !== "0") {
+        } else if (exponent !== 0) {
             result[dimension] = symbolAndExponent;
         }
     }
-    return result as any;
+    return result as UnitWithSymbols<MultiplyUnits<Left, Right>>;
+}
+
+export function divideUnits<Left extends Unit, Right extends Unit>(
+    left: UnitWithSymbols<Left>,
+    right: UnitWithSymbols<Right>,
+): UnitWithSymbols<DivideUnits<Left, Right>> {
+    return multiplyUnits(left, reciprocalUnit(right)) as unknown as UnitWithSymbols<DivideUnits<Left, Right>>;
 }
 
 function copySymbolAndExponent(unit: UnitWithSymbols, dimension: string): SymbolAndExponent | undefined {
@@ -59,29 +59,7 @@ function copySymbolAndExponent(unit: UnitWithSymbols, dimension: string): Symbol
     return [symbol, exponent];
 }
 
-export function divideUnits<L extends Unit, R extends DivisorUnit<L>>(
-    left: UnitWithSymbols<L>,
-    right: UnitWithSymbols<R>,
-): UnitWithSymbols<DivideUnits<L, R>> {
-    const rightInverse = exponentiateUnit(right, "-1") as any;
-    return multiplyUnits(left, rightInverse) as any;
-}
-
-export function exponentiateUnit<U extends Unit, N extends AllowedExponents<U>>(
-    unit: UnitWithSymbols<U>,
-    power: N,
-): UnitWithSymbols<ExponentiateUnit<U, N>> {
-    return expAndRootImpl(unit, exponent => multiplyExponents(exponent, power));
-}
-
-export function nthRootUnit<U extends RadicandUnit<N>, N extends PositiveExponent>(
-    unit: UnitWithSymbols<U>,
-    root: N,
-): UnitWithSymbols<NthRootUnit<U, N>> {
-    return expAndRootImpl(unit, exponent => divideExponents(exponent, root));
-}
-
-function expAndRootImpl(unit: UnitWithSymbols, updateExponent: (exp: Exponent) => Exponent): any {
+export function reciprocalUnit<U extends Unit>(unit: UnitWithSymbols<U>): UnitWithSymbols<ReciprocalUnit<U>> {
     const result: UnitWithSymbols = {};
     for (const dimension in unit) {
         const symbolAndExponent = unit[dimension];
@@ -89,10 +67,9 @@ function expAndRootImpl(unit: UnitWithSymbols, updateExponent: (exp: Exponent) =
             continue;
         }
         const [symbol, exponent] = symbolAndExponent;
-        const newExponent = updateExponent(exponent);
-        if (newExponent !== "0") {
-            result[dimension] = [symbol, newExponent];
+        if (exponent !== 0) {
+            result[dimension] = [symbol, -exponent];
         }
     }
-    return result;
+    return result as UnitWithSymbols<ReciprocalUnit<U>>;
 }
