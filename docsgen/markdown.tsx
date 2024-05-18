@@ -171,8 +171,8 @@ function getCodeBlockText(root: Node): string {
     return lines.slice(startLine + 1, endLine).join("\n");
 }
 
-const EXAMPLE_START_REGEX = /^\/\/\s+start\s*/gi;
-const EXAMPLE_END_REGX = /^\/\/\s+end\s*/gi;
+const EXAMPLE_START_REGEX = /^\/\/\s+start\s*/i;
+const EXAMPLE_END_REGX = /^\/\/\s+end\s*/i;
 
 const CodeBlock = component("code-block", "code", {
     borderRadius: 3,
