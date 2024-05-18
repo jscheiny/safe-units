@@ -3,6 +3,8 @@ import highlight from "highlight.js";
 import * as React from "react";
 import { createNodeId, getNodeText } from "./markdownUtils";
 import { component } from "./style";
+import { join } from "path";
+import { existsSync, readFileSync } from "fs";
 
 interface MarkdownProps {
     root: Node;
@@ -44,7 +46,8 @@ export const Markdown: MarkdownComponent = ({ root }) => {
         case "thematic_break":
             return <hr />;
         case "code_block": {
-            const highlightedCode = highlight.highlight(root.literal ?? "", { language: "typescript" }).value;
+            const text = getCodeBlockText(root);
+            const highlightedCode = highlight.highlight(text, { language: "typescript" }).value;
             return (
                 <pre>
                     <CodeBlock className="hljs typescript" dangerouslySetInnerHTML={{ __html: highlightedCode }} />
@@ -139,6 +142,37 @@ function getHeadingTag(level: number): keyof JSX.IntrinsicElements {
             return "h6";
     }
 }
+
+function getCodeBlockText(root: Node): string {
+    if (root.info !== "example") {
+        return root.literal ?? "";
+    }
+
+    if (root.literal == null) {
+        throw new Error("Expected example code block to have a reference to an example file.");
+    }
+
+    const examplePath = join("docs", "examples", root.literal.trim());
+    console.log(examplePath);
+    if (!existsSync(examplePath)) {
+        throw new Error(`Example file not found: ${examplePath}`);
+    }
+
+    const contents = readFileSync(examplePath, "utf-8");
+
+    const lines = contents.split("\n");
+    const startLine = lines.findIndex(line => EXAMPLE_START_REGEX.test(line));
+    const endLine = lines.findIndex(line => EXAMPLE_END_REGX.test(line));
+
+    if (startLine === -1 || endLine === -1) {
+        return contents;
+    }
+
+    return lines.slice(startLine + 1, endLine).join("\n");
+}
+
+const EXAMPLE_START_REGEX = /^\/\/\s+start\s*/gi;
+const EXAMPLE_END_REGX = /^\/\/\s+end\s*/gi;
 
 const CodeBlock = component("code-block", "code", {
     borderRadius: 3,
