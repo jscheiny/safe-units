@@ -4,19 +4,8 @@
 
 Safe Units is a type safe library for using units of measurement in TypeScript. Check it out on [github](https://github.com/jscheiny/safe-units). Safe Units provides an implementation of an SI based unit system but is flexible enough to allow users to create their own unit systems which can be independent or can interoperate with the built-in units. Users can also make unit systems for any numeric type they'd like not just the JavaScript `number` type. This library requires TypeScript 3.2 or higher.
 
-```typescript
-import { Length, Measure, meters, seconds, Time, Velocity } from "safe-units";
-
-const length: Length = Measure.of(30, meters);
-const time: Time = Measure.of(15, seconds);
-const velocity: Velocity = length.over(time);
-
-console.log(length.toString());   // 30 m
-console.log(time.toString());     // 15 s
-console.log(velocity.toString()); // 2 m * s^-1
-
-const error: Velocity = length.times(time);
-// ERROR: A measure of m*s isn't assignable to a measure of m/s.
+```example
+intro.ts
 ```
 
 **Features include:**
