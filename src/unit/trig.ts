@@ -59,7 +59,7 @@ export function atan2(y: Length, x: Length): PlaneAngle {
 type Dimensionless = GenericMeasure<number, SIUnitSystem, DimensionlessUnit<SIUnitSystem>>;
 
 function wrapTrigFn(f: (x: number) => number): (angle: PlaneAngle) => Dimensionless {
-    return angle => Measure.dimensionless(MetricSystem, f(angle.value));
+    return angle => Measure.dimensionless(SIUnitSystem, f(angle.value));
 }
 
 function wrapInverseTrigFn(f: (x: number) => number): (angle: Dimensionless) => PlaneAngle {
