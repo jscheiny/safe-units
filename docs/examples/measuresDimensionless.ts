@@ -1,7 +1,7 @@
-import { Measure, MetricSystem, meters } from "safe-units";
+import { Measure, SIUnitSystem, meters } from "safe-units";
 
 // START
-const scalar = Measure.dimensionless(MetricSystem, 2);
+const scalar = Measure.dimensionless(SIUnitSystem, 2);
 const distance = Measure.of(20, meters);
 const doubled = distance.times(scalar); // 40 m
 // END

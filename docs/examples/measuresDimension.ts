@@ -1,9 +1,9 @@
-import { Measure, MetricSystem } from "safe-units";
+import { Measure, SIUnitSystem } from "safe-units";
 
 // START
-const meter = Measure.dimension(MetricSystem, "length");
+const meter = Measure.dimension(SIUnitSystem, "length");
 console.log(meter); // 1 m
 
-const second = Measure.dimension(MetricSystem, "time");
+const second = Measure.dimension(SIUnitSystem, "time");
 console.log(second); // 1 s
 // END
