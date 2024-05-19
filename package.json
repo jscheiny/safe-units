@@ -40,7 +40,7 @@
         "test:types": "tsc -p test",
         "test": "npm-run-all -p test:src test:types",
         "prepack": "yarn clean && yarn build",
-        "verify": "npm-run-all -s build lint test docs"
+        "verify": "npm-run-all -s build test docs lint"
     },
     "devDependencies": {
         "@eslint/js": "^9.2.0",
