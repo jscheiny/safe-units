@@ -1,5 +1,4 @@
-import { DimensionUnit } from "../measure";
-import { GenericMeasure } from "../measure/genericMeasure";
+import { GenericMeasureType } from "../measure";
 import { Measure } from "../measure/numberMeasure";
 import { UnitSystem } from "../measure/unitSystem";
 
@@ -22,19 +21,18 @@ export interface MetricSystem extends MetricSystemBasis {}
 
 export const MetricSystem = UnitSystem.from<MetricSystem>(MetricSystemBasis);
 
-type MetricDimension<Dimension extends keyof MetricSystem> = GenericMeasure<
-    number,
-    MetricSystem,
-    DimensionUnit<MetricSystem, Dimension>
->;
+export const createSIBaseUnits = <N>(measure: GenericMeasureType<N, any>) => ({
+    meters: measure.dimension(MetricSystem, "length"),
+    kilograms: measure.dimension(MetricSystem, "mass"),
+    seconds: measure.dimension(MetricSystem, "time"),
+    amperes: measure.dimension(MetricSystem, "current"),
+    kelvin: measure.dimension(MetricSystem, "temperature"),
+    moles: measure.dimension(MetricSystem, "substance"),
+    candelas: measure.dimension(MetricSystem, "intensity"),
+    radians: measure.dimension(MetricSystem, "planeAngle"),
+    steradians: measure.dimension(MetricSystem, "solidAngle"),
+    bits: measure.dimension(MetricSystem, "memory"),
+});
 
-export const meters: MetricDimension<"length"> = Measure.dimension(MetricSystem, "length");
-export const kilograms: MetricDimension<"mass"> = Measure.dimension(MetricSystem, "mass");
-export const seconds: MetricDimension<"time"> = Measure.dimension(MetricSystem, "time");
-export const amperes: MetricDimension<"current"> = Measure.dimension(MetricSystem, "current");
-export const kelvin: MetricDimension<"temperature"> = Measure.dimension(MetricSystem, "temperature");
-export const moles: MetricDimension<"substance"> = Measure.dimension(MetricSystem, "substance");
-export const candelas: MetricDimension<"intensity"> = Measure.dimension(MetricSystem, "intensity");
-export const radians: MetricDimension<"planeAngle"> = Measure.dimension(MetricSystem, "planeAngle");
-export const steradians: MetricDimension<"solidAngle"> = Measure.dimension(MetricSystem, "solidAngle");
-export const bits: MetricDimension<"memory"> = Measure.dimension(MetricSystem, "memory");
+export const { meters, kilograms, seconds, amperes, kelvin, moles, candelas, radians, steradians, bits } =
+    createSIBaseUnits(Measure);

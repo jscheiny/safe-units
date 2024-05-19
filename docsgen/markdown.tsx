@@ -153,7 +153,6 @@ function getCodeBlockText(root: Node): string {
     }
 
     const examplePath = join("docs", "examples", root.literal.trim());
-    console.log(examplePath);
     if (!existsSync(examplePath)) {
         throw new Error(`Example file not found: ${examplePath}`);
     }

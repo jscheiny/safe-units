@@ -13,5 +13,5 @@ console.log(velocity.toString()); // 2 m * s^-1
 const error: Velocity = length.times(time);
 // END
 
-// Ensure that error is used
+// Ensure that variables are used
 console.log(error);
