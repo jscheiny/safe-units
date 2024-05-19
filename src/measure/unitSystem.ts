@@ -30,18 +30,18 @@ export class UnitSystem<Basis> implements UnitSystem<Basis> {
      *
      * @param symbols a map from dimension to the unit symbol for the base unit of that dimension.
      * @example
-     * const MetricBasis = {
+     * const Basis = {
      *     length: "m",
      *     mass: "kg",
      *     time: "s",
      *     // ...
      * } as const;
-     * type MetricBasis = typeof MetricBasis;
+     * type Basis = typeof Basis;
      * // Use an interface to type the basis so that intellisense views are simpler.
-     * interface MetricSystem extends MetricBasis {}
+     * interface ExampleUnitSystem extends Basis {}
      *
      * // We pass the type parameter below even though it could be inferred.
-     * const MetricSystem = UnitSystem.from<MetricSystem>({
+     * const ExampleUnitSystem = UnitSystem.from<ExampleUnitSystem>({
      *     length: "m",
      *     mass: "kg",
      *     time: "s",
@@ -81,6 +81,7 @@ export class UnitSystem<Basis> implements UnitSystem<Basis> {
         return this.createUnit(dim => (dim === dimension ? 1 : 0)) as DimensionUnit<Basis, Dimension>;
     }
 
+    /** @returns a unit that is the product of the two input units */
     public multiply<Left extends Unit<Basis>, Right extends Unit<Basis>>(
         left: Left,
         right: Right,
@@ -88,6 +89,7 @@ export class UnitSystem<Basis> implements UnitSystem<Basis> {
         return this.createUnit(dimension => left[dimension] + right[dimension]) as MultiplyUnits<Basis, Left, Right>;
     }
 
+    /** @returns a unit that is the quotient of the two input units */
     public divide<Left extends Unit<Basis>, Right extends Unit<Basis>>(
         left: Left,
         right: Right,
@@ -95,19 +97,21 @@ export class UnitSystem<Basis> implements UnitSystem<Basis> {
         return this.createUnit(dimension => left[dimension] - right[dimension]) as DivideUnits<Basis, Left, Right>;
     }
 
+    /** @returns a unit that is the reciprical of the input unit */
     public reciprocal<U extends Unit<Basis>>(unit: U): ReciprocalUnit<Basis, U> {
         return this.createUnit(dimension => {
             const exponent = unit[dimension];
             return exponent === 0 ? 0 : -exponent;
         }) as ReciprocalUnit<Basis, U>;
     }
+
     /**
      * Creates a unit by mapping each dimension of the unit system to a given exponent defined by a mapping function.
      *
      * @param getExponent a function which maps a given dimension of the unit system to the exponent of the resulting
      * unit.
      */
-    public createUnit(getExponent: (dimension: keyof Basis) => number): Unit<Basis> {
+    private createUnit(getExponent: (dimension: keyof Basis) => number): Unit<Basis> {
         const partial: Partial<Unit<Basis>> = {};
 
         for (const dimension of this.dimensions) {
