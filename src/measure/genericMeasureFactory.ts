@@ -71,7 +71,7 @@ export function createMeasureType<N, S extends {} = {}>(
     const { createMeasure, isMeasure } = createMeasureClass(num);
 
     const common: GenericMeasureCommon<N> = {
-        ...getGenericMeasureStaticMethods(),
+        ...getGenericMeasureStaticMethods(num),
         isMeasure,
         dimensionless: (unitSystem, value) => createMeasure(value, unitSystem.createDimensionlessUnit(), unitSystem),
         dimension: (unitSystem, dimension, symbol) =>

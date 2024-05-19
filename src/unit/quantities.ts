@@ -1,57 +1,69 @@
 import { GenericMeasure, LiftMeasure } from "../measure/genericMeasure";
 import { Measure } from "../measure/numberMeasure";
 import { DimensionlessUnit } from "../measure/unitTypeArithmetic";
-import * as Base from "./base";
+import {
+    amperes,
+    bits,
+    candelas,
+    kelvin,
+    kilograms,
+    meters,
+    moles,
+    radians,
+    seconds,
+    SIUnitSystem,
+    steradians,
+} from "./base";
 
 // Dimensionless
 
 /** A measure without any unit */
-export type Dimensionless<N = number> = GenericMeasure<N, Base.MetricSystem, DimensionlessUnit<Base.MetricSystem>>;
-export const Dimensionless: Dimensionless = Measure.dimensionless(Base.MetricSystem, 1);
+export type Dimensionless<N = number> = GenericMeasure<N, SIUnitSystem, DimensionlessUnit<SIUnitSystem>>;
+export const Dimensionless: Dimensionless = Measure.dimensionless(SIUnitSystem, 1);
 
 // Base units
 
 /** meters */
-export type Length<N = number> = LiftMeasure<typeof Base.meters, N>;
-export const Length: Length = Base.meters;
+export type Length<N = number> = LiftMeasure<typeof meters, N>;
+export const Length: Length = meters;
 
 /** kilograms */
-export type Mass<N = number> = LiftMeasure<typeof Base.kilograms, N>;
-export const Mass: Mass = Base.kilograms;
+export type Mass<N = number> = LiftMeasure<typeof kilograms, N>;
+export const Mass: Mass = kilograms;
 
 /** seconds */
-export type Time<N = number> = LiftMeasure<typeof Base.seconds, N>;
-export const Time: Time = Base.seconds;
+export type Time<N = number> = LiftMeasure<typeof seconds, N>;
+export const Time: Time = seconds;
 
 /** Amperes */
-export type ElectricCurrent<N = number> = LiftMeasure<typeof Base.amperes, N>;
-export const ElectricCurrent: ElectricCurrent = Base.amperes;
+export type ElectricCurrent<N = number> = LiftMeasure<typeof amperes, N>;
+export const ElectricCurrent: ElectricCurrent = amperes;
 
 /** Kelvin */
-export type Temperature<N = number> = LiftMeasure<typeof Base.kelvin, N>;
-export const Temperature: Temperature = Base.kelvin;
+export type Temperature<N = number> = LiftMeasure<typeof kelvin, N>;
+export const Temperature: Temperature = kelvin;
 
 /** moles */
-export type AmountOfSubstance<N = number> = LiftMeasure<typeof Base.moles, N>;
-export const AmountOfSubstance: AmountOfSubstance = Base.moles;
+export type AmountOfSubstance<N = number> = LiftMeasure<typeof moles, N>;
+export const AmountOfSubstance: AmountOfSubstance = moles;
 
 /** candelas */
-export type LuminousIntensity<N = number> = LiftMeasure<typeof Base.candelas, N>;
-export const LuminousIntensity: LuminousIntensity = Base.candelas;
+export type LuminousIntensity<N = number> = LiftMeasure<typeof candelas, N>;
+export const LuminousIntensity: LuminousIntensity = candelas;
 
 /** bits */
-export type Memory<N = number> = LiftMeasure<typeof Base.bits, N>;
-export const Memory: Memory = Base.bits;
+export type Memory<N = number> = LiftMeasure<typeof bits, N>;
+export const Memory: Memory = bits;
 
 // Angular base units
 
 /** radians */
-export type PlaneAngle<N = number> = LiftMeasure<typeof Base.radians, N>;
-export const PlaneAngle: PlaneAngle = Base.radians;
+export type PlaneAngle<N = number> = LiftMeasure<typeof radians, N>;
+export const PlaneAngle: PlaneAngle = radians;
 
 /** steradians */
-export type SolidAngle<N = number> = LiftMeasure<typeof Base.steradians, N>;
-export const SolidAngle: SolidAngle = Base.steradians;
+export type SolidAngle<N = number> = LiftMeasure<typeof steradians, N>;
+export const SolidAngle: SolidAngle = steradians;
 
 // Derived units
 
