@@ -1,7 +1,7 @@
 import { GenericMeasure } from "../measure/genericMeasure";
 import { Measure } from "../measure/numberMeasure";
 import { DimensionlessUnit } from "../measure/unitTypeArithmetic";
-import { MetricSystem, radians } from "./base";
+import { SIUnitSystem, radians } from "./base";
 import { Length, PlaneAngle } from "./quantities";
 
 /**
@@ -56,10 +56,10 @@ export function atan2(y: Length, x: Length): PlaneAngle {
     return Measure.of(Math.atan2(y.value, x.value), radians);
 }
 
-type Dimensionless = GenericMeasure<number, MetricSystem, DimensionlessUnit<MetricSystem>>;
+type Dimensionless = GenericMeasure<number, SIUnitSystem, DimensionlessUnit<SIUnitSystem>>;
 
 function wrapTrigFn(f: (x: number) => number): (angle: PlaneAngle) => Dimensionless {
-    return angle => Measure.dimensionless(MetricSystem, f(angle.value));
+    return angle => Measure.dimensionless(SIUnitSystem, f(angle.value));
 }
 
 function wrapInverseTrigFn(f: (x: number) => number): (angle: Dimensionless) => PlaneAngle {

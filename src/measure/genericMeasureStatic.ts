@@ -1,5 +1,5 @@
-import { GenericMeasure } from "./genericMeasure";
-import { BinaryFn, PrefixFn, SpreadFn } from "./genericMeasureUtils";
+import { GenericMeasure, NumericOperations } from "./genericMeasure";
+import { BinaryFn, PrefixFn, SpreadFn, wrapBinaryFn, wrapReducerFn } from "./genericMeasureUtils";
 import { DivideUnits, MultiplyUnits, Unit } from "./unitTypeArithmetic";
 
 export interface GenericMeasureStatic<N> {
@@ -39,16 +39,13 @@ export interface GenericMeasureStatic<N> {
     prefix(prefix: string, multiplier: N): PrefixFn<N>;
 }
 
-export const getGenericMeasureStaticMethods = <N>(): GenericMeasureStatic<N> => {
-    const add: BinaryFn<N> = (left, right) => left.plus(right);
-    const min: BinaryFn<N> = (min, curr) => (curr.lt(min) ? curr : min);
-    const max: BinaryFn<N> = (max, curr) => (curr.gt(max) ? curr : max);
+export const getGenericMeasureStaticMethods = <N>(num: NumericOperations<N>): GenericMeasureStatic<N> => {
     return {
-        sum: reduce(add as any),
-        min: reduce(min as any),
-        max: reduce(max as any),
-        add,
-        subtract: (left, right) => left.minus(right),
+        sum: wrapReducerFn(num.add),
+        min: wrapReducerFn((left, right) => (num.compare(left, right) < 0 ? left : right)),
+        max: wrapReducerFn((left, right) => (num.compare(left, right) < 0 ? right : left)),
+        add: wrapBinaryFn(num.add),
+        subtract: wrapBinaryFn(num.sub),
         multiply: (left, right) => left.times(right),
         divide: (left, right) => left.over(right),
         prefix: (prefix, multiplier) => {
@@ -59,12 +56,3 @@ export const getGenericMeasureStaticMethods = <N>(): GenericMeasureStatic<N> => 
         },
     };
 };
-
-export function reduce<N>(
-    fn: <Basis, U extends Unit<Basis>>(
-        left: GenericMeasure<N, Basis, U>,
-        right: GenericMeasure<N, Basis, U>,
-    ) => GenericMeasure<N, any, U>,
-): SpreadFn<N> {
-    return (first, ...rest) => rest.reduce(fn, first);
-}

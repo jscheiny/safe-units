@@ -2,7 +2,7 @@ import { GenericMeasureType } from "../measure";
 import { Measure } from "../measure/numberMeasure";
 import { UnitSystem } from "../measure/unitSystem";
 
-const MetricSystemBasis = {
+const SIUnitSystemBasis = {
     length: "m",
     mass: "kg",
     time: "s",
@@ -15,23 +15,23 @@ const MetricSystemBasis = {
     memory: "b",
 } as const;
 
-type MetricSystemBasis = typeof MetricSystemBasis;
+type SIUnitSystemBasis = typeof SIUnitSystemBasis;
 
-export interface MetricSystem extends MetricSystemBasis {}
+export interface SIUnitSystem extends SIUnitSystemBasis {}
 
-export const MetricSystem = UnitSystem.from<MetricSystem>(MetricSystemBasis);
+export const SIUnitSystem = UnitSystem.from<SIUnitSystem>(SIUnitSystemBasis);
 
 export const createSIBaseUnits = <N>(measure: GenericMeasureType<N, any>) => ({
-    meters: measure.dimension(MetricSystem, "length"),
-    kilograms: measure.dimension(MetricSystem, "mass"),
-    seconds: measure.dimension(MetricSystem, "time"),
-    amperes: measure.dimension(MetricSystem, "current"),
-    kelvin: measure.dimension(MetricSystem, "temperature"),
-    moles: measure.dimension(MetricSystem, "substance"),
-    candelas: measure.dimension(MetricSystem, "intensity"),
-    radians: measure.dimension(MetricSystem, "planeAngle"),
-    steradians: measure.dimension(MetricSystem, "solidAngle"),
-    bits: measure.dimension(MetricSystem, "memory"),
+    meters: measure.dimension(SIUnitSystem, "length"),
+    kilograms: measure.dimension(SIUnitSystem, "mass"),
+    seconds: measure.dimension(SIUnitSystem, "time"),
+    amperes: measure.dimension(SIUnitSystem, "current"),
+    kelvin: measure.dimension(SIUnitSystem, "temperature"),
+    moles: measure.dimension(SIUnitSystem, "substance"),
+    candelas: measure.dimension(SIUnitSystem, "intensity"),
+    radians: measure.dimension(SIUnitSystem, "planeAngle"),
+    steradians: measure.dimension(SIUnitSystem, "solidAngle"),
+    bits: measure.dimension(SIUnitSystem, "memory"),
 });
 
 export const { meters, kilograms, seconds, amperes, kelvin, moles, candelas, radians, steradians, bits } =
