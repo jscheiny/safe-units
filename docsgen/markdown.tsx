@@ -3,8 +3,7 @@ import highlight from "highlight.js";
 import * as React from "react";
 import { createNodeId, getNodeText } from "./markdownUtils";
 import { component } from "./style";
-import { join } from "path";
-import { existsSync, readFileSync } from "fs";
+import { readExample } from "./example";
 
 interface MarkdownProps {
     root: Node;
@@ -152,26 +151,8 @@ function getCodeBlockText(root: Node): string {
         throw new Error("Expected example code block to have a reference to an example file.");
     }
 
-    const examplePath = join("docs", "examples", root.literal.trim());
-    if (!existsSync(examplePath)) {
-        throw new Error(`Example file not found: ${examplePath}`);
-    }
-
-    const contents = readFileSync(examplePath, "utf-8");
-
-    const lines = contents.split("\n");
-    const startLine = lines.findIndex(line => EXAMPLE_START_REGEX.test(line));
-    const endLine = lines.findIndex(line => EXAMPLE_END_REGX.test(line));
-
-    if (startLine === -1 || endLine === -1) {
-        return contents;
-    }
-
-    return lines.slice(startLine + 1, endLine).join("\n");
+    return readExample(root.literal).join("\n");
 }
-
-const EXAMPLE_START_REGEX = /^\/\/\s+start\s*/i;
-const EXAMPLE_END_REGX = /^\/\/\s+end\s*/i;
 
 const CodeBlock = component("code-block", "code", {
     borderRadius: 3,
