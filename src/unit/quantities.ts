@@ -115,6 +115,10 @@ export const Jounce = Jerk.over(Time);
 export type Crackle<N = number> = LiftMeasure<typeof Crackle, N>;
 export const Crackle = Jounce.over(Time);
 
+/** m / s⁶ */
+export type Pop<N = number> = LiftMeasure<typeof Pop, N>;
+export const Pop = Crackle.over(Time);
+
 /** m³ / s */
 export type VolumetricFlow<N = number> = LiftMeasure<typeof VolumetricFlow, N>;
 export const VolumetricFlow = Volume.over(Time);
@@ -339,7 +343,7 @@ export const CatalyticActivity = AmountOfSubstance.over(Time);
 export type CatalyticEfficiency<N = number> = LiftMeasure<typeof CatalyticEfficiency, N>;
 export const CatalyticEfficiency = Volume.over(AmountOfSubstance.times(Time));
 
-/** mol / (m³ ⋅ s)  */
+/** mol / (m³ ⋅ s) */
 export type ReactionRate<N = number> = LiftMeasure<typeof ReactionRate, N>;
 export const ReactionRate = CatalyticActivity.over(Volume);
 
@@ -359,7 +363,7 @@ export const ElectronMobility = Area.over(Voltage.times(Time));
 export type AngularMomentum<N = number> = LiftMeasure<typeof AngularMomentum, N>;
 export const AngularMomentum = Force.times(Length).times(Time);
 
-/** m² /s */
+/** m² / s */
 export type SpecificAngularMomentum<N = number> = LiftMeasure<typeof SpecificAngularMomentum, N>;
 export const SpecificAngularMomentum = AngularMomentum.over(Mass);
 
@@ -393,7 +397,7 @@ export const LuminousEfficiency = LuminousFlux.over(Power);
 export type RadiantIntensity<N = number> = LiftMeasure<typeof RadiantIntensity, N>;
 export const RadiantIntensity = Power.over(SolidAngle);
 
-/** kg ⋅ m / (s³ ⋅ sr)  */
+/** kg ⋅ m / (s³ ⋅ sr) */
 export type SpectralIntensity<N = number> = LiftMeasure<typeof SpectralIntensity, N>;
 export const SpectralIntensity = RadiantIntensity.over(Length);
 

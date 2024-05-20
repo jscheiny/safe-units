@@ -11,7 +11,8 @@ interface GenericMeasureFactory<N> {
 
     /**
      * Creates a new dimension base unit.
-     * @param dim a unique string literal which names this dimension (e.g. "length")
+     * @param unitSystem the unit system for this dimension
+     * @param dimension the basis of the unit system for this dimension
      * @param symbol the symbol of the base unit of the dimension (e.g. "m")
      * @returns A measure representing 1 base unit of the dimension (1 m)
      */
@@ -23,6 +24,7 @@ interface GenericMeasureFactory<N> {
 
     /**
      * Creates a dimensionless measure.
+     * @param unitSystem the unit system for this measure
      * @param value the value of the measure
      * @returns a measure with no dimensions
      */
@@ -61,7 +63,7 @@ export type GenericMeasureType<N, StaticMethods extends {}> = GenericMeasureComm
  * useful for attaching static math operations to the type.
  * @returns a factory for constructing measures of the given numeric type
  * @example
- * type MyMeasure<U extends Unit> = GenericMeasure<MyNumberType, U>;
+ * type MyMeasure<B, U extends Unit<B>> = GenericMeasure<MyNumberType, B, U>;
  * const MyMeasure = createMeasureType({ ... });
  */
 export function createMeasureType<N, S extends {} = {}>(
