@@ -4,6 +4,7 @@ scripts/
 test/
 docs/
 docsgen/
-jest.config.json
-.travis.yml
+.github/
+jest.config.ts
 tslint.json
+eslint.config.mjs
