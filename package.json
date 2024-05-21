@@ -9,7 +9,7 @@
         "typescript",
         "typesafe"
     ],
-    "version": "1.1.0",
+    "version": "2.0.0",
     "license": "MIT",
     "homepage": "https://github.com/jscheiny/safe-units",
     "bugs": "https://github.com/jscheiny/safe-units/issues",
@@ -44,6 +44,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.2.0",
+        "@stylistic/eslint-plugin-ts": "^2.1.0",
         "@types/commonmark": "^0.27.9",
         "@types/jest": "^29.5.12",
         "@types/node": "^20.12.12",
@@ -66,8 +67,5 @@
         "typescript": "^5.4.5",
         "typescript-eslint": "^7.9.0",
         "typestyle": "^2.4.0"
-    },
-    "dependencies": {
-        "@stylistic/eslint-plugin-ts": "^2.1.0"
     }
 }
