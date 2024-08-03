@@ -17,10 +17,20 @@
         "type": "git",
         "url": "https://github.com/jscheiny/safe-units.git"
     },
-    "main": "dist/src/index.js",
-    "typings": "dist/src/index.d.ts",
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/esm/index.js",
+    "types": "./dist/types/index.d.ts",
+    "exports": {
+        "import": "./dist/esm/index.js",
+        "require": "./dist/cjs/index.js"
+    },
+    "files": [
+        "dist"
+    ],
     "scripts": {
-        "build": "tsc -p src",
+        "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
+        "build:esm": "tsc -p tsconfig.esm.json && echo '{\"type\":\"module\"}' > dist/esm/package.json",
+        "build": "yarn run build:cjs && yarn run build:esm",
         "clean": "rimraf dist docs/build",
         "compile:docs": "tsc -p docsgen",
         "compile:examples": "tsc -p docs/examples",
