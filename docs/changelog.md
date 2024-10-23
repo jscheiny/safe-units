@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.2
+- Fixed an issue where large memory prefix functions (`tebi` and up) were using the wrong scalar values.
+
 ## v2.0.0
 
 **Breaking changes**
