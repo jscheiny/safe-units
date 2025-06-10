@@ -11,7 +11,7 @@ export {
     wrapUnaryFn,
 } from "./genericMeasureUtils";
 export { Measure } from "./numberMeasure";
-export { UnitSystem } from "./unitSystem";
+export { BasisType, UnitSystem } from "./unitSystem";
 export {
     CubeUnit,
     DimensionlessUnit,

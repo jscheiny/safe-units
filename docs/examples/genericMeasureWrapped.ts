@@ -1,9 +1,9 @@
 import { WrappedNumber, wrap } from "./genericMeasureIntro";
 
 // START
-import { createMeasureType, GenericMeasure, Unit } from "safe-units";
+import { type BasisType, createMeasureType, GenericMeasure, Unit } from "safe-units";
 
-type WrappedMeasure<B, U extends Unit<B>> = GenericMeasure<WrappedNumber, B, U>;
+type WrappedMeasure<B extends BasisType, U extends Unit<B>> = GenericMeasure<WrappedNumber, B, U>;
 const WrappedMeasure = createMeasureType<WrappedNumber>({
     one: () => wrap(1),
     neg: x => wrap(-x.value),

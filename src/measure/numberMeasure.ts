@@ -1,6 +1,7 @@
 import { GenericMeasure, NumericOperations } from "./genericMeasure";
 import { createMeasureType, GenericMeasureType } from "./genericMeasureFactory";
 import { SpreadFn, UnaryFn, wrapSpreadFn, wrapUnaryFn } from "./genericMeasureUtils";
+import type { BasisType } from "./unitSystem";
 import { Unit } from "./unitTypeArithmetic";
 
 interface MeasureStaticMethods {
@@ -35,5 +36,5 @@ const numericOps: NumericOperations<number> = {
     format: x => `${x}`,
 };
 
-export type Measure<Basis, U extends Unit<Basis>> = GenericMeasure<number, Basis, U>;
+export type Measure<Basis extends BasisType, U extends Unit<Basis>> = GenericMeasure<number, Basis, U>;
 export const Measure: GenericMeasureType<number, MeasureStaticMethods> = createMeasureType(numericOps, staticMethods);

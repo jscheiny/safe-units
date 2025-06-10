@@ -1,9 +1,9 @@
-import { UnitSystem } from "./unitSystem";
+import { type BasisType, UnitSystem } from "./unitSystem";
 import { Unit } from "./unitTypeArithmetic";
 
 type SymbolAndExponent = [symbol: string, exponent: number];
 
-export function defaultFormatUnit<Basis>(unit: Unit<Basis>, unitSystem: UnitSystem<Basis>): string {
+export function defaultFormatUnit<Basis extends BasisType>(unit: Unit<Basis>, unitSystem: UnitSystem<Basis>): string {
     const positive: SymbolAndExponent[] = [];
     const negative: SymbolAndExponent[] = [];
     unitSystem.getDimensions().forEach(dimension => {

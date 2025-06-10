@@ -84,5 +84,5 @@ const validUnitSystem = UnitSystem.from({ length: "m", mass: "kg", time: "s" } a
 expectTrue(value(validUnitSystem).hasType<UnitSystem<{ length: "m"; mass: "kg"; time: "s" }>>());
 
 const errorBasis = { length: "m", mass: 3, time: "kg" };
+// @ts-expect-error errorBasis is not a valid basis for a type system
 const errorUnitSystem = UnitSystem.from(errorBasis);
-expectTrue(value(errorUnitSystem).hasType<"Dimension 'mass' does not have a valid symbol">());

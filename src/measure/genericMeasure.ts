@@ -1,9 +1,9 @@
-import { UnitSystem } from "./unitSystem";
+import { type BasisType, UnitSystem } from "./unitSystem";
 import { CubeUnit, DivideUnits, MultiplyUnits, ReciprocalUnit, SquareUnit, Unit } from "./unitTypeArithmetic";
 
 export interface MeasureFormatter<N> {
     formatValue?: (value: N) => string;
-    formatUnit?: <Basis>(unit: Unit<Basis>, unitSystem: UnitSystem<Basis>) => string;
+    formatUnit?: <Basis extends BasisType>(unit: Unit<Basis>, unitSystem: UnitSystem<Basis>) => string;
 }
 
 /** The set of numeric operations required to fully represent a `GenericMeasure` for a given numeric type */
@@ -29,7 +29,7 @@ export interface NumericOperations<N> {
 }
 
 /** A numeric value with a corresponding unit of measurement. */
-export interface GenericMeasure<N, Basis, U extends Unit<Basis>> {
+export interface GenericMeasure<N, Basis extends BasisType, U extends Unit<Basis>> {
     /** The numeric value of this measure */
     readonly value: N;
     /** The unit of this measure */

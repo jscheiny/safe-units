@@ -1,5 +1,5 @@
 {
-    "extends": "./tsconfig.base.json",
+    "extends": "./tsconfig.src.base.json",
     "compilerOptions": {
         "module": "es6",
         "outDir": "./dist/esm",

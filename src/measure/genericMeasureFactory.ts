@@ -1,7 +1,7 @@
 import { GenericMeasure, NumericOperations } from "./genericMeasure";
 import { createMeasureClass } from "./genericMeasureClass";
 import { GenericMeasureStatic, getGenericMeasureStaticMethods } from "./genericMeasureStatic";
-import { UnitSystem } from "./unitSystem";
+import { type BasisType, UnitSystem } from "./unitSystem";
 import { DimensionUnit, DimensionlessUnit, Unit } from "./unitTypeArithmetic";
 
 /** The functions needed to construct a measure of a given numeric type */
@@ -16,7 +16,7 @@ interface GenericMeasureFactory<N> {
      * @param symbol the symbol of the base unit of the dimension (e.g. "m")
      * @returns A measure representing 1 base unit of the dimension (1 m)
      */
-    dimension<Basis, Dimension extends keyof Basis>(
+    dimension<Basis extends BasisType, Dimension extends keyof Basis>(
         unitSystem: UnitSystem<Basis>,
         dimension: Dimension,
         symbol?: string,
@@ -28,7 +28,10 @@ interface GenericMeasureFactory<N> {
      * @param value the value of the measure
      * @returns a measure with no dimensions
      */
-    dimensionless<Basis>(unitSystem: UnitSystem<Basis>, value: N): GenericMeasure<N, Basis, DimensionlessUnit<Basis>>;
+    dimensionless<Basis extends BasisType>(
+        unitSystem: UnitSystem<Basis>,
+        value: N,
+    ): GenericMeasure<N, Basis, DimensionlessUnit<Basis>>;
 
     /**
      * Creates a measure as a multiple of another measure.
@@ -37,7 +40,7 @@ interface GenericMeasureFactory<N> {
      * @param symbol an optional unit symbol for this measure
      * @returns a measure of value number of quantities.
      */
-    of<Basis, U extends Unit<Basis>>(
+    of<Basis extends BasisType, U extends Unit<Basis>>(
         value: N,
         quantity: GenericMeasure<N, Basis, U>,
         symbol?: string,

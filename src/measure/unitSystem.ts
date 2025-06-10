@@ -7,7 +7,13 @@ import {
     Unit,
 } from "./unitTypeArithmetic";
 
-type UnitSystemResult<Basis> = [Basis[keyof Basis]] extends [string]
+/**
+ * The keys of a type system's basis are the names of the dimensions, and the values are the symbols
+ * of each dimension's base unit.
+ */
+export type BasisType = Record<string, string>;
+
+type UnitSystemResult<Basis extends BasisType> = [Basis[keyof Basis]] extends [string]
     ? UnitSystem<Basis>
     : `Dimension '${NonStringValuedKeys<Basis>}' does not have a valid symbol`;
 
@@ -20,7 +26,7 @@ type NonStringValuedKeys<T> = keyof {
  * are defined by the keys of the Basis type parameter. The base units are given by the symbol map passed into the
  * constructor.
  */
-export class UnitSystem<Basis> implements UnitSystem<Basis> {
+export class UnitSystem<Basis extends BasisType> implements UnitSystem<Basis> {
     private readonly dimensions: Array<keyof Basis>;
 
     /**
@@ -48,7 +54,7 @@ export class UnitSystem<Basis> implements UnitSystem<Basis> {
      *     ...
      * });
      */
-    public static from<Basis>(symbols: Basis): UnitSystemResult<Basis> {
+    public static from<Basis extends BasisType>(symbols: Basis): UnitSystemResult<Basis> {
         return new UnitSystem(symbols) as UnitSystemResult<Basis>;
     }
 

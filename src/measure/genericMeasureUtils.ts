@@ -1,24 +1,25 @@
 import { GenericMeasure } from "./genericMeasure";
+import type { BasisType } from "./unitSystem";
 import { Unit } from "./unitTypeArithmetic";
 
 /** A function which applies a symbol prefix and multiplier to a given measure. */
-export type PrefixFn<N = number> = <Basis, U extends Unit<Basis>>(
+export type PrefixFn<N = number> = <Basis extends BasisType, U extends Unit<Basis>>(
     measure: GenericMeasure<N, Basis, U>,
 ) => GenericMeasure<N, Basis, U>;
 
 /** A function which transforms a single measure into another measure with the same unit. */
-export type UnaryFn<N = number> = <Basis, U extends Unit<Basis>>(
+export type UnaryFn<N = number> = <Basis extends BasisType, U extends Unit<Basis>>(
     x: GenericMeasure<N, Basis, U>,
 ) => GenericMeasure<N, Basis, U>;
 
 /** A function which transforms two measures with same unit into a single measure with the same unit. */
-export type BinaryFn<N = number> = <Basis, U extends Unit<any>>(
+export type BinaryFn<N = number> = <Basis extends BasisType, U extends Unit<any>>(
     left: GenericMeasure<N, Basis, U>,
     right: GenericMeasure<N, Basis, U>,
 ) => GenericMeasure<N, Basis, U>;
 
 /** A function which transforms one or more measure with the same unit into a single measure with the same unit. */
-export type SpreadFn<N = number> = <Basis, U extends Unit<Basis>>(
+export type SpreadFn<N = number> = <Basis extends BasisType, U extends Unit<Basis>>(
     first: GenericMeasure<N, Basis, U>,
     ...rest: Array<GenericMeasure<N, Basis, U>>
 ) => GenericMeasure<N, Basis, U>;

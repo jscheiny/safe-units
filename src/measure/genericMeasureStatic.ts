@@ -1,5 +1,6 @@
 import { GenericMeasure, NumericOperations } from "./genericMeasure";
 import { BinaryFn, PrefixFn, SpreadFn, wrapBinaryFn, wrapReducerFn } from "./genericMeasureUtils";
+import type { BasisType } from "./unitSystem";
 import { DivideUnits, MultiplyUnits, Unit } from "./unitTypeArithmetic";
 
 export interface GenericMeasureStatic<N> {
@@ -19,13 +20,13 @@ export interface GenericMeasureStatic<N> {
     subtract: BinaryFn<N>;
 
     /** Static version of `left.times(right)` */
-    multiply<Basis, Left extends Unit<Basis>, Right extends Unit<Basis>>(
+    multiply<Basis extends BasisType, Left extends Unit<Basis>, Right extends Unit<Basis>>(
         left: GenericMeasure<N, Basis, Left>,
         right: GenericMeasure<N, Basis, Right>,
     ): GenericMeasure<N, Basis, MultiplyUnits<Basis, Left, Right>>;
 
     /** Static version of `left.div(right)` */
-    divide<Basis, Left extends Unit<Basis>, Right extends Unit<Basis>>(
+    divide<Basis extends BasisType, Left extends Unit<Basis>, Right extends Unit<Basis>>(
         left: GenericMeasure<N, Basis, Left>,
         right: GenericMeasure<N, Basis, Right>,
     ): GenericMeasure<N, Basis, DivideUnits<Basis, Left, Right>>;

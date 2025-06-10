@@ -1,10 +1,10 @@
 import { defaultFormatUnit } from "./format";
 import { GenericMeasure, MeasureFormatter, NumericOperations } from "./genericMeasure";
-import { UnitSystem } from "./unitSystem";
+import { type BasisType, UnitSystem } from "./unitSystem";
 import { DivideUnits, MultiplyUnits, ReciprocalUnit, SquareUnit, Unit, CubeUnit } from "./unitTypeArithmetic";
 
 interface GenericMeasureClass<N> {
-    createMeasure: <Basis, U extends Unit<Basis>>(
+    createMeasure: <Basis extends BasisType, U extends Unit<Basis>>(
         value: N,
         unit: U,
         unitSystem: UnitSystem<Basis>,
@@ -28,7 +28,7 @@ export function createMeasureClass<N>(num: NumericOperations<N>): GenericMeasure
         }
     }
 
-    class Measure<Basis, U extends Unit<Basis>> implements GenericMeasure<N, Basis, U> {
+    class Measure<Basis extends BasisType, U extends Unit<Basis>> implements GenericMeasure<N, Basis, U> {
         constructor(
             public readonly value: N,
             public readonly unit: U,

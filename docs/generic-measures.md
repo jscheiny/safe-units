@@ -23,13 +23,13 @@ We can then use this class just as we would use `Measure`, except anywhere we'd 
 Let's deconstruct this example to explain what's going on. First we start with this type definition:
 
 ```ts
-type WrappedMeasure<B, U extends Unit<B>> = GenericMeasure<WrappedNumber, B, U>;
+type WrappedMeasure<B extends BasisType, U extends Unit<B>> = GenericMeasure<WrappedNumber, B, U>;
 ```
 
 This line isn't strictly necessary, but it is often useful to have our `WrappedMeasure` available as a type. Having a type for the measure is useful for writing generic functions on wrapped measures. All this line does is bind the numeric type of `GenericMeasure`. Similarly, the `Measure` type has the following definition:
 
 ```ts
-type Measure<B, U extends Unit<B>> = GenericMeasure<number, B, U>;
+type Measure<B extends BasisType, U extends Unit<B>> = GenericMeasure<number, B, U>;
 ```
 
 After we've defined the type of `WrappedMeasure` we now define the class itself by calling `createMeasureType`. This function takes an object which let's the generic measure type know how to perform operations on our numeric type. Note that for this simple example, we generally just unwrap the value, perform the arithmetic operation and then wrap it back up. Most of these operations should be self-explanatory, however some require some further explanation:
