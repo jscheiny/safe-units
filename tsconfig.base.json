@@ -19,13 +19,5 @@
             "es2015",
             "es2015.core"
         ]
-    },
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "dist",
-        "node_modules",
-        "test"
-    ]
+    }
 }
