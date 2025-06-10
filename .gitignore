@@ -13,6 +13,7 @@ yarn-error.log
 
 ### Editors
 .vscode/
+.idea/
 
 *.js
 *.js.map
