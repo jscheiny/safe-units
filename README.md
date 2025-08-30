@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=jscheiny&project=safe-units&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 # Safe Units
 
 [![NPM Version](https://img.shields.io/npm/v/safe-units.svg)](https://www.npmjs.com/package/safe-units) [![MIT License](https://img.shields.io/npm/l/safe-units.svg)](https://github.com/jscheiny/safe-units/blob/master/LICENSE)
